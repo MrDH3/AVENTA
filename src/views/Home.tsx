@@ -370,7 +370,6 @@ export default function Home({ cars, reviews = [], resumeSlugs = [] }: { cars: C
         </div>
         {menuOpen && (
           <div className="rd-menu">
-            <div className="rd-menu-lang"><LanguageDropdown variant="bar" /></div>
             {navLinks.map(([h, l]) => <a key={h} href={h} onClick={() => setMenuOpen(false)}>{l}</a>)}
             <Link href="/auth" onClick={() => setMenuOpen(false)}>{t.signIn}</Link>
             <Link href="/catalog" className="rd-btn rd-btn-coral" onClick={() => setMenuOpen(false)}>{t.choose}</Link>

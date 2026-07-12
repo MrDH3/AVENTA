@@ -45,7 +45,7 @@ const SNAV_CSS = `
 .snav-menu a:hover{background:var(--sn-bg)}
 .snav-menu .snav-btn{margin-top:6px}
 .snav-menu-lang{padding:6px 6px 8px}
-@media(max-width:900px){.snav-links,.snav-right .snav-btn,.snav-lang{display:none}.snav-burger{display:inline-flex}}
+@media(max-width:900px){.snav-links,.snav-right .snav-btn{display:none}.snav-burger{display:inline-flex}.snav-lang{display:inline-flex;margin-right:2px}}
 `
 
 export default function SiteNav() {
@@ -85,7 +85,6 @@ export default function SiteNav() {
         </div>
         {open && (
           <div className="snav-menu">
-            <div className="snav-menu-lang"><LanguageDropdown variant="bar" /></div>
             {links.map(([h, l]) => <Link key={h} href={h} onClick={() => setOpen(false)}>{l}</Link>)}
             <Link href="/auth" onClick={() => setOpen(false)}>{t.signIn}</Link>
             <Link href="/catalog" className="snav-btn snav-coral" onClick={() => setOpen(false)}>{t.choose}</Link>

@@ -185,7 +185,7 @@ export const RD_CSS = `
 .rd .rd-menu a{padding:12px 14px;font:600 15px var(--fu);color:var(--ink);border-radius:10px}.rd .rd-menu a:hover{background:var(--bg)}
 .rd .rd-menu .rd-btn{margin-top:6px}
 .rd .rd-menu-lang{padding:8px 6px 4px}
-@media(max-width:900px){.rd .rd-links,.rd .rd-nav-right .rd-btn,.rd .rd-lang{display:none}.rd .rd-burger{display:inline-flex}}
+@media(max-width:900px){.rd .rd-links,.rd .rd-nav-right .rd-btn{display:none}.rd .rd-burger{display:inline-flex}.rd .rd-lang{display:inline-flex;margin-right:2px}}
 
 /* hero */
 .rd .rd-hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;color:#fff;overflow:hidden;background:#04181b;padding:120px 0 60px}
