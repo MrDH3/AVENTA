@@ -1,0 +1,62 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# render.yaml — Render Blueprint for AVENTA  (Next.js 14 · Prisma · PostgreSQL)
+#
+# One-time setup:
+#   Render Dashboard → New +  →  Blueprint  →  connect the  MrDH3/AVENTA  repo.
+#   Render reads this file and provisions BOTH the Postgres database and the web
+#   service, and wires DATABASE_URL between them automatically. You will only be
+#   prompted for the two `sync: false` secrets (DOC_ENCRYPTION_KEY, APP_URL).
+#
+# Blueprint spec:  https://render.com/docs/blueprint-spec
+# Full env list:   see .env.example
+# ─────────────────────────────────────────────────────────────────────────────
+
+databases:
+  - name: aventa-db
+    databaseName: aventa
+    user: aventa
+    plan: free              # 90-day free Postgres; upgrade to basic-256mb+ to keep it long-term
+    region: frankfurt       # closest region to Antalya — DB and web service MUST share a region
+
+services:
+  - type: web
+    name: aventa
+    runtime: node
+    plan: free              # free web spins down after ~15 min idle; use `starter` to stay warm
+    region: frankfurt
+    branch: main
+    buildCommand: npm install && npm run build
+    # Apply DB migrations at startup: at runtime the internal DB host resolves, and
+    # `prisma migrate deploy` only applies unapplied migrations (safe to run every boot).
+    startCommand: npx prisma migrate deploy && npm start
+    healthCheckPath: /
+    autoDeploy: true         # redeploy automatically on every push to `main`
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: aventa-db
+          property: connectionString    # Render injects the internal connection string
+      - key: SESSION_SECRET
+        generateValue: true             # Render generates a secure random value for you
+      - key: DOC_ENCRYPTION_KEY
+        sync: false                     # MUST be 64 hex chars — paste your own (see command below)
+      - key: APP_URL
+        sync: false                     # set to https://<your-service>.onrender.com after 1st deploy
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "20"
+
+# ── Optional integrations ────────────────────────────────────────────────────
+# The app runs without these — each feature simply stays hidden until its keys are
+# set. Add them later in the Render dashboard (web service → Environment). See
+# .env.example for the full list. Common ones:
+#   STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+#   PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PAYPAL_ENV
+#   SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, MAIL_FROM
+#   TELEGRAM_BOT_TOKEN, WHATSAPP_TOKEN, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET
+#   CRYPTO_USDT_TRC20, CRYPTO_USDT_ERC20, …
+#
+# Note: uploaded documents write to ./.storage (ephemeral on Render — wiped on each
+# redeploy). Fine for testing; for persistence add a Render Disk mounted at
+# /opt/render/project/src/.storage and set STORAGE_DIR to that path.
