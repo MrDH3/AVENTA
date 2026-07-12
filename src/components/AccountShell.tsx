@@ -69,9 +69,10 @@ const I = {
   arrow: (<><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></>),
   star: <polygon points="12 2 15 9 22 9.3 16.5 13.8 18.3 21 12 17 5.7 21 7.5 13.8 2 9.3 9 9" />,
   menu: (<><line x1="4" x2="20" y1="6" y2="6" /><line x1="4" x2="20" y1="12" y2="12" /><line x1="4" x2="20" y1="18" y2="18" /></>),
+  lock: (<><rect width="18" height="11" x="3" y="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></>),
 }
 
-export type AccountNavKey = 'overview' | 'bookings' | 'documents' | 'payments' | 'places' | 'support'
+export type AccountNavKey = 'overview' | 'bookings' | 'documents' | 'payments' | 'places' | 'support' | 'security'
 
 const NAV: { key: AccountNavKey; href: string; icon: ReactNode }[] = [
   { key: 'overview', href: '/account', icon: I.grid },
@@ -79,20 +80,21 @@ const NAV: { key: AccountNavKey; href: string; icon: ReactNode }[] = [
   { key: 'documents', href: '/account/documents', icon: I.file },
   { key: 'payments', href: '/account/payments', icon: I.card },
   { key: 'places', href: '/account#c-places', icon: I.pin },
+  { key: 'security', href: '/account/security', icon: I.lock },
   { key: 'support', href: '/account#c-support', icon: I.headset },
 ]
 
 type ShellStrings = {
   menu: string
-  overview: string; bookings: string; documents: string; payments: string; places: string; support: string
+  overview: string; bookings: string; documents: string; payments: string; places: string; support: string; security: string
   chooseCar: string; signOut: string; cabinet: string
 }
 const L10N: Record<Lang, ShellStrings> = {
-  en: { menu: 'Menu', overview: 'Overview', bookings: 'My bookings', documents: 'Documents', payments: 'Payments', places: 'Places', support: 'Support', chooseCar: 'Choose a car', signOut: 'Sign out', cabinet: 'Personal cabinet' },
-  ru: { menu: 'Меню', overview: 'Обзор', bookings: 'Мои брони', documents: 'Документы', payments: 'Оплата', places: 'Места', support: 'Поддержка', chooseCar: 'Выбрать авто', signOut: 'Выйти', cabinet: 'Личный кабинет' },
-  tr: { menu: 'Menü', overview: 'Genel bakış', bookings: 'Rezervasyonlarım', documents: 'Belgeler', payments: 'Ödemeler', places: 'Yerler', support: 'Destek', chooseCar: 'Araç seç', signOut: 'Çıkış', cabinet: 'Kişisel hesap' },
-  es: { menu: 'Menú', overview: 'Resumen', bookings: 'Mis reservas', documents: 'Documentos', payments: 'Pagos', places: 'Lugares', support: 'Soporte', chooseCar: 'Elegir coche', signOut: 'Salir', cabinet: 'Cuenta personal' },
-  de: { menu: 'Menü', overview: 'Übersicht', bookings: 'Meine Buchungen', documents: 'Dokumente', payments: 'Zahlungen', places: 'Orte', support: 'Support', chooseCar: 'Auto wählen', signOut: 'Abmelden', cabinet: 'Konto' },
+  en: { menu: 'Menu', overview: 'Overview', bookings: 'My bookings', documents: 'Documents', payments: 'Payments', places: 'Places', support: 'Support', security: 'Password', chooseCar: 'Choose a car', signOut: 'Sign out', cabinet: 'Personal cabinet' },
+  ru: { menu: 'Меню', overview: 'Обзор', bookings: 'Мои брони', documents: 'Документы', payments: 'Оплата', places: 'Места', support: 'Поддержка', security: 'Пароль', chooseCar: 'Выбрать авто', signOut: 'Выйти', cabinet: 'Личный кабинет' },
+  tr: { menu: 'Menü', overview: 'Genel bakış', bookings: 'Rezervasyonlarım', documents: 'Belgeler', payments: 'Ödemeler', places: 'Yerler', support: 'Destek', security: 'Parola', chooseCar: 'Araç seç', signOut: 'Çıkış', cabinet: 'Kişisel hesap' },
+  es: { menu: 'Menú', overview: 'Resumen', bookings: 'Mis reservas', documents: 'Documentos', payments: 'Pagos', places: 'Lugares', support: 'Soporte', security: 'Contraseña', chooseCar: 'Elegir coche', signOut: 'Salir', cabinet: 'Cuenta personal' },
+  de: { menu: 'Menü', overview: 'Übersicht', bookings: 'Meine Buchungen', documents: 'Dokumente', payments: 'Zahlungen', places: 'Orte', support: 'Support', security: 'Passwort', chooseCar: 'Auto wählen', signOut: 'Abmelden', cabinet: 'Konto' },
 }
 
 export default function AccountShell({

@@ -74,12 +74,12 @@ export default function OwnerTeam({ staff, recovery }: { staff: StaffRow[]; reco
           <span style={{ font: '700 12px var(--f-mono,monospace)', color: 'var(--d-muted)' }}>{admins.length} админ.</span>
         </div>
 
-        {/* one-time temp password after a successful create */}
-        {createState.ok && createState.tempPassword && (
+        {/* invite sent — the admin sets their own password via the emailed link */}
+        {createState.ok && createState.inviteLink && (
           <div style={{ marginTop: 14, background: 'rgba(39,181,118,.12)', border: '1px solid rgba(39,181,118,.35)', borderRadius: 12, padding: '13px 15px' }}>
-            <div style={{ font: '700 12px var(--f-ui)', color: 'var(--d-green,#3fb883)' }}>Администратор создан. Передайте ему временный пароль (показывается один раз):</div>
-            <div style={{ marginTop: 8, font: '700 16px var(--f-mono,monospace)', color: 'var(--d-text)', background: 'var(--d-bg,#06222a)', border: '1px solid var(--d-hair)', borderRadius: 9, padding: '10px 13px', userSelect: 'all', wordBreak: 'break-all' }}>{createState.tempPassword}</div>
-            <div style={{ marginTop: 7, font: '500 11.5px var(--f-ui)', color: 'var(--d-muted)' }}>Пусть администратор войдёт с ним и сменит пароль через «Забыли пароль?» (после настройки почты).</div>
+            <div style={{ font: '700 12px var(--f-ui)', color: 'var(--d-green,#3fb883)' }}>Приглашение отправлено на {createState.invitedEmail}. Администратор задаст свой пароль по ссылке из письма и сможет войти.</div>
+            <div style={{ marginTop: 8, font: '500 11.5px var(--f-ui)', color: 'var(--d-muted)' }}>Если письмо не пришло (почта ещё не настроена) — передайте ссылку вручную:</div>
+            <div style={{ marginTop: 6, font: '600 12px var(--f-mono,monospace)', color: 'var(--d-text)', background: 'var(--d-bg,#06222a)', border: '1px solid var(--d-hair)', borderRadius: 9, padding: '10px 13px', userSelect: 'all', wordBreak: 'break-all' }}>{createState.inviteLink}</div>
           </div>
         )}
 

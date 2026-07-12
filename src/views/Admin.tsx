@@ -2035,6 +2035,16 @@ export default function Admin(props: AdminProps) {
       {tab === 'settings' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? 14 : 0 }}>
           <a
+            href="/admin/settings/security"
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '16px 20px', marginBottom: isMobile ? 0 : 16, borderRadius: 14, border: '1px solid rgba(45,212,191,.28)', background: 'linear-gradient(135deg,rgba(13,148,136,.12),rgba(45,212,191,.05))', textDecoration: 'none' }}
+          >
+            <div>
+              <div style={{ font: '600 14px var(--f-ui)', color: 'var(--d-text-bright)' }}>Пароль и безопасность</div>
+              <div style={{ marginTop: 3, font: '400 12px var(--f-ui)', color: 'var(--d-muted)' }}>Смена пароля вашего аккаунта</div>
+            </div>
+            <span style={{ font: '700 13px var(--f-ui)', color: 'var(--d-accent-light)' }}>{t.open}</span>
+          </a>
+          <a
             href="/admin/settings/auth"
             style={{
               display: 'flex',
