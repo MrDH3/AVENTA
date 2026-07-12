@@ -1,0 +1,1072 @@
+// AVENTA — Prisma schema (PostgreSQL)
+// Premium car rental & travel ecosystem. Full domain model.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────── Enums ───────────────────────────────
+
+enum Role {
+  CLIENT
+  ADMIN
+  OWNER
+}
+
+enum CarClass {
+  ECONOMY
+  COMFORT
+  BUSINESS
+  PREMIUM
+  SUV
+  MINIVAN
+}
+
+enum Gearbox {
+  AUTOMATIC
+  MANUAL
+}
+
+enum Fuel {
+  PETROL
+  DIESEL
+  HYBRID
+  ELECTRIC
+}
+
+enum DocumentType {
+  PASSPORT
+  SELFIE // passport/ID held next to the customer's face (liveness)
+  LICENSE_FRONT
+  LICENSE_BACK
+  PAYMENT_PROOF
+  CONTRACT
+  OTHER
+}
+
+enum DocumentStatus {
+  UPLOADED
+  UNDER_REVIEW
+  VERIFIED
+  REJECTED
+}
+
+enum BookingStatus {
+  NEW
+  AWAITING_CONFIRMATION
+  AWAITING_PAYMENT
+  CONFIRMED
+  PREPARING
+  DELIVERED
+  ACTIVE
+  RETURNED
+  CLOSED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  NOT_PAID
+  AWAITING
+  PARTIAL
+  PAID
+  DEPOSIT_HELD
+  DEPOSIT_RETURNED
+  ERROR
+  CANCELLED
+}
+
+enum PaymentMethod {
+  CARD_STRIPE
+  CARD_PAYPAL
+  BANK_TRANSFER
+  CRYPTO
+  CASH
+  MANUAL
+}
+
+enum PaymentKind {
+  RENT
+  DEPOSIT
+  PREPAY
+  BALANCE
+  FULL
+}
+
+enum CryptoNetwork {
+  TRC20
+  ERC20
+  BEP20
+  POLYGON
+}
+
+enum InsuranceType {
+  BASIC
+  EXTENDED
+  FULL_NO_FRANCHISE
+}
+
+enum InsuranceStatus {
+  ISSUED
+  PENDING
+  CLIENT_DATA_INCOMPLETE
+  NEEDS_EXTRA_CHECK
+}
+
+enum TripGoal {
+  LEISURE
+  BUSINESS
+  PROPERTY_PURCHASE
+  PROPERTY_VIEWING
+  MEDICAL
+  RELOCATION
+  LONG_STAY
+  VISITING
+  OTHER
+}
+
+enum WaitlistStatus {
+  WAITING
+  OFFERED
+  CONVERTED
+  EXPIRED
+  CANCELLED
+}
+
+enum ServiceCategory {
+  RENTAL
+  TRANSFER
+  REAL_ESTATE
+  TOURS
+  INSURANCE
+  CONCIERGE
+  CONNECTIVITY
+  OTHER
+}
+
+enum Currency {
+  EUR
+  USD
+  RUB
+  TRY
+  USDT
+  USDC
+}
+
+enum LocationKind {
+  AIRPORT
+  HOTEL
+  COMPLEX
+  ADDRESS
+  OFFICE
+  DELIVERY
+  OTHER
+}
+
+enum NotificationChannel {
+  EMAIL
+  TELEGRAM
+  WHATSAPP
+  INAPP
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+// ─────────────────────────────── Users ───────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String? // null for OAuth/OTP-only accounts
+  role          Role      @default(CLIENT)
+  firstName     String?
+  lastName      String?
+  phone         String? // normalized (lib/phone.ts); enforced in app logic + a DB
+  // partial-unique index "User_phone_unique" (WHERE phone IS NOT NULL) added via
+  // raw SQL migration 20260701130000 — permits many NULLs, one owner per number.
+  // (Not expressible as @@unique in Prisma; keep that migration on `migrate dev`.)
+  whatsapp      String?
+  telegram      String?
+  image         String? // avatar URL from an OAuth provider
+  emailVerified Boolean   @default(false)
+  phoneVerified Boolean   @default(false)
+  locale        String    @default("ru")
+  loyaltyTier   String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  profile         ClientProfile?
+  bookings        Booking[]
+  documents       Document[]
+  sessions        Session[]
+  oauthAccounts   OAuthAccount[]
+  resetTokens     PasswordResetToken[]
+  addresses       SavedAddress[]
+  paymentMethods  SavedPaymentMethod[]
+  waitlist        WaitlistEntry[]
+  consents        ConsentRecord[]
+  smartResponses  SmartServiceResponse[]
+  auditLogs       AuditLog[]
+  bookingDrafts   BookingDraft[]
+  savedPlaces     SavedPlace[]
+}
+
+/// A customer's saved destination (e.g. "My hotel", "Beach") — a labelled point they can get
+/// DIRECTIONS to. This is "help me get there", not tracking: only chosen destinations are stored,
+/// never a history of where the customer has been.
+model SavedPlace {
+  id        String   @id @default(cuid())
+  userId    String
+  label     String
+  lat       Float
+  lng       Float
+  address   String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+/// Admin-managed map-provider selection (single row, dormant-but-ready like PaymentProvider). The app
+/// renders every map through the ACTIVE provider; OSM/Leaflet is the always-working default (no key).
+/// Google/Yandex need an API key: AES-256-GCM encrypted (lib/crypto) inside `secrets` as
+/// { google|yandex: { ciphertext, iv, authTag } }, never returned to the browser. A provider is only
+/// selectable when its key is configured — otherwise the app falls back to OSM so maps always work.
+model MapProviderConfig {
+  id             String   @id @default("default")
+  activeProvider String   @default("osm") // osm | google | yandex
+  secrets        Json?
+  updatedAt      DateTime @updatedAt
+}
+
+/// An in-progress booking held while the visitor is anonymous (keyed by the aventa_draft
+/// cookie), then BOUND to their account at sign-up so nothing is lost across the
+/// email→set-password detour. Also powers the "continue your booking" card state.
+model BookingDraft {
+  id        String   @id @default(cuid())
+  anonId    String? // random token from the aventa_draft cookie (pre-claim). Null once bound.
+  userId    String? // set when the draft is claimed by the account that created it.
+  carSlug   String
+  data      Json     @default("{}") // step-1 selections (dates, pickup/route, currency, …)
+  step      Int      @default(1) // furthest step index reached (1 = Route done)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  expiresAt DateTime
+
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([anonId])
+  @@index([userId])
+}
+
+/// A linked external identity (Google, Yandex, Telegram, …).
+model OAuthAccount {
+  id                String   @id @default(cuid())
+  userId            String
+  provider          String // google | yandex | telegram | vk | max
+  providerAccountId String
+  email             String?
+  createdAt         DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+/// One-time codes for phone / messenger / email verification.
+model OtpCode {
+  id         String    @id @default(cuid())
+  identifier String // phone number or email
+  channel    String // sms | whatsapp | telegram | max | email
+  codeHash   String
+  purpose    String    @default("login")
+  expiresAt  DateTime
+  attempts   Int       @default(0)
+  consumedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([identifier])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String   @unique
+  userAgent String?
+  ip        String?
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+/// Contract & insurance data. Sensitive — access is admin/owner gated.
+/// Identity-verification lifecycle (Sumsub). "Verified" for reuse purposes means
+/// APPROVED *and* documents not expired — see lib/verification.
+enum VerificationStatus {
+  NONE
+  PENDING // submitted / in review / on hold
+  APPROVED // GREEN
+  REJECTED // RED + FINAL — cannot reapply
+  RESUBMISSION // RED + RETRY — must resubmit
+}
+
+model ClientProfile {
+  id             String    @id @default(cuid())
+  userId         String    @unique
+  birthDate      DateTime?
+  citizenship    String?
+  // Contact — customer-supplied at booking. Messenger arrays hold the ticked apps
+  // ('whatsapp' | 'telegram' | 'max') available on each number. additionalPhone is optional.
+  additionalPhone           String?
+  phoneMessengers           String[] @default([])
+  additionalPhoneMessengers String[] @default([])
+  // Document region — selected on the Documents step before uploading (issuing country/state).
+  docCountry     String?
+  docRegion      String?
+  passportNo     String?
+  passportIssue  DateTime?
+  passportExpiry DateTime?
+  licenseNo      String?
+  licenseIssue   DateTime?
+  licenseExpiry  DateTime?
+  licenseCountry String?
+  addressCountry String?
+  addressCity    String?
+  addressLine    String?
+  notes          String?
+  // ── Sumsub identity verification ──────────────────────────────
+  verificationStatus VerificationStatus @default(NONE)
+  sumsubApplicantId  String?
+  verifiedAt         DateTime?
+  verificationReason String? // moderation comment / reject reason (user-facing)
+  // When the current review cycle was submitted (set on NONE/REJECTED → PENDING). Drives the
+  // admin queue's oldest-first ordering so no one is stranded.
+  verificationSubmittedAt DateTime?
+  // When staff last made a review DECISION (set on BOTH approve AND reject). Drives the "reviewed"
+  // tab's most-recently-decided-first order + its displayed timestamp — a real decision time, so it
+  // never disagrees with the sort (unlike verifiedAt, which is null on reject / stale after edits).
+  verificationReviewedAt DateTime?
+  updatedAt      DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+/// ⚠️ DEPRECATED / UNUSED. Typed postal addresses were never given add/edit CRUD and the read-only
+/// profile display was removed — nothing in the app reads or writes this model anymore. The real,
+/// map-based saved-location feature is `SavedPlace` (see /account/addresses). Table kept (not dropped)
+/// to avoid a destructive migration; do not build new features on it — extend SavedPlace instead.
+model SavedAddress {
+  id        String       @id @default(cuid())
+  userId    String
+  label     String
+  kind      LocationKind @default(ADDRESS)
+  country   String?
+  city      String?
+  district  String?
+  line      String?
+  comment   String?
+  lat       Float?
+  lng       Float?
+  isDefault Boolean      @default(false)
+  createdAt DateTime     @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+/// ⚠️ DEPRECATED / DEAD. Display-only saved method (brand + last4, no PAN). Zero app references — no
+/// reader, no writer, and no longer seeded. Real card storage cannot exist until a payment processor
+/// is connected; the /account/payment-methods page is an honest "coming soon" placeholder. Table kept
+/// (not dropped) to avoid a destructive migration; safe to remove in a future cleanup migration.
+model SavedPaymentMethod {
+  id        String   @id @default(cuid())
+  userId    String
+  brand     String
+  last4     String
+  kind      String   @default("card")
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// ─────────────────────────────── Fleet ───────────────────────────────
+
+model Car {
+  id                 String   @id @default(cuid())
+  slug               String   @unique
+  brand              String
+  model              String
+  year               Int
+  class              CarClass
+  gearbox            Gearbox  @default(AUTOMATIC)
+  fuel               Fuel     @default(PETROL)
+  seats              Int      @default(5)
+  doors              Int      @default(4)
+  airConditioning    Boolean  @default(true)
+  pricePerDay        Decimal  @db.Decimal(10, 2) // in base currency (EUR)
+  deposit            Decimal  @db.Decimal(10, 2)
+  mileageLimitPerDay Int? // null = unlimited
+  conditionsRu       String?
+  conditionsEn       String?
+  descriptionRu      String?
+  descriptionEn      String?
+  minRentalDays      Int      @default(1)
+  prepHoursBetween   Int      @default(3) // buffer between rentals
+  active             Boolean  @default(true)
+  sortOrder          Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  photos   CarPhoto[]
+  bookings Booking[]
+  waitlist WaitlistEntry[]
+  reviews  Review[]
+}
+
+model CarPhoto {
+  id         String   @id @default(cuid())
+  carId      String
+  storageKey String // encrypted-at-rest key OR external url
+  isExternal Boolean  @default(false)
+  alt        String?
+  sortOrder  Int      @default(0)
+  isCover    Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  car Car @relation(fields: [carId], references: [id], onDelete: Cascade)
+
+  @@index([carId])
+}
+
+// ────────────────────────────── Bookings ─────────────────────────────
+
+model Booking {
+  id     String        @id @default(cuid())
+  number String        @unique
+  carId  String
+  userId String
+  status BookingStatus @default(NEW)
+
+  startAt DateTime
+  endAt   DateTime
+  days    Int
+
+  // pickup
+  pickupKind    LocationKind @default(AIRPORT)
+  pickupCountry String?
+  pickupCity    String?
+  pickupDistrict String?
+  pickupAddress String?
+  pickupComment String?
+  // ⚠️ UNUSED: no pickup map-picker exists, so pickupLat/Lng are never written. Any feature reading
+  // them degrades to nothing (the "directions to pickup" affordance was removed for this reason).
+  pickupLat     Float?
+  pickupLng     Float?
+
+  // return
+  // ⚠️ UNUSED: there is no separate return-location UI; the booking flow always uses returnSameAsPickup
+  // and never writes the returnKind/Country/City/Address/Lat/Lng columns below.
+  returnSameAsPickup Boolean @default(true)
+  returnKind    LocationKind?
+  returnCountry String?
+  returnCity    String?
+  returnAddress String?
+  returnLat     Float?
+  returnLng     Float?
+
+  // money (stored in booking currency; base amounts kept for reporting)
+  currency        Currency @default(EUR)
+  fxRate          Decimal  @db.Decimal(14, 6) @default(1)
+  rentTotal       Decimal  @db.Decimal(10, 2) @default(0)
+  extrasTotal     Decimal  @db.Decimal(10, 2) @default(0)
+  insuranceTotal  Decimal  @db.Decimal(10, 2) @default(0)
+  subtotal        Decimal  @db.Decimal(10, 2) @default(0)
+  depositAmount   Decimal  @db.Decimal(10, 2) @default(0)
+  prepaidAmount   Decimal  @db.Decimal(10, 2) @default(0) // written by recomputeBookingBalance from confirmed PREPAY/BALANCE payments (card deposit, manual)
+  balanceAmount   Decimal  @db.Decimal(10, 2) @default(0)
+  baseTotal       Decimal  @db.Decimal(10, 2) @default(0) // subtotal in base currency
+
+  tripGoal     TripGoal?
+  adminComment String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  car               Car                   @relation(fields: [carId], references: [id])
+  user              User                  @relation(fields: [userId], references: [id])
+  extras            BookingExtra[]
+  insurance         Insurance?
+  additionalDrivers AdditionalDriver[]
+  payments          Payment[]
+  documents         Document[]
+  statusHistory     BookingStatusEvent[]
+  smartResponse     SmartServiceResponse?
+  consents          ConsentRecord[]
+  contractSignature ContractSignature?
+  incomeAdjustments IncomeAdjustment[]
+
+  @@index([carId])
+  @@index([userId])
+  @@index([status])
+  @@index([startAt, endAt])
+}
+
+model BookingExtra {
+  id        String  @id @default(cuid())
+  bookingId String
+  serviceId String?
+  nameRu    String
+  nameEn    String
+  unitPrice Decimal @db.Decimal(10, 2)
+  qty       Int     @default(1)
+  perDay    Boolean @default(false)
+  total     Decimal @db.Decimal(10, 2)
+
+  booking Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  service Service? @relation(fields: [serviceId], references: [id])
+
+  @@index([bookingId])
+}
+
+model Insurance {
+  id        String          @id @default(cuid())
+  bookingId String          @unique
+  type      InsuranceType   @default(BASIC)
+  status    InsuranceStatus @default(PENDING)
+  price     Decimal         @db.Decimal(10, 2) @default(0)
+  notes     String?
+  updatedAt DateTime        @updatedAt
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
+
+model AdditionalDriver {
+  id             String    @id @default(cuid())
+  bookingId      String
+  firstName      String
+  lastName       String
+  licenseNo      String?
+  licenseCountry String?
+  licenseExpiry  DateTime?
+  birthDate      DateTime?
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId])
+}
+
+model BookingStatusEvent {
+  id        String        @id @default(cuid())
+  bookingId String
+  status    BookingStatus
+  byUserId  String?
+  comment   String?
+  createdAt DateTime      @default(now())
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId])
+}
+
+/// Encrypted document (passport / licence / payment proof / contract).
+/// The bytes live under STORAGE_DIR encrypted with AES-256-GCM; iv+authTag stored here.
+model Document {
+  id              String         @id @default(cuid())
+  userId          String
+  bookingId       String?
+  type            DocumentType
+  storageKey      String         @unique
+  filename        String
+  mime            String
+  size            Int
+  iv              String // hex
+  authTag         String // hex
+  status          DocumentStatus @default(UPLOADED)
+  rejectionReason String?
+  uploadedAt      DateTime       @default(now())
+  reviewedAt      DateTime?
+  reviewedById    String?
+  // Per-document verification (per-document model). expiresAt: the ID's expiry, set by staff when
+  // APPROVING this attempt (null = never expires, e.g. a selfie); the derived "verified?" treats a
+  // past expiresAt as invalid. supersededAt: set when a NEWER attempt of the same type is submitted —
+  // the attempt stays on record (immutable, admin-visible) but no longer counts toward "verified?".
+  expiresAt       DateTime?
+  supersededAt    DateTime?
+  // Set for government-ID images pulled from Sumsub after an approved verification.
+  // Marks the doc as verification-sourced (retention target) and dedupes re-verification.
+  sumsubImageId   String?
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  booking Booking? @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+
+  @@unique([userId, sumsubImageId]) // one row per Sumsub image per user (concurrency-safe dedupe)
+  @@index([userId])
+  @@index([userId, type]) // "current attempt per required type" lookups for the derived gate/queue
+  @@index([bookingId])
+  @@index([sumsubImageId])
+}
+
+// ───────────────────────── Services / concierge ──────────────────────
+
+model Service {
+  id        String          @id @default(cuid())
+  key       String          @unique
+  category  ServiceCategory
+  nameRu    String
+  nameEn    String
+  descRu    String?
+  descEn    String?
+  price     Decimal         @db.Decimal(10, 2) @default(0)
+  unit      String          @default("flat") // flat | per_day | per_trip
+  forGoals  TripGoal[] // which trip goals this is recommended for
+  active    Boolean         @default(true)
+  sortOrder Int             @default(0)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  bookingExtras BookingExtra[]
+}
+
+model SmartServiceResponse {
+  id        String   @id @default(cuid())
+  bookingId String?  @unique
+  userId    String?
+  tripGoal  TripGoal
+  needs     String[] // service keys selected
+  notes     String?
+  createdAt DateTime @default(now())
+
+  booking Booking? @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  user    User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+}
+
+// ────────────────────────────── Payments ─────────────────────────────
+
+model Payment {
+  id            String         @id @default(cuid())
+  bookingId     String
+  method        PaymentMethod
+  kind          PaymentKind    @default(RENT)
+  currency      Currency
+  amount        Decimal        @db.Decimal(10, 2)
+  fxRate        Decimal        @db.Decimal(14, 6) @default(1)
+  status        PaymentStatus  @default(NOT_PAID)
+  txHash        String?
+  cryptoNetwork CryptoNetwork?
+  cryptoAddress String?
+  provider      String? // stripe | paypal
+  // Unique so one Stripe/PayPal intent can back at most ONE Payment row — the DB-level backstop that
+  // stops two concurrent booking-creates (same succeeded card intent) minting two paid bookings.
+  // Postgres treats NULLs as distinct, so non-provider payments (bank/crypto/cash) keep NULL freely.
+  providerRef   String? @unique // payment intent / order id
+  proofDocId    String?
+  adminComment  String?
+  accountId     String? // which wallet a CONFIRMED payment landed in (income/deposit)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  booking Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  account Account? @relation(fields: [accountId], references: [id])
+
+  @@index([bookingId])
+  @@index([status])
+  @@index([accountId])
+}
+
+// ────────────────────────── Availability queue ───────────────────────
+
+/// ⚠️ DEPRECATED / UNUSED. No join-waitlist / offer / notify flow was ever built — there is no action
+/// to create an entry and no path to convert one on cancellation. The stray calendar read + UI note
+/// (which falsely implied "the system offers the car to the first in queue") were removed. Table kept
+/// (not dropped) to avoid a destructive migration; build a real queue before relying on it.
+model WaitlistEntry {
+  id         String         @id @default(cuid())
+  carId      String
+  userId     String
+  startAt    DateTime
+  endAt      DateTime
+  status     WaitlistStatus @default(WAITING)
+  notifiedAt DateTime?
+  createdAt  DateTime       @default(now())
+
+  car  Car  @relation(fields: [carId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([carId])
+  @@index([userId])
+}
+
+// ─────────────────────── Contract & e-signature ──────────────────────
+
+/// ⚠️ DORMANT / UNUSED (not deprecated — kept for a planned feature). The e-signature capture
+/// (components/SignaturePad.tsx + server/contract-actions.ts) is NOT mounted anywhere, so no
+/// ContractSignature is ever created through the UI. The Success page therefore no longer claims
+/// "electronic signature available". Wire SignaturePad into the flow before making any signing claim.
+model ContractSignature {
+  id            String   @id @default(cuid())
+  bookingId     String   @unique
+  signerName    String
+  signatureData String // data URL of drawn signature (PNG)
+  signedAt      DateTime @default(now())
+  ip            String?
+  userAgent     String?
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
+
+// ──────────────────── Config / i18n / content (admin) ─────────────────
+
+model CurrencyRate {
+  code         Currency @id
+  symbol       String
+  rateFromBase Decimal  @db.Decimal(14, 6) // 1 base(EUR) = rateFromBase of this currency
+  active       Boolean  @default(true)
+  updatedAt    DateTime @updatedAt
+}
+
+model Setting {
+  key       String   @id
+  value     String
+  group     String   @default("general")
+  updatedAt DateTime @updatedAt
+}
+
+// ── Finance module (informal single-entry money tracker; NOT double-entry accounting) ──
+// Income is DERIVED from confirmed Payments (the authoritative source) — never stored here, so it
+// can't be faked. Only expenses + admin-managed categories + reconciliation snapshots are stored.
+
+/// Admin-managed expense category (same pattern as City/Service). Seeded with sensible defaults.
+model ExpenseCategory {
+  id        String    @id @default(cuid())
+  key       String    @unique // stable slug
+  nameRu    String
+  active    Boolean   @default(true)
+  sortOrder Int       @default(0)
+  createdAt DateTime  @default(now())
+  expenses  Expense[]
+}
+
+/// A single expense entry (money out). `baseAmount` is the amount converted to base(EUR) at save
+/// time so historical totals don't drift as rates change. `paid=false` ⇒ shows up as a creditor.
+model Expense {
+  id          String           @id @default(cuid())
+  categoryId  String?
+  accountId   String? // which wallet the money came OUT of
+  amount      Decimal          @db.Decimal(12, 2)
+  currency    Currency         @default(EUR)
+  baseAmount  Decimal          @db.Decimal(12, 2) @default(0) // amount in base(EUR), frozen at save
+  spentAt     DateTime         @default(now())
+  note        String?
+  vendor      String?
+  paid        Boolean          @default(true) // false ⇒ unpaid ⇒ a creditor we owe
+  createdById String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  category ExpenseCategory? @relation(fields: [categoryId], references: [id])
+  account  Account?         @relation(fields: [accountId], references: [id])
+
+  @@index([categoryId])
+  @@index([accountId])
+  @@index([spentAt])
+  @@index([paid])
+}
+
+/// A money location the business holds (cash box, bank account, crypto wallet). Admin-managed;
+/// archived (never hard-deleted) when retired so its history stays intact. openingBalance is an
+/// admin-editable starting figure (in the account's currency); every edit is written to FinanceAudit.
+model Account {
+  id             String    @id @default(cuid())
+  name           String
+  kind           String    @default("CASH") // CASH | BANK | CRYPTO | OTHER
+  currency       Currency  @default(EUR)
+  openingBalance Decimal   @db.Decimal(14, 2) @default(0)
+  archived       Boolean   @default(false)
+  sortOrder      Int       @default(0)
+  note           String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  expenses          Expense[]
+  payments          Payment[]
+  transfersFrom     Transfer[]         @relation("TransferFrom")
+  transfersTo       Transfer[]         @relation("TransferTo")
+  incomeAdjustments IncomeAdjustment[]
+}
+
+/// A move of money between two accounts (single-entry: source down, destination up, total unchanged).
+model Transfer {
+  id            String   @id @default(cuid())
+  fromAccountId String
+  toAccountId   String
+  amount        Decimal  @db.Decimal(14, 2)
+  currency      Currency @default(EUR)
+  baseAmount    Decimal  @db.Decimal(14, 2) @default(0) // amount in base(EUR), frozen at save
+  occurredAt    DateTime @default(now())
+  note          String?
+  byUserId      String?
+  createdAt     DateTime @default(now())
+
+  fromAccount Account @relation("TransferFrom", fields: [fromAccountId], references: [id])
+  toAccount   Account @relation("TransferTo", fields: [toAccountId], references: [id])
+
+  @@index([fromAccountId])
+  @@index([toAccountId])
+  @@index([occurredAt])
+}
+
+/// A visible correction to DERIVED income (income itself is never overwritten). A signed amount
+/// (negative = reduction) with a required reason; clearly marked as a correction in the UI, leaving
+/// the original confirmed payment intact. May reference the booking and land on an account.
+model IncomeAdjustment {
+  id         String   @id @default(cuid())
+  bookingId  String?
+  accountId  String?
+  amount     Decimal  @db.Decimal(14, 2) // signed (negative = reduction)
+  currency   Currency @default(EUR)
+  baseAmount Decimal  @db.Decimal(14, 2) @default(0) // signed amount in base(EUR), frozen at save
+  reason     String
+  occurredAt DateTime @default(now())
+  byUserId   String?
+  createdAt  DateTime @default(now())
+
+  booking Booking? @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  account Account? @relation(fields: [accountId], references: [id])
+
+  @@index([bookingId])
+  @@index([accountId])
+  @@index([occurredAt])
+}
+
+/// Append-only, immutable audit trail for every financial record change. Nothing ever updates or
+/// deletes a row here — it is the accountability record that makes editable finance data trustworthy.
+/// `changes` holds [{ field, from, to }]; `byName` is a denormalized snapshot of who made the change.
+model FinanceAudit {
+  id         String   @id @default(cuid())
+  entityType String // account | expense | payment | opening_balance | transfer | income_adjustment
+  entityId   String
+  action     String // create | update | archive | unarchive | delete | confirm | correct | transfer
+  changes    Json? // [{ field, from, to }]
+  reason     String?
+  byUserId   String?
+  byName     String?
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([createdAt])
+}
+
+/// A reconciliation check: the owner enters their real bank/cash balance; we snapshot the module's
+/// computed cash position + the difference so "do my books match reality" is logged over time.
+model FinanceReconciliation {
+  id             String   @id @default(cuid())
+  actualAmount   Decimal  @db.Decimal(14, 2) // owner-entered actual balance (base EUR)
+  recordedAmount Decimal  @db.Decimal(14, 2) // module's computed cash position at the time
+  currency       Currency @default(EUR)
+  note           String?
+  byUserId       String?
+  createdAt      DateTime @default(now())
+}
+
+model SiteContent {
+  id      String @id @default(cuid())
+  key     String
+  locale  String // ru | en | tr | es | de
+  value   String
+  group   String @default("general")
+  updatedAt DateTime @updatedAt
+
+  @@unique([key, locale])
+}
+
+/// Admin-managed social-login credentials (single-company — one row per provider).
+/// clientId is plaintext; the client secret is AES-256-GCM encrypted at rest
+/// (lib/crypto.ts) and NEVER returned to the browser.
+model ProviderCredential {
+  provider              String   @id // google | yandex | telegram
+  clientId              String?
+  encryptedClientSecret String? // hex ciphertext
+  secretIv              String? // hex
+  secretAuthTag         String? // hex
+  enabled               Boolean  @default(false)
+  updatedAt             DateTime @updatedAt
+}
+
+/// Admin-managed payment-processor credentials (single-company — one row per
+/// provider: stripe | paypal | paytr | iyzico | coinbase). Non-secret fields
+/// (publishable keys, merchant ids) live in `config`; secret fields are
+/// AES-256-GCM encrypted (lib/crypto.ts) inside `secrets` as
+/// { fieldKey: { ciphertext, iv, authTag } } and NEVER returned to the browser.
+/// The provider's identity/capabilities/credential shape are declared by its
+/// adapter in lib/payment-gateway — this row only stores config + toggle.
+model PaymentProvider {
+  key       String   @id // stripe | paypal | paytr | iyzico | coinbase
+  enabled   Boolean  @default(false)
+  config    Json? // non-secret fields { fieldKey: value }
+  secrets   Json? // encrypted secret fields { fieldKey: { ciphertext, iv, authTag } }
+  updatedAt DateTime @updatedAt
+}
+
+/// Admin-managed service cities. The booking form shows only enabled ones,
+/// ordered by `order`. Country carried per-city (defaults Türkiye).
+model City {
+  id        String   @id @default(cuid())
+  name      String
+  country   String   @default("Türkiye")
+  enabled   Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([enabled, order])
+}
+
+/// Company office(s) for "pick up from office". One is enough for now; the model
+/// supports several (ordered, enable-toggle). Coordinates drive the map + external
+/// directions links.
+model Office {
+  id        String   @id @default(cuid())
+  name      String
+  address   String
+  city      String?
+  country   String   @default("Türkiye")
+  lat       Float
+  lng       Float
+  enabled   Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([enabled, order])
+}
+
+/// Admin-editable insurance-tier coverage shown in the booking flow. The coverage
+/// text is DB-stored (NOT hardcoded) so the owner keeps policy terms accurate
+/// without a developer. `coverage` is a JSON array of
+/// { labelRu, labelEn, status: 'yes' | 'no' | 'partial' }. `isPlaceholder` stays
+/// true until an admin saves the tier (i.e. reviews/replaces the example text).
+model InsuranceTier {
+  key           String   @id // BASIC | EXTENDED | FULL_NO_FRANCHISE
+  order         Int      @default(0)
+  nameRu        String
+  nameEn        String
+  descRu        String?
+  descEn        String?
+  excessRu      String?
+  excessEn      String?
+  coverage      Json?
+  isPlaceholder Boolean  @default(true)
+  updatedAt     DateTime @updatedAt
+}
+
+/// Sumsub (identity verification) integration config — a single row. Secret
+/// credentials (app token, secret key, webhook secret) are AES-256-GCM encrypted
+/// via the shared lib/crypto pipeline inside `secrets`
+/// ({ appToken|secretKey|webhookSecret: { ciphertext, iv, authTag } }) and are
+/// NEVER returned to the browser. `levelName` is the Sumsub verification level
+/// (must cover ID document + driving licence + liveness/selfie).
+model SumsubConfig {
+  id        String   @id @default("default")
+  enabled   Boolean  @default(false)
+  levelName String   @default("")
+  secrets   Json?
+  updatedAt DateTime @updatedAt
+}
+
+/// ⚠️ DEPRECATED as a feature. There is NO in-app review submission and NO moderation UI — the
+/// `approved` flag is filtered on read but never written by the app. Rows exist only from the seed and
+/// are rendered as curated testimonials on the home/about pages (kept as static social proof). Do not
+/// present this as a live, user-generated review system without building submission + moderation.
+model Review {
+  id         String   @id @default(cuid())
+  authorName String
+  rating     Int      @default(5)
+  text       String
+  locale     String   @default("ru")
+  carId      String?
+  approved   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  car Car? @relation(fields: [carId], references: [id], onDelete: SetNull)
+}
+
+// ─────────────────────── Notifications / audit ───────────────────────
+
+model Notification {
+  id        String              @id @default(cuid())
+  event     String
+  channel   NotificationChannel
+  toAddress String?
+  subject   String?
+  body      String
+  status    NotificationStatus  @default(PENDING)
+  bookingId String?
+  error     String?
+  createdAt DateTime            @default(now())
+  sentAt    DateTime?
+
+  @@index([bookingId])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  entity    String?
+  entityId  String?
+  meta      Json?
+  ip        String?
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([entity, entityId])
+}
+
+model ConsentRecord {
+  id         String   @id @default(cuid())
+  userId     String?
+  bookingId  String?
+  type       String // personal_data | offer | cookies | marketing
+  version    String   @default("1.0")
+  acceptedAt DateTime @default(now())
+  ip         String?
+  userAgent  String?
+
+  user    User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  booking Booking? @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([bookingId])
+}

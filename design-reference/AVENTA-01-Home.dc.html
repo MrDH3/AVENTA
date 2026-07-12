@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:#EAF7F8;}
+a{text-decoration:none;color:inherit;}
+::selection{background:#FF7A5C;color:#fff;}
+@keyframes av-wave{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+@keyframes av-cloud{from{transform:translateX(-30vw);}to{transform:translateX(130vw);}}
+@keyframes av-sway{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(4deg);}}
+@keyframes av-sway2{0%,100%{transform:rotate(2deg);}50%{transform:rotate(-4deg);}}
+@keyframes av-sun{0%,100%{transform:scale(1);opacity:.96;}50%{transform:scale(1.05);opacity:1;}}
+@keyframes av-shimmer{0%,100%{opacity:.18;}50%{opacity:.6;}}
+@keyframes av-surf{0%{transform:translateX(0) translateY(0) rotate(-5deg);}50%{transform:translateX(26px) translateY(-9px) rotate(3deg);}100%{transform:translateX(0) translateY(0) rotate(-5deg);}}
+@keyframes av-float{0%,100%{transform:translateY(0);}50%{transform:translateY(-9px);}}
+@keyframes av-gull{0%,100%{transform:translateY(0) scaleX(1);}50%{transform:translateY(-5px) scaleX(.82);}}
+</style>
+<template id="__bundler_thumbnail" data-bg-color="#1399AE"><svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg"><rect width="1200" height="800" fill="#7FD6E3"/><circle cx="900" cy="240" r="120" fill="#FFD56B"/><path d="M0 560 Q300 500 600 560 T1200 560 V800 H0Z" fill="#1399AE"/><text x="600" y="430" font-family="Georgia, serif" font-size="200" fill="#0C3B45" text-anchor="middle" font-weight="700">A</text></svg></template>
+</helmet>
+
+<div style="width:100%;min-height:100vh;background:#EAF7F8;color:#0C3B45;font-family:'Plus Jakarta Sans',sans-serif;overflow:hidden;">
+
+<!-- ===================== HERO + ANIMATED SCENE ===================== -->
+<div style="position:relative;min-height:660px;overflow:hidden;background:linear-gradient(180deg,#CDEFF6 0%,#A7E2EC 38%,#7CD3E1 56%,#36B6C9 100%);">
+
+  <!-- sun -->
+  <div style="position:absolute;top:84px;right:11%;width:118px;height:118px;border-radius:50%;background:radial-gradient(circle at 50% 50%,#FFE49B 0%,#FFD56B 55%,#FFC24D 100%);box-shadow:0 0 80px 30px rgba(255,213,107,.55);animation:av-sun 6s ease-in-out infinite;"></div>
+  <div style="position:absolute;top:70px;right:9.5%;width:150px;height:150px;border-radius:50%;border:1px solid rgba(255,255,255,.4);opacity:.5;"></div>
+
+  <!-- clouds -->
+  <div style="position:absolute;top:90px;left:0;width:150px;height:42px;background:#fff;border-radius:40px;opacity:.85;filter:blur(1px);animation:av-cloud 46s linear infinite;box-shadow:36px 8px 0 -6px #fff,-30px 6px 0 -8px #fff;"></div>
+  <div style="position:absolute;top:160px;left:0;width:110px;height:32px;background:#fff;border-radius:40px;opacity:.7;filter:blur(1px);animation:av-cloud 64s linear infinite;animation-delay:-20s;box-shadow:28px 6px 0 -5px #fff;"></div>
+  <div style="position:absolute;top:54px;left:0;width:90px;height:26px;background:#fff;border-radius:40px;opacity:.6;filter:blur(1px);animation:av-cloud 80s linear infinite;animation-delay:-50s;"></div>
+
+  <!-- seagulls -->
+  <div style="position:absolute;top:150px;left:30%;color:rgba(12,59,69,.4);animation:av-gull 3.4s ease-in-out infinite;"><svg width="30" height="12" viewBox="0 0 30 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 8 Q8 1 15 7 Q22 1 28 8"/></svg></div>
+  <div style="position:absolute;top:120px;left:38%;color:rgba(12,59,69,.3);animation:av-gull 3.4s ease-in-out infinite;animation-delay:-1.2s;"><svg width="22" height="9" viewBox="0 0 30 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 8 Q8 1 15 7 Q22 1 28 8"/></svg></div>
+
+  <!-- SEA band -->
+  <div style="position:absolute;left:0;right:0;bottom:90px;height:220px;background:linear-gradient(180deg,#3FB7CA 0%,#1C9DB3 45%,#0E7E90 100%);"></div>
+
+  <!-- sun glints -->
+  <div style="position:absolute;bottom:168px;right:14%;width:64px;height:4px;border-radius:3px;background:#FFE49B;animation:av-shimmer 3s ease-in-out infinite;"></div>
+  <div style="position:absolute;bottom:150px;right:18%;width:44px;height:4px;border-radius:3px;background:#FFE49B;animation:av-shimmer 3s ease-in-out infinite;animation-delay:-1s;"></div>
+  <div style="position:absolute;bottom:188px;right:22%;width:30px;height:3px;border-radius:3px;background:#FFEFC2;animation:av-shimmer 3s ease-in-out infinite;animation-delay:-2s;"></div>
+
+  <!-- wave layers (each svg is 2 tiles wide, translateX -50% loops seamlessly) -->
+  <div style="position:absolute;left:0;bottom:150px;width:200%;height:54px;animation:av-wave 14s linear infinite;opacity:.5;">
+    <svg width="100%" height="54" viewBox="0 0 2880 54" preserveAspectRatio="none" fill="#BFEAF0"><path d="M0,28 C240,6 480,6 720,28 C960,50 1200,50 1440,28 C1680,6 1920,6 2160,28 C2400,50 2640,50 2880,28 L2880,54 L0,54 Z"/></svg>
+  </div>
+  <div style="position:absolute;left:0;bottom:124px;width:200%;height:60px;animation:av-wave 10s linear infinite;opacity:.8;">
+    <svg width="100%" height="60" viewBox="0 0 2880 60" preserveAspectRatio="none" fill="#6FD0DD"><path d="M0,30 C240,8 480,8 720,30 C960,52 1200,52 1440,30 C1680,8 1920,8 2160,30 C2400,52 2640,52 2880,30 L2880,60 L0,60 Z"/></svg>
+  </div>
+
+  <!-- BEACH (sand) -->
+  <div style="position:absolute;left:0;right:0;bottom:0;height:104px;background:linear-gradient(180deg,#F6E7C4 0%,#EFD9AC 55%,#E7CD9A 100%);"></div>
+  <div style="position:absolute;left:0;right:0;bottom:92px;height:20px;background:linear-gradient(180deg,rgba(14,126,144,.16),rgba(231,205,154,0));"></div>
+
+  <!-- foam lapping the sand -->
+  <div style="position:absolute;left:0;bottom:92px;width:200%;height:48px;animation:av-wave 7s linear infinite;">
+    <svg width="100%" height="48" viewBox="0 0 2880 48" preserveAspectRatio="none" fill="#ffffff"><path d="M0,28 C240,10 480,10 720,28 C960,46 1200,46 1440,28 C1680,10 1920,10 2160,28 C2400,46 2640,46 2880,28 L2880,48 L0,48 Z" opacity="0.92"/></svg>
+  </div>
+  <div style="position:absolute;left:0;bottom:88px;width:200%;height:10px;animation:av-wave 9s linear infinite;opacity:.65;">
+    <svg width="100%" height="10" viewBox="0 0 2880 10" preserveAspectRatio="none" fill="#ffffff"><path d="M0,6 C360,2 720,2 1440,6 C2160,2 2520,2 2880,6 L2880,10 L0,10 Z"/></svg>
+  </div>
+
+  <!-- palm planted on the beach, swaying -->
+  <div style="position:absolute;bottom:16px;left:44px;width:210px;height:20px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(90,66,28,.26),rgba(90,66,28,0) 70%);"></div>
+  <div style="position:absolute;bottom:24px;left:64px;transform-origin:bottom left;animation:av-sway 6.5s ease-in-out infinite;">
+    <svg width="176" height="244" viewBox="0 0 200 280" fill="none">
+      <path d="M40 280 C40 200 36 120 30 60" stroke="#0E5A52" stroke-width="9" stroke-linecap="round"/>
+      <g fill="#1F9E7A">
+        <path d="M30 58 C-6 40 -28 58 -40 86 C0 70 22 70 34 78 Z"/>
+        <path d="M30 58 C8 22 -10 8 -42 6 C-6 18 12 36 30 66 Z"/>
+        <path d="M30 58 C58 30 92 24 120 36 C84 36 56 48 36 72 Z"/>
+        <path d="M30 58 C66 50 100 64 120 92 C86 70 54 66 34 76 Z"/>
+        <path d="M30 58 C30 22 44 -4 70 -16 C50 14 40 38 36 64 Z"/>
+      </g>
+      <g fill="#16876A"><circle cx="30" cy="60" r="8"/><circle cx="22" cy="64" r="5"/><circle cx="38" cy="64" r="5"/></g>
+      <g fill="#C77B33"><ellipse cx="23" cy="71" rx="4" ry="6"/><ellipse cx="37" cy="71" rx="4" ry="6"/></g>
+    </svg>
+  </div>
+  <!-- (corner palm removed; palm now planted on the beach) -->
+
+  <!-- ===== NAV + HERO CONTENT (above scene) ===== -->
+  <div style="position:relative;z-index:5;">
+    <div style="max-width:1240px;margin:0 auto;padding:20px clamp(20px,4vw,40px);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+      <a href="AVENTA-Home-Beach.dc.html" style="display:flex;align-items:center;gap:11px;">
+        <svg width="40" height="40" viewBox="0 0 48 48" fill="none"><rect x="2" y="2" width="44" height="44" rx="14" fill="#fff"/><path d="M14 35 L24 12 L34 35" stroke="#0E7E90" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.6 27.2 H29.4" stroke="#FF7A5C" stroke-width="3.2" stroke-linecap="round"/><circle cx="24" cy="12" r="2.6" fill="#FF7A5C"/></svg>
+        <div style="font:800 24px 'Bricolage Grotesque',sans-serif;letter-spacing:.04em;color:#0C3B45;">AVENTA</div>
+      </a>
+      <div style="display:flex;align-items:center;gap:24px;font:600 14px 'Plus Jakarta Sans';color:#0C3B45;flex-wrap:wrap;">
+        <a href="AVENTA-02-Catalog-Card.dc.html">{{ t.navCars }}</a>
+        <a href="AVENTA-04-Smart-Services.dc.html">{{ t.navServices }}</a>
+        <a href="AVENTA-14-About-Trust.dc.html">{{ t.navAbout }}</a>
+      </div>
+      <div style="display:flex;align-items:center;gap:13px;">
+        <div style="display:flex;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.9);border-radius:999px;overflow:hidden;font:700 12px 'Plus Jakarta Sans';cursor:pointer;backdrop-filter:blur(6px);">
+          <span style="{{ ruStyle }}" onClick="{{ setRu }}">RU</span>
+          <span style="{{ enStyle }}" onClick="{{ setEn }}">EN</span>
+        </div>
+        <a href="AVENTA-02-Catalog-Card.dc.html" style="padding:11px 22px;background:linear-gradient(180deg,#FF8A5B,#FF6F61);color:#fff;border-radius:999px;font:700 13px 'Plus Jakarta Sans';box-shadow:0 10px 24px -8px rgba(255,111,97,.7);">{{ t.chooseCar }}</a>
+      </div>
+    </div>
+
+    <div style="max-width:1240px;margin:0 auto;padding:clamp(28px,4vw,52px) clamp(20px,4vw,40px) 0;">
+      <div style="display:inline-flex;align-items:center;gap:8px;padding:7px 15px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.8);border-radius:999px;backdrop-filter:blur(6px);font:700 11px 'Space Mono',monospace;letter-spacing:.12em;color:#0E7E90;">☀ {{ t.heroKicker }}</div>
+      <div style="margin-top:18px;font:800 clamp(38px,6vw,68px)/1.02 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em;color:#0C3B45;max-width:760px;">{{ t.heroTitle }}</div>
+      <div style="margin-top:18px;font:500 clamp(15px,2vw,18px)/1.6 'Plus Jakarta Sans';color:#0B5560;max-width:520px;">{{ t.heroSub }}</div>
+
+      <div style="margin-top:32px;max-width:1000px;background:rgba(255,255,255,.82);border:1px solid rgba(255,255,255,.95);border-radius:20px;padding:10px;display:flex;align-items:stretch;flex-wrap:wrap;gap:6px;box-shadow:0 30px 60px -28px rgba(11,85,96,.5);backdrop-filter:blur(10px);">
+        <div style="flex:1 1 150px;padding:14px 18px;"><div style="font:700 10px 'Space Mono',monospace;letter-spacing:.12em;color:#1399AE;">{{ t.fPickup }}</div><div style="margin-top:6px;font:700 15px 'Plus Jakarta Sans';color:#0C3B45;">{{ t.date1 }}</div></div>
+        <div style="width:1px;background:rgba(12,59,69,.1);"></div>
+        <div style="flex:1 1 150px;padding:14px 18px;"><div style="font:700 10px 'Space Mono',monospace;letter-spacing:.12em;color:#1399AE;">{{ t.fReturn }}</div><div style="margin-top:6px;font:700 15px 'Plus Jakarta Sans';color:#0C3B45;">{{ t.date2 }}</div></div>
+        <div style="width:1px;background:rgba(12,59,69,.1);"></div>
+        <div style="flex:1 1 190px;padding:14px 18px;"><div style="font:700 10px 'Space Mono',monospace;letter-spacing:.12em;color:#1399AE;">{{ t.fLoc }}</div><div style="margin-top:6px;font:700 15px 'Plus Jakarta Sans';color:#0C3B45;">{{ t.loc1 }}</div></div>
+        <a href="AVENTA-02-Catalog-Card.dc.html" style="flex:1 1 170px;display:flex;align-items:center;justify-content:center;gap:9px;padding:16px 24px;background:linear-gradient(180deg,#FF8A5B,#FF6F61);color:#fff;border-radius:14px;font:700 14px 'Plus Jakarta Sans';box-shadow:0 14px 28px -10px rgba(255,111,97,.65);">{{ t.searchBtn }}</a>
+      </div>
+      <div style="margin-top:14px;display:flex;align-items:center;gap:9px;font:600 13px 'Plus Jakarta Sans';color:#0B5560;padding-bottom:60px;"><span style="display:inline-flex;width:18px;height:18px;border-radius:50%;background:#FF7A5C;color:#fff;align-items:center;justify-content:center;font-size:11px;">✓</span>{{ t.searchNote }}</div>
+      <div style="height:270px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== ADVANTAGES ===================== -->
+<div style="max-width:1240px;margin:0 auto;padding:clamp(40px,6vw,68px) clamp(20px,4vw,40px) 0;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;">
+    <div style="background:#fff;border-radius:20px;padding:26px 24px;box-shadow:0 18px 40px -24px rgba(11,85,96,.35);"><div style="width:46px;height:46px;border-radius:14px;background:#E0F6F2;display:flex;align-items:center;justify-content:center;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16876A" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div style="margin-top:16px;font:700 18px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">{{ t.adv1t }}</div><div style="margin-top:7px;font:500 13px/1.55 'Plus Jakarta Sans';color:#5E8A92;">{{ t.adv1d }}</div></div>
+    <div style="background:#fff;border-radius:20px;padding:26px 24px;box-shadow:0 18px 40px -24px rgba(11,85,96,.35);"><div style="width:46px;height:46px;border-radius:14px;background:#FFEEDD;display:flex;align-items:center;justify-content:center;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF7A5C" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9h6v6l-9 9z"/><circle cx="15" cy="9" r="1.4"/></svg></div><div style="margin-top:16px;font:700 18px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">{{ t.adv2t }}</div><div style="margin-top:7px;font:500 13px/1.55 'Plus Jakarta Sans';color:#5E8A92;">{{ t.adv2d }}</div></div>
+    <div style="background:#fff;border-radius:20px;padding:26px 24px;box-shadow:0 18px 40px -24px rgba(11,85,96,.35);"><div style="width:46px;height:46px;border-radius:14px;background:#E3F2FB;display:flex;align-items:center;justify-content:center;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2E86C9" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div><div style="margin-top:16px;font:700 18px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">{{ t.adv3t }}</div><div style="margin-top:7px;font:500 13px/1.55 'Plus Jakarta Sans';color:#5E8A92;">{{ t.adv3d }}</div></div>
+    <div style="background:#fff;border-radius:20px;padding:26px 24px;box-shadow:0 18px 40px -24px rgba(11,85,96,.35);"><div style="width:46px;height:46px;border-radius:14px;background:#FFF3D6;display:flex;align-items:center;justify-content:center;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E0A21E" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6L21 9.3l-4.5 4.3 1.1 6.4L12 17l-5.6 3 1.1-6.4L3 9.3l6.4-.7z"/></svg></div><div style="margin-top:16px;font:700 18px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">{{ t.adv4t }}</div><div style="margin-top:7px;font:500 13px/1.55 'Plus Jakarta Sans';color:#5E8A92;">{{ t.adv4d }}</div></div>
+  </div>
+</div>
+
+<!-- ===================== FLEET ===================== -->
+<div style="max-width:1240px;margin:0 auto;padding:clamp(40px,5vw,60px) clamp(20px,4vw,40px) 0;">
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+    <div><div style="font:700 12px 'Space Mono',monospace;letter-spacing:.16em;color:#FF7A5C;">{{ t.parkKicker }}</div><div style="margin-top:8px;font:800 clamp(28px,4vw,38px) 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em;color:#0C3B45;">{{ t.parkTitle }}</div></div>
+    <a href="AVENTA-02-Catalog-Card.dc.html" style="font:700 13px 'Plus Jakarta Sans';color:#0E7E90;">{{ t.allCatalog }}</a>
+  </div>
+  <div style="margin-top:26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px;">
+    <sc-for list="{{ cars }}" as="car" hint-placeholder-count="3">
+    <a href="AVENTA-03-Booking.dc.html" style="display:block;background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 20px 44px -26px rgba(11,85,96,.4);transition:all .25s ease;" style-hover="transform:translateY(-5px);box-shadow:0 30px 56px -26px rgba(11,85,96,.5);">
+      <div style="position:relative;height:178px;background:linear-gradient(135deg,#DCF3F6,#B6E6EE);display:flex;align-items:center;justify-content:center;">
+        <div style="font:700 12px 'Space Mono',monospace;color:rgba(12,59,69,.4);">{{ car.brand }} {{ car.model }}</div>
+        <span style="position:absolute;top:13px;left:13px;padding:5px 11px;background:#fff;border-radius:999px;font:700 10px 'Plus Jakarta Sans';color:#0E7E90;box-shadow:0 4px 12px -4px rgba(11,85,96,.4);">{{ car.cls }}</span>
+        <sc-if value="{{ car.isAvailable }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:13px;right:13px;display:flex;align-items:center;gap:6px;padding:5px 11px;background:#E6F8EE;border-radius:999px;font:700 10px 'Plus Jakarta Sans';color:#1F9E6B;"><span style="width:6px;height:6px;border-radius:50%;background:#27B576;"></span>{{ car.statusText }}</span></sc-if>
+        <sc-if value="{{ car.isBusy }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:13px;right:13px;display:flex;align-items:center;gap:6px;padding:5px 11px;background:#FFF0E0;border-radius:999px;font:700 10px 'Plus Jakarta Sans';color:#E07A1E;"><span style="width:6px;height:6px;border-radius:50%;background:#FF9F45;"></span>{{ car.statusText }}</span></sc-if>
+      </div>
+      <div style="padding:20px;">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;"><div style="font:700 19px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">{{ car.brand }} {{ car.model }}</div><div style="font:600 13px 'Space Mono',monospace;color:#5E8A92;">{{ car.year }}</div></div>
+        <div style="margin-top:10px;font:600 12px 'Space Mono',monospace;color:#5E8A92;">{{ car.specs }}</div>
+        <div style="margin-top:18px;display:flex;align-items:flex-end;justify-content:space-between;border-top:1px solid rgba(12,59,69,.08);padding-top:16px;">
+          <div><div style="font:800 22px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">€{{ car.pricePerDay }}<span style="font:600 12px 'Plus Jakarta Sans';color:#5E8A92;"> {{ t.perDay }}</span></div><div style="margin-top:3px;font:500 11px 'Plus Jakarta Sans';color:#5E8A92;">{{ t.deposit }} €{{ car.deposit }}</div></div>
+          <sc-if value="{{ car.isAvailable }}" hint-placeholder-val="{{ true }}"><span style="padding:11px 18px;background:linear-gradient(180deg,#FF8A5B,#FF6F61);color:#fff;border-radius:999px;font:700 12px 'Plus Jakarta Sans';">{{ t.book }}</span></sc-if>
+          <sc-if value="{{ car.isBusy }}" hint-placeholder-val="{{ false }}"><span style="padding:11px 16px;border:1.5px solid #FF7A5C;color:#FF6F61;border-radius:999px;font:700 11px 'Plus Jakarta Sans';">{{ t.fromDate }}</span></sc-if>
+        </div>
+      </div>
+    </a>
+    </sc-for>
+  </div>
+</div>
+
+<!-- ===================== ECOSYSTEM ===================== -->
+<div style="max-width:1240px;margin:0 auto;padding:clamp(40px,5vw,60px) clamp(20px,4vw,40px) clamp(40px,5vw,60px);">
+  <div style="border-radius:26px;padding:clamp(28px,4vw,42px);background:linear-gradient(135deg,#127C90 0%,#1AA1B0 60%,#28BBC4 100%);position:relative;overflow:hidden;box-shadow:0 30px 60px -30px rgba(11,85,96,.6);">
+    <div style="position:absolute;top:-30px;right:-20px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,#FFD56B,#FFC24D);opacity:.85;box-shadow:0 0 70px 20px rgba(255,213,107,.5);"></div>
+    <div style="position:relative;z-index:2;">
+      <div style="font:700 12px 'Space Mono',monospace;letter-spacing:.16em;color:#BFF0F5;">{{ t.ecoKicker }}</div>
+      <div style="margin-top:10px;margin-bottom:26px;font:800 clamp(24px,3.4vw,32px) 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em;color:#fff;max-width:620px;">{{ t.ecoTitle }}</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;">
+        <a href="AVENTA-02-Catalog-Card.dc.html" style="display:block;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:16px;padding:22px;backdrop-filter:blur(4px);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13l1.6-4.6A2 2 0 017.5 7h9a2 2 0 011.9 1.4L20 13v5a1 1 0 01-1 1h-1a1 1 0 01-1-1v-1H7v1a1 1 0 01-1 1H5a1 1 0 01-1-1z"/><circle cx="8" cy="16" r="0.7"/><circle cx="16" cy="16" r="0.7"/></svg><div style="margin-top:14px;font:700 16px 'Bricolage Grotesque',sans-serif;color:#fff;">{{ t.eco1t }}</div><div style="margin-top:7px;font:500 12px/1.5 'Plus Jakarta Sans';color:rgba(255,255,255,.85);">{{ t.eco1d }}</div></a>
+        <a href="AVENTA-04-Smart-Services.dc.html" style="display:block;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:16px;padding:22px;backdrop-filter:blur(4px);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16l-9-3-7 4 1.5-5L3 9l5 .5L12 4l1.5 6L21 11z"/></svg><div style="margin-top:14px;font:700 16px 'Bricolage Grotesque',sans-serif;color:#fff;">{{ t.eco2t }}</div><div style="margin-top:7px;font:500 12px/1.5 'Plus Jakarta Sans';color:rgba(255,255,255,.85);">{{ t.eco2d }}</div></a>
+        <a href="AVENTA-04-Smart-Services.dc.html" style="display:block;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:16px;padding:22px;backdrop-filter:blur(4px);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V7l8-4 8 4v14"/><path d="M9 21v-5h6v5"/></svg><div style="margin-top:14px;font:700 16px 'Bricolage Grotesque',sans-serif;color:#fff;">{{ t.eco3t }}</div><div style="margin-top:7px;font:500 12px/1.5 'Plus Jakarta Sans';color:rgba(255,255,255,.85);">{{ t.eco3d }}</div></a>
+        <a href="AVENTA-04-Smart-Services.dc.html" style="display:block;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:16px;padding:22px;backdrop-filter:blur(4px);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16l-2 3H6z"/><path d="M12 4v12M12 6l7 8H5z"/></svg><div style="margin-top:14px;font:700 16px 'Bricolage Grotesque',sans-serif;color:#fff;">{{ t.eco4t }}</div><div style="margin-top:7px;font:500 12px/1.5 'Plus Jakarta Sans';color:rgba(255,255,255,.85);">{{ t.eco4d }}</div></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== FOOTER ===================== -->
+<div style="background:#0C3B45;color:#CDEAEF;">
+  <div style="max-width:1240px;margin:0 auto;padding:30px clamp(20px,4vw,40px);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:11px;"><svg width="30" height="30" viewBox="0 0 48 48" fill="none"><rect x="2" y="2" width="44" height="44" rx="14" fill="#0E7E90"/><path d="M14 35 L24 12 L34 35" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.6 27.2 H29.4" stroke="#FF8A5B" stroke-width="3.2" stroke-linecap="round"/><circle cx="24" cy="12" r="2.6" fill="#FF8A5B"/></svg><div><div style="font:800 17px 'Bricolage Grotesque',sans-serif;color:#fff;letter-spacing:.04em;">AVENTA</div><div style="font:500 11px 'Plus Jakarta Sans';color:#7FB6BF;">{{ t.footRights }}</div></div></div>
+    <div style="display:flex;align-items:center;gap:16px;font:700 12px 'Plus Jakarta Sans';">
+      <span style="font:400 10px 'Space Mono';color:#5E8A92;">{{ t.forStaff }}:</span>
+      <a href="AVENTA-06-Admin.dc.html" style="color:#5FE0C8;">{{ t.adminPanel }}</a>
+      <a href="AVENTA-07-CRM.dc.html" style="color:#5FE0C8;">CRM</a>
+      <a href="AVENTA-00-Index.dc.html" style="color:#5FE0C8;">{{ t.allScreens }}</a>
+    </div>
+  </div>
+</div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  state = { lang: 'ru' };
+  componentDidMount() {
+    try { const l = localStorage.getItem('aventa_lang'); if (l === 'ru' || l === 'en') this.setState({ lang: l }); } catch (e) {}
+  }
+  setLang(l) {
+    try { localStorage.setItem('aventa_lang', l); } catch (e) {}
+    this.setState({ lang: l });
+  }
+  renderVals() {
+    const lang = this.state.lang;
+    const dict = {
+      ru: {
+        navCars:'Автомобили', navServices:'Услуги', navAbout:'О нас', chooseCar:'Выбрать авто',
+        heroKicker:'ПРЕМИУМ-АРЕНДА · АНТАЛИЯ',
+        heroTitle:'Ваше море, солнце и дорога — начинаются здесь',
+        heroSub:'Премиум-парк, подача в аэропорт и к морю, трансферы, экскурсии и недвижимость — в одном бронировании.',
+        fPickup:'ПОЛУЧЕНИЕ', fReturn:'ВОЗВРАТ', fLoc:'МЕСТО ПОДАЧИ',
+        date1:'10 авг, 12:00', date2:'15 авг, 12:00', loc1:'Аэропорт Анталии (AYT)',
+        searchBtn:'Найти авто', searchNote:'Покажем только свободные авто на ваши даты',
+        adv1t:'Подача 24/7', adv1d:'Аэропорт, отель, пляж — любой адрес',
+        adv2t:'Прозрачная цена', adv2d:'Без скрытых платежей, всё в договоре',
+        adv3t:'Полное страхование', adv3d:'Базовая, расширенная, без франшизы',
+        adv4t:'Оценка 4.9★', adv4d:'2000+ гостей, поддержка на русском',
+        parkKicker:'ПАРК · 5 АВТОМОБИЛЕЙ', parkTitle:'Доступны к бронированию', allCatalog:'Весь каталог →',
+        perDay:'/ сутки', deposit:'Залог', book:'Забронировать', fromDate:'С этой даты →',
+        ecoKicker:'НЕ ТОЛЬКО АВТО', ecoTitle:'Всё для идеального отдыха в Турции',
+        eco1t:'Аренда авто', eco1d:'5 моделей премиум-класса', eco2t:'Трансфер · VIP-встреча', eco2d:'Аэропорт, отель, бизнес-приём',
+        eco3t:'Недвижимость', eco3d:'Просмотр, покупка, сопровождение', eco4t:'Экскурсии · яхты', eco4d:'Море, гид, переводчик',
+        footRights:'© 2026 · Премиум-аренда авто', forStaff:'ДЛЯ СОТРУДНИКОВ', adminPanel:'Админ-панель', allScreens:'Все экраны'
+      },
+      en: {
+        navCars:'Cars', navServices:'Services', navAbout:'About', chooseCar:'Choose a car',
+        heroKicker:'PREMIUM RENTAL · ANTALYA',
+        heroTitle:'Your sea, sun and the open road — start here',
+        heroSub:'Premium fleet, airport & seaside delivery, transfers, tours and real estate — all in one booking.',
+        fPickup:'PICK-UP', fReturn:'RETURN', fLoc:'PICK-UP POINT',
+        date1:'Aug 10, 12:00', date2:'Aug 15, 12:00', loc1:'Antalya Airport (AYT)',
+        searchBtn:'Find a car', searchNote:'We show only cars free for your dates',
+        adv1t:'24/7 delivery', adv1d:'Airport, hotel, beach — any address',
+        adv2t:'Transparent price', adv2d:'No hidden fees, all in the contract',
+        adv3t:'Full insurance', adv3d:'Basic, extended, zero-excess',
+        adv4t:'Rated 4.9★', adv4d:'2000+ guests, support in your language',
+        parkKicker:'FLEET · 5 CARS', parkTitle:'Available to book', allCatalog:'Full catalogue →',
+        perDay:'/ day', deposit:'Deposit', book:'Book now', fromDate:'From this date →',
+        ecoKicker:'NOT JUST CARS', ecoTitle:'Everything for a perfect Turkey getaway',
+        eco1t:'Car rental', eco1d:'5 premium-class models', eco2t:'Transfer · VIP meet', eco2d:'Airport, hotel, business welcome',
+        eco3t:'Real estate', eco3d:'Viewings, purchase, assistance', eco4t:'Tours · yachts', eco4d:'Sea, guide, interpreter',
+        footRights:'© 2026 · Premium car rental', forStaff:'FOR STAFF', adminPanel:'Admin panel', allScreens:'All screens'
+      }
+    };
+    const t = dict[lang];
+    const seatsWord = lang === 'ru' ? 'мест' : 'seats';
+    const L = {
+      Business: lang === 'ru' ? 'Бизнес' : 'Business',
+      SUV: lang === 'ru' ? 'Премиум SUV' : 'Premium SUV',
+      Auto: lang === 'ru' ? 'Автомат' : 'Automatic',
+      Petrol: lang === 'ru' ? 'Бензин' : 'Petrol',
+      Diesel: lang === 'ru' ? 'Дизель' : 'Diesel',
+      avail: lang === 'ru' ? 'Свободен' : 'Available',
+      busy18: lang === 'ru' ? 'Занят до 18 авг' : 'Busy until Aug 18'
+    };
+    const cars = [
+      { brand:'Mercedes-Benz', model:'E 200', year:2024, cls:L.Business, specs:`${L.Auto} · ${L.Petrol} · 5 ${seatsWord}`, pricePerDay:120, deposit:800, statusText:L.avail, isAvailable:true, isBusy:false },
+      { brand:'BMW', model:'520i', year:2023, cls:L.Business, specs:`${L.Auto} · ${L.Diesel} · 5 ${seatsWord}`, pricePerDay:110, deposit:750, statusText:L.busy18, isAvailable:false, isBusy:true },
+      { brand:'Range Rover', model:'Velar', year:2024, cls:L.SUV, specs:`${L.Auto} · ${L.Petrol} · 5 ${seatsWord}`, pricePerDay:180, deposit:1500, statusText:L.avail, isAvailable:true, isBusy:false }
+    ];
+    const onPill = "padding:6px 13px;background:#0E7E90;color:#fff;";
+    const offPill = "padding:6px 13px;color:#0E7E90;";
+    return {
+      t, cars, lang,
+      setRu: () => this.setLang('ru'),
+      setEn: () => this.setLang('en'),
+      ruStyle: lang === 'ru' ? onPill : offPill,
+      enStyle: lang === 'en' ? onPill : offPill
+    };
+  }
+}
+</script>
+</body>
+</html>

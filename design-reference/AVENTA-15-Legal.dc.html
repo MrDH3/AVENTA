@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+::selection{background:#FF7A5C;color:#fff;}
+</style>
+<template id="__bundler_thumbnail" data-bg-color="#7FD6E3"><svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg"><rect width="1200" height="800" fill="#7FD6E3"/><circle cx="900" cy="240" r="120" fill="#FFD56B"/><path d="M0 560 Q300 500 600 560 T1200 560 V800 H0Z" fill="#1399AE"/><text x="600" y="430" font-family="Georgia, serif" font-size="200" fill="#0C3B45" text-anchor="middle" font-weight="700">A</text></svg></template>
+</helmet>
+
+<div style="position:absolute;left:4px;top:8px;width:1000px;">
+<div style="font:800 24px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">AVENTA — Юридический пакет</div>
+<div style="margin-top:6px;font:500 13px 'Space Mono',monospace;color:#5E8A92;">Политика конфиденциальности · оферта · cookie-баннер · экран согласия · «морской» стиль</div>
+</div>
+
+<!-- PRIVACY -->
+<div style="position:absolute;left:0;top:110px;width:640px;">
+<div data-drags-parent="1" style="position:absolute;top:-30px;left:2px;font:700 13px 'Space Mono',monospace;color:#5E8A92;">Политика конфиденциальности</div>
+<div style="width:640px;height:740px;overflow:hidden;border-radius:20px;box-shadow:0 30px 70px -34px rgba(11,85,96,.5);background:#fff;font-family:'Plus Jakarta Sans',sans-serif;color:#0C3B45;">
+<div style="padding:24px 34px;background:linear-gradient(135deg,#127C90,#1AA1B0);display:flex;align-items:center;gap:12px;"><svg width="30" height="30" viewBox="0 0 48 48" fill="none"><rect x="2" y="2" width="44" height="44" rx="14" fill="#fff"/><path d="M14 35 L24 12 L34 35" stroke="#0E7E90" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.6 27.2 H29.4" stroke="#FF7A5C" stroke-width="3.2" stroke-linecap="round"/><circle cx="24" cy="12" r="2.6" fill="#FF7A5C"/></svg><div style="font:800 19px 'Bricolage Grotesque',sans-serif;color:#fff;">Политика конфиденциальности</div></div>
+<div style="padding:26px 34px;">
+<div style="font:600 11px 'Space Mono';color:#5E8A92;">Редакция от 01.01.2026</div>
+<div style="margin-top:16px;font:700 14px 'Bricolage Grotesque',sans-serif;color:#0E7E90;">1. Какие данные мы собираем</div>
+<div style="margin-top:6px;font:500 13px/1.7 'Plus Jakarta Sans';color:#3F6670;">Имя, контакты, паспорт/ID, водительское удостоверение, адрес и фото документов — исключительно для оформления аренды, договора и страховки.</div>
+<div style="margin-top:14px;font:700 14px 'Bricolage Grotesque',sans-serif;color:#0E7E90;">2. Как используем</div>
+<div style="margin-top:6px;font:500 13px/1.7 'Plus Jakarta Sans';color:#3F6670;">Для подтверждения брони, оформления договора и полиса, связи по заказу и выполнения требований законодательства Турции.</div>
+<div style="margin-top:14px;font:700 14px 'Bricolage Grotesque',sans-serif;color:#0E7E90;">3. Хранение и защита</div>
+<div style="margin-top:6px;font:500 13px/1.7 'Plus Jakarta Sans';color:#3F6670;">Файлы хранятся в зашифрованном виде, доступ — только у администратора. Передача по SSL. Регулярное резервное копирование.</div>
+<div style="margin-top:14px;font:700 14px 'Bricolage Grotesque',sans-serif;color:#0E7E90;">4. Ваши права</div>
+<div style="margin-top:6px;font:500 13px/1.7 'Plus Jakarta Sans';color:#3F6670;">Запросить доступ, исправление или удаление данных — privacy@aventa-rental.com. Данные не передаются третьим лицам, кроме страховой по вашему заказу.</div>
+<div style="margin-top:20px;display:flex;gap:8px;"><span style="padding:8px 14px;border-radius:999px;background:#E0F6F2;color:#0E7E90;font:700 11px 'Plus Jakarta Sans';">KVKK (Турция)</span><span style="padding:8px 14px;border-radius:999px;background:#E0F6F2;color:#0E7E90;font:700 11px 'Plus Jakarta Sans';">GDPR</span></div>
+</div>
+</div>
+</div>
+
+<!-- OFFER -->
+<div style="position:absolute;left:720px;top:110px;width:640px;">
+<div data-drags-parent="1" style="position:absolute;top:-30px;left:2px;font:700 13px 'Space Mono',monospace;color:#5E8A92;">Публичная оферта</div>
+<div style="width:640px;height:740px;overflow:hidden;border-radius:20px;box-shadow:0 30px 70px -34px rgba(11,85,96,.5);background:#fff;font-family:'Plus Jakarta Sans',sans-serif;color:#0C3B45;">
+<div style="padding:24px 34px;background:linear-gradient(135deg,#127C90,#1AA1B0);display:flex;align-items:center;gap:12px;"><svg width="30" height="30" viewBox="0 0 48 48" fill="none"><rect x="2" y="2" width="44" height="44" rx="14" fill="#fff"/><path d="M14 35 L24 12 L34 35" stroke="#0E7E90" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.6 27.2 H29.4" stroke="#FF7A5C" stroke-width="3.2" stroke-linecap="round"/><circle cx="24" cy="12" r="2.6" fill="#FF7A5C"/></svg><div style="font:800 19px 'Bricolage Grotesque',sans-serif;color:#fff;">Публичная оферта</div></div>
+<div style="padding:26px 34px;">
+<div style="font:600 11px 'Space Mono';color:#5E8A92;">Договор-оферта на оказание услуг аренды</div>
+<div style="margin-top:16px;font:700 14px 'Bricolage Grotesque',sans-serif;color:#0E7E90;">1. Общие положения</div>
+<div style="margin-top:6px;font:500 13px/1.7 'Plus Jakarta Sans';color:#3F6670;">Оферта — официальное предложение AVENTA Rental LLC заключить договор аренды. Оформление заявки означает акцепт оферты.</div>
+<div style="margin-top:14px;font:700 14px 'Bricolage Grotesque',sans-serif;color:#0E7E90;">2. Предмет</div>
+<div style="margin-top:6px;font:500 13px/1.7 'Plus Jakarta Sans';color:#3F6670;">Предоставление автомобиля во временное пользование на согласованный срок и сопутствующих услуг (трансфер, страхование, оборудование).</div>
+<div style="margin-top:14px;font:700 14px 'Bricolage Grotesque',sans-serif;color:#0E7E90;">3. Стоимость и оплата</div>
+<div style="margin-top:6px;font:500 13px/1.7 'Plus Jakarta Sans';color:#3F6670;">Стоимость указывается при оформлении. Оплата картой, переводом и криптовалютой (USDT/USDC). Залог возвращается после возврата авто без повреждений.</div>
+<div style="margin-top:14px;font:700 14px 'Bricolage Grotesque',sans-serif;color:#0E7E90;">4. Ответственность сторон</div>
+<div style="margin-top:6px;font:500 13px/1.7 'Plus Jakarta Sans';color:#3F6670;">Арендатор отвечает за сохранность авто согласно выбранному типу страхования. Отмена и возврат — по разделу 5 договора.</div>
+</div>
+</div>
+</div>
+
+<!-- COOKIE -->
+<div style="position:absolute;left:1440px;top:110px;width:560px;">
+<div data-drags-parent="1" style="position:absolute;top:-30px;left:2px;font:700 13px 'Space Mono',monospace;color:#5E8A92;">Cookie-баннер</div>
+<div style="width:560px;height:360px;border-radius:20px;overflow:hidden;box-shadow:0 30px 70px -34px rgba(11,85,96,.5);background:linear-gradient(180deg,#CDEFF6,#A7E2EC);font-family:'Plus Jakarta Sans',sans-serif;color:#0C3B45;position:relative;padding:30px;">
+<div style="font:700 11px 'Space Mono';letter-spacing:.14em;color:#0E7E90;">ПОКАЗ ВНИЗУ САЙТА</div>
+<div style="position:absolute;left:24px;right:24px;bottom:24px;background:#fff;border-radius:16px;padding:20px 22px;box-shadow:0 20px 50px -20px rgba(11,85,96,.5);">
+<div style="display:flex;align-items:flex-start;gap:14px;"><div style="width:42px;height:42px;border-radius:12px;background:#FFF3D6;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🍪</div><div style="flex:1;"><div style="font:700 14px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">Мы используем cookie</div><div style="margin-top:5px;font:500 12px/1.55 'Plus Jakarta Sans';color:#5E8A92;">Для работы сайта и аналитики. Продолжая, вы соглашаетесь с <span style="color:#0E7E90;font-weight:700;">политикой</span>.</div></div></div>
+<div style="margin-top:16px;display:flex;gap:10px;"><span style="flex:1;text-align:center;padding:11px;background:linear-gradient(180deg,#FF8A5B,#FF6F61);color:#fff;border-radius:10px;font:700 12px 'Plus Jakarta Sans';">Принять все</span><span style="padding:11px 16px;border:1.5px solid rgba(20,153,174,.3);color:#0E7E90;border-radius:10px;font:700 12px 'Plus Jakarta Sans';">Только нужные</span><span style="padding:11px 14px;color:#5E8A92;font:700 12px 'Plus Jakarta Sans';">Настроить</span></div>
+</div>
+</div>
+</div>
+
+<!-- CONSENT -->
+<div style="position:absolute;left:1440px;top:510px;width:560px;">
+<div data-drags-parent="1" style="position:absolute;top:-30px;left:2px;font:700 13px 'Space Mono',monospace;color:#5E8A92;">Экран согласия на обработку данных</div>
+<div style="width:560px;border-radius:20px;overflow:hidden;box-shadow:0 30px 70px -34px rgba(11,85,96,.5);background:linear-gradient(180deg,#A7E2EC,#7CD3E1);font-family:'Plus Jakarta Sans',sans-serif;padding:40px 34px;display:flex;align-items:center;justify-content:center;">
+<div style="width:100%;max-width:420px;background:#fff;border-radius:20px;padding:30px;box-shadow:0 24px 60px -28px rgba(11,85,96,.6);">
+<div style="width:54px;height:54px;border-radius:15px;background:#E0F6F2;display:flex;align-items:center;justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0E7E90" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+<div style="margin-top:16px;font:800 21px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">Согласие на обработку данных</div>
+<div style="margin-top:8px;font:500 13px/1.6 'Plus Jakarta Sans';color:#5E8A92;">Для оформления аренды, договора и страховки нам нужно обработать ваши персональные данные и документы.</div>
+<div style="margin-top:18px;display:flex;flex-direction:column;gap:12px;">
+<div style="display:flex;align-items:flex-start;gap:10px;"><span style="width:18px;height:18px;border-radius:5px;background:#27B576;display:flex;align-items:center;justify-content:center;color:#fff;font:700 11px 'Plus Jakarta Sans';flex-shrink:0;margin-top:1px;">✓</span><span style="font:500 12px/1.5 'Plus Jakarta Sans';color:#0C3B45;">Согласие на обработку персональных данных согласно <span style="color:#0E7E90;font-weight:700;">политике</span></span></div>
+<div style="display:flex;align-items:flex-start;gap:10px;"><span style="width:18px;height:18px;border-radius:5px;background:#27B576;display:flex;align-items:center;justify-content:center;color:#fff;font:700 11px 'Plus Jakarta Sans';flex-shrink:0;margin-top:1px;">✓</span><span style="font:500 12px/1.5 'Plus Jakarta Sans';color:#0C3B45;">Принимаю условия <span style="color:#0E7E90;font-weight:700;">оферты</span></span></div>
+<div style="display:flex;align-items:flex-start;gap:10px;"><span style="width:18px;height:18px;border-radius:5px;border:1.5px solid rgba(20,153,174,.3);flex-shrink:0;margin-top:1px;"></span><span style="font:500 12px/1.5 'Plus Jakarta Sans';color:#5E8A92;">Хочу получать спецпредложения (необязательно)</span></div>
+</div>
+<div style="margin-top:22px;text-align:center;padding:14px;background:linear-gradient(180deg,#FF8A5B,#FF6F61);color:#fff;border-radius:12px;font:700 14px 'Plus Jakarta Sans';box-shadow:0 14px 28px -10px rgba(255,111,97,.7);">Подтвердить и продолжить</div>
+<div style="margin-top:12px;text-align:center;font:500 11px 'Plus Jakarta Sans';color:#5E8A92;">Вы можете отозвать согласие в любой момент</div>
+</div>
+</div>
+</div>
+
+</x-dc>
+</body>
+</html>

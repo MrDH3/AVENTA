@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:#EAF7F8;}
+a{text-decoration:none;color:inherit;}
+::selection{background:#FF7A5C;color:#fff;}
+</style>
+<template id="__bundler_thumbnail" data-bg-color="#7FD6E3"><svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg"><rect width="1200" height="800" fill="#7FD6E3"/><circle cx="900" cy="240" r="120" fill="#FFD56B"/><path d="M0 560 Q300 500 600 560 T1200 560 V800 H0Z" fill="#1399AE"/><text x="600" y="430" font-family="Georgia, serif" font-size="200" fill="#0C3B45" text-anchor="middle" font-weight="700">A</text></svg></template>
+</helmet>
+
+<div style="width:100%;min-height:100vh;background:#EAF7F8;color:#0C3B45;font-family:'Plus Jakarta Sans',sans-serif;">
+
+<div style="background:linear-gradient(180deg,#CDEFF6,#EAF7F8);border-bottom:1px solid rgba(20,153,174,.14);">
+<div style="max-width:1240px;margin:0 auto;padding:18px clamp(20px,4vw,40px);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+<a href="AVENTA-01-Home.dc.html" style="display:flex;align-items:center;gap:11px;"><svg width="38" height="38" viewBox="0 0 48 48" fill="none"><rect x="2" y="2" width="44" height="44" rx="14" fill="#fff"/><path d="M14 35 L24 12 L34 35" stroke="#0E7E90" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.6 27.2 H29.4" stroke="#FF7A5C" stroke-width="3.2" stroke-linecap="round"/><circle cx="24" cy="12" r="2.6" fill="#FF7A5C"/></svg><div style="font:800 23px 'Bricolage Grotesque',sans-serif;letter-spacing:.04em;color:#0C3B45;">AVENTA</div></a>
+<div style="display:flex;align-items:center;gap:13px;"><div style="display:flex;background:#fff;border:1px solid rgba(20,153,174,.2);border-radius:999px;overflow:hidden;font:700 12px 'Plus Jakarta Sans';cursor:pointer;"><span style="{{ ruStyle }}" onClick="{{ setRu }}">RU</span><span style="{{ enStyle }}" onClick="{{ setEn }}">EN</span></div><a href="AVENTA-02-Catalog-Card.dc.html" style="font:600 13px 'Plus Jakarta Sans';color:#0E7E90;">‹ {{ t.toCatalog }}</a></div>
+</div>
+</div>
+
+<!-- step rail -->
+<div style="max-width:1240px;margin:0 auto;padding:clamp(22px,3vw,32px) clamp(20px,4vw,40px) 0;">
+<div style="font:800 clamp(24px,3.4vw,34px) 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em;color:#0C3B45;">{{ t.title }}</div>
+<div style="margin-top:18px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+<sc-for list="{{ steps }}" as="s" hint-placeholder-count="5">
+<div style="display:flex;align-items:center;gap:6px;"><span style="{{ s.dot }}">{{ s.num }}</span><span style="{{ s.label }}">{{ s.name }}</span></div>
+<sc-if value="{{ s.bar }}" hint-placeholder-val="{{ true }}"><span style="width:26px;height:2px;border-radius:2px;background:rgba(12,59,69,.14);"></span></sc-if>
+</sc-for>
+</div>
+</div>
+
+<div style="max-width:1240px;margin:0 auto;padding:24px clamp(20px,4vw,40px) clamp(40px,5vw,60px);display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;">
+
+<!-- LEFT: stacked step cards -->
+<div style="flex:1 1 560px;min-width:0;display:flex;flex-direction:column;gap:18px;">
+
+<!-- step 1 route + map -->
+<div style="background:#fff;border-radius:20px;padding:24px;box-shadow:0 18px 40px -26px rgba(11,85,96,.4);">
+<div style="display:flex;align-items:center;gap:10px;"><span style="width:26px;height:26px;border-radius:50%;background:#0E7E90;color:#fff;display:flex;align-items:center;justify-content:center;font:700 13px 'Plus Jakarta Sans';">1</span><div style="font:700 17px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">{{ t.s1 }}</div></div>
+<div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+<div><div style="font:700 9px 'Space Mono',monospace;letter-spacing:.1em;color:#1399AE;margin-bottom:6px;">{{ t.country }}</div><div style="background:#F2FAFB;border:1px solid rgba(20,153,174,.2);border-radius:10px;padding:11px 13px;font:600 13px 'Plus Jakarta Sans';color:#0C3B45;">Турция</div></div>
+<div><div style="font:700 9px 'Space Mono',monospace;letter-spacing:.1em;color:#1399AE;margin-bottom:6px;">{{ t.city }}</div><div style="background:#F2FAFB;border:1px solid rgba(20,153,174,.2);border-radius:10px;padding:11px 13px;font:600 13px 'Plus Jakarta Sans';color:#0C3B45;">Анталия</div></div>
+<div style="grid-column:span 2;"><div style="font:700 9px 'Space Mono',monospace;letter-spacing:.1em;color:#1399AE;margin-bottom:6px;">{{ t.address }}</div><div style="background:#F2FAFB;border:1px solid rgba(20,153,174,.2);border-radius:10px;padding:11px 13px;font:600 13px 'Plus Jakarta Sans';color:#0C3B45;">Аэропорт Анталии (AYT), Терминал 1, зона прилёта</div></div>
+</div>
+<div style="margin-top:14px;position:relative;height:230px;border-radius:14px;overflow:hidden;border:1px solid rgba(20,153,174,.2);">
+<iframe title="Карта подачи" src="https://www.openstreetmap.org/export/embed.html?bbox=30.770,36.880,30.835,36.915&layer=mapnik&marker=36.8987,30.8005" style="width:100%;height:100%;border:0;"></iframe>
+<div style="position:absolute;left:12px;top:12px;display:flex;align-items:center;gap:7px;background:#fff;border-radius:9px;padding:7px 12px;font:700 11px 'Plus Jakarta Sans';color:#0E7E90;pointer-events:none;box-shadow:0 4px 12px -4px rgba(11,85,96,.4);"><span style="width:7px;height:7px;border-radius:50%;background:#FF7A5C;"></span>Аэропорт Анталии (AYT)</div>
+</div>
+</div>
+
+<!-- step 2 services + insurance -->
+<div style="background:#fff;border-radius:20px;padding:24px;box-shadow:0 18px 40px -26px rgba(11,85,96,.4);">
+<div style="display:flex;align-items:center;gap:10px;"><span style="width:26px;height:26px;border-radius:50%;background:#0E7E90;color:#fff;display:flex;align-items:center;justify-content:center;font:700 13px 'Plus Jakarta Sans';">2</span><div style="font:700 17px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">{{ t.s2 }}</div></div>
+<div style="margin-top:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;">
+<sc-for list="{{ extras }}" as="x" hint-placeholder-count="4">
+<div style="{{ x.box }}"><div><div style="font:700 13px 'Plus Jakarta Sans';color:#0C3B45;">{{ x.name }}</div><div style="font:500 11px 'Plus Jakarta Sans';color:#5E8A92;">{{ x.price }}</div></div><span style="{{ x.check }}">{{ x.mark }}</span></div>
+</sc-for>
+</div>
+<div style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;">
+<div style="display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,#FFF3EB,#FFE8DC);border:1.5px solid #FF7A5C;border-radius:13px;padding:14px;"><div><div style="font:700 13px 'Plus Jakarta Sans';color:#0C3B45;">{{ t.insExt }}</div><div style="font:500 11px 'Plus Jakarta Sans';color:#5E8A92;">{{ t.fr }} €300</div></div><span style="font:800 14px 'Bricolage Grotesque';color:#FF6F61;">€15{{ t.perDayShort }}</span></div>
+<div style="display:flex;align-items:center;justify-content:space-between;background:#F2FAFB;border:1px solid rgba(20,153,174,.2);border-radius:13px;padding:14px;"><div><div style="font:700 13px 'Plus Jakarta Sans';color:#0C3B45;">{{ t.insFull }}</div><div style="font:500 11px 'Plus Jakarta Sans';color:#5E8A92;">0 {{ t.fr }}</div></div><span style="font:800 14px 'Bricolage Grotesque';color:#0C3B45;">€28{{ t.perDayShort }}</span></div>
+</div>
+</div>
+
+<!-- step 3 client + docs -->
+<div style="background:#fff;border-radius:20px;padding:24px;box-shadow:0 18px 40px -26px rgba(11,85,96,.4);">
+<div style="display:flex;align-items:center;gap:10px;"><span style="width:26px;height:26px;border-radius:50%;background:#0E7E90;color:#fff;display:flex;align-items:center;justify-content:center;font:700 13px 'Plus Jakarta Sans';">3</span><div style="font:700 17px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">{{ t.s3 }}</div></div>
+<div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+<div><div style="font:700 9px 'Space Mono',monospace;letter-spacing:.1em;color:#1399AE;margin-bottom:6px;">{{ t.name }}</div><div style="background:#F2FAFB;border:1px solid rgba(20,153,174,.2);border-radius:10px;padding:11px 13px;font:600 13px 'Plus Jakarta Sans';color:#0C3B45;">Иван Петров</div></div>
+<div><div style="font:700 9px 'Space Mono',monospace;letter-spacing:.1em;color:#1399AE;margin-bottom:6px;">{{ t.phone }}</div><div style="background:#F2FAFB;border:1px solid rgba(20,153,174,.2);border-radius:10px;padding:11px 13px;font:600 13px 'Plus Jakarta Sans';color:#0C3B45;">+90 555 123 45 67</div></div>
+</div>
+<div style="margin-top:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+<div style="border:1.5px dashed rgba(20,153,174,.35);border-radius:12px;padding:14px;text-align:center;background:#F2FAFB;"><div style="font:700 11px 'Plus Jakarta Sans';color:#0E7E90;">{{ t.passport }}</div><div style="margin-top:4px;font:600 10px 'Space Mono';color:#1F9E6B;">✓ загружен</div></div>
+<div style="border:1.5px dashed rgba(20,153,174,.35);border-radius:12px;padding:14px;text-align:center;background:#F2FAFB;"><div style="font:700 11px 'Plus Jakarta Sans';color:#0E7E90;">{{ t.dlFront }}</div><div style="margin-top:4px;font:600 10px 'Space Mono';color:#1F9E6B;">✓ загружен</div></div>
+<div style="border:1.5px dashed rgba(255,122,92,.5);border-radius:12px;padding:14px;text-align:center;background:#FFF6F1;"><div style="font:700 11px 'Plus Jakarta Sans';color:#E07A1E;">{{ t.dlBack }}</div><div style="margin-top:4px;font:600 10px 'Space Mono';color:#E07A1E;">+ добавить</div></div>
+</div>
+</div>
+
+<!-- step 4 payment -->
+<div style="background:#fff;border-radius:20px;padding:24px;box-shadow:0 18px 40px -26px rgba(11,85,96,.4);">
+<div style="display:flex;align-items:center;gap:10px;"><span style="width:26px;height:26px;border-radius:50%;background:#0E7E90;color:#fff;display:flex;align-items:center;justify-content:center;font:700 13px 'Plus Jakarta Sans';">4</span><div style="font:700 17px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">{{ t.s4 }}</div></div>
+<div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;">
+<span style="padding:8px 14px;border-radius:999px;background:#0E7E90;color:#fff;font:700 12px 'Plus Jakarta Sans';">EUR €</span>
+<span style="padding:8px 14px;border-radius:999px;background:#F2FAFB;color:#0C3B45;font:600 12px 'Plus Jakarta Sans';">USD</span>
+<span style="padding:8px 14px;border-radius:999px;background:#F2FAFB;color:#0C3B45;font:600 12px 'Plus Jakarta Sans';">RUB</span>
+<span style="padding:8px 14px;border-radius:999px;background:#F2FAFB;color:#0C3B45;font:600 12px 'Plus Jakarta Sans';">TRY</span>
+<span style="padding:8px 14px;border-radius:999px;background:#F2FAFB;color:#0C3B45;font:600 12px 'Plus Jakarta Sans';">USDT</span>
+<span style="padding:8px 14px;border-radius:999px;background:#F2FAFB;color:#0C3B45;font:600 12px 'Plus Jakarta Sans';">USDC</span>
+</div>
+<div style="margin-top:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;background:#F2FAFB;border:1px solid rgba(20,153,174,.2);border-radius:14px;padding:16px;">
+<div style="width:104px;height:104px;flex-shrink:0;border-radius:12px;overflow:hidden;background:#fff;padding:7px;"><img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TQn9Y2khEsLJW1ChVWFMSMeRDow5KcVeR" alt="QR USDT TRC20" style="width:100%;height:100%;display:block;" /></div>
+<div style="flex:1;min-width:160px;"><div style="font:700 13px 'Plus Jakarta Sans';color:#0C3B45;">{{ t.cryptoTitle }}</div><div style="margin-top:5px;font:500 12px/1.5 'Plus Jakarta Sans';color:#5E8A92;">{{ t.cryptoSub }}</div><div style="margin-top:8px;font:700 11px 'Space Mono';color:#0E7E90;word-break:break-all;">TQn9Y2kh…Dow5KcVeR · TRC20</div></div>
+</div>
+</div>
+
+<!-- step 5 consent -->
+<div style="background:#fff;border-radius:20px;padding:24px;box-shadow:0 18px 40px -26px rgba(11,85,96,.4);">
+<div style="display:flex;align-items:center;gap:10px;"><span style="width:26px;height:26px;border-radius:50%;background:#0E7E90;color:#fff;display:flex;align-items:center;justify-content:center;font:700 13px 'Plus Jakarta Sans';">5</span><div style="font:700 17px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">{{ t.s5 }}</div></div>
+<div style="margin-top:14px;display:flex;align-items:flex-start;gap:10px;"><span style="width:20px;height:20px;border-radius:6px;background:#27B576;display:flex;align-items:center;justify-content:center;color:#fff;font:700 12px 'Plus Jakarta Sans';flex-shrink:0;margin-top:1px;">✓</span><span style="font:500 12px/1.55 'Plus Jakarta Sans';color:#0B5560;">{{ t.consent }}</span></div>
+</div>
+
+</div>
+
+<!-- RIGHT: sticky summary -->
+<div style="flex:1 1 300px;min-width:0;position:sticky;top:18px;">
+<div style="background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 22px 48px -26px rgba(11,85,96,.45);">
+<div style="height:120px;background:linear-gradient(135deg,#DCF3F6,#B6E6EE);display:flex;align-items:center;justify-content:center;font:700 12px 'Space Mono';color:rgba(12,59,69,.4);">Mercedes-Benz E 200</div>
+<div style="padding:20px;">
+<div style="font:700 18px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">Mercedes-Benz E 200</div>
+<div style="margin-top:4px;font:600 11px 'Space Mono';color:#5E8A92;">{{ t.business }} · 2024</div>
+<div style="margin-top:16px;display:flex;flex-direction:column;gap:9px;font:500 13px 'Plus Jakarta Sans';">
+<div style="display:flex;justify-content:space-between;"><span style="color:#5E8A92;">{{ t.period }}</span><span style="color:#0C3B45;font-weight:700;">10–15 авг · 5 {{ t.nights }}</span></div>
+<div style="display:flex;justify-content:space-between;"><span style="color:#5E8A92;">{{ t.rent }} 5×€120</span><span style="color:#0C3B45;font-weight:700;">€600</span></div>
+<div style="display:flex;justify-content:space-between;"><span style="color:#5E8A92;">{{ t.extrasL }}</span><span style="color:#0C3B45;font-weight:700;">€100</span></div>
+<div style="display:flex;justify-content:space-between;border-top:1px solid rgba(12,59,69,.1);padding-top:10px;"><span style="color:#0C3B45;font-weight:800;">{{ t.total }}</span><span style="color:#0C3B45;font-weight:800;font-size:18px;">€700</span></div>
+<div style="display:flex;justify-content:space-between;"><span style="color:#5E8A92;">{{ t.deposit }}</span><span style="color:#0C3B45;font-weight:600;">€800</span></div>
+</div>
+<a href="AVENTA-12-Success-Contract.dc.html" style="margin-top:18px;display:block;text-align:center;padding:15px;background:linear-gradient(180deg,#FF8A5B,#FF6F61);color:#fff;border-radius:13px;font:700 14px 'Plus Jakarta Sans';box-shadow:0 14px 28px -10px rgba(255,111,97,.7);">{{ t.submit }}</a>
+<div style="margin-top:10px;text-align:center;font:500 11px 'Plus Jakarta Sans';color:#5E8A92;">{{ t.noCharge }}</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1240,&quot;height&quot;:1400}}">
+class Component extends DCLogic {
+  state = { lang: 'ru' };
+  componentDidMount() { try { const l = localStorage.getItem('aventa_lang'); if (l==='ru'||l==='en') this.setState({lang:l}); } catch(e){} }
+  setLang(l){ try{ localStorage.setItem('aventa_lang',l);}catch(e){} this.setState({lang:l}); }
+  renderVals() {
+    const lang = this.state.lang;
+    const dict = {
+      ru: { toCatalog:'К каталогу', title:'Оформление бронирования',
+        s1:'Маршрут и место подачи', s2:'Услуги и страховка', s3:'Данные клиента и документы', s4:'Оплата', s5:'Согласие',
+        country:'СТРАНА', city:'ГОРОД', address:'АДРЕС ПОДАЧИ', name:'ИМЯ', phone:'ТЕЛЕФОН',
+        passport:'Паспорт', dlFront:'ВУ лицевая', dlBack:'ВУ обратная',
+        insExt:'Расширенная', insFull:'Полная без франшизы', fr:'франшиза', perDayShort:'/сут',
+        cryptoTitle:'Оплата криптовалютой', cryptoSub:'Отправляйте только USDT в сети TRC20 на указанный адрес.',
+        consent:'Я согласен на обработку персональных данных и принимаю оферту и политику конфиденциальности.',
+        business:'Бизнес', period:'Период', nights:'сут', rent:'Аренда', extrasL:'Доп. услуги', total:'Итого', deposit:'Залог',
+        submit:'Отправить заявку', noCharge:'Оплата после подтверждения менеджером',
+        stepNames:['Маршрут','Услуги','Данные','Оплата','Готово'],
+        exName:['Детское кресло','Доставка по адресу','Безлимитный пробег','Доп. водитель'], exPrice:['€5 / сут','€25','€20 / сут','€10 / сут'] },
+      en: { toCatalog:'To catalogue', title:'Complete your booking',
+        s1:'Route & pick-up point', s2:'Extras & insurance', s3:'Client details & documents', s4:'Payment', s5:'Consent',
+        country:'COUNTRY', city:'CITY', address:'PICK-UP ADDRESS', name:'NAME', phone:'PHONE',
+        passport:'Passport', dlFront:'Licence front', dlBack:'Licence back',
+        insExt:'Extended', insFull:'Full, zero-excess', fr:'excess', perDayShort:'/day',
+        cryptoTitle:'Pay with crypto', cryptoSub:'Send only USDT on the TRC20 network to the address shown.',
+        consent:'I consent to the processing of personal data and accept the offer and privacy policy.',
+        business:'Business', period:'Period', nights:'nights', rent:'Rental', extrasL:'Extras', total:'Total', deposit:'Deposit',
+        submit:'Submit request', noCharge:'Payment after manager confirmation',
+        stepNames:['Route','Extras','Details','Payment','Done'],
+        exName:['Child seat','Delivery to address','Unlimited mileage','Extra driver'], exPrice:['€5 / day','€25','€20 / day','€10 / day'] }
+    };
+    const t = dict[lang];
+    const steps = t.stepNames.map((name, i) => ({
+      num: i+1, name, bar: i < 4,
+      dot: i === 0 ? "width:26px;height:26px;border-radius:50%;background:#0E7E90;color:#fff;display:flex;align-items:center;justify-content:center;font:700 12px 'Plus Jakarta Sans';"
+                   : "width:26px;height:26px;border-radius:50%;background:#fff;border:1.5px solid rgba(20,153,174,.3);color:#0E7E90;display:flex;align-items:center;justify-content:center;font:700 12px 'Plus Jakarta Sans';",
+      label: i === 0 ? "font:700 12px 'Plus Jakarta Sans';color:#0C3B45;" : "font:600 12px 'Plus Jakarta Sans';color:#5E8A92;"
+    }));
+    const checkedBox = "display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,#E9FBF2,#D6F2E4);border:1.5px solid #27B576;border-radius:13px;padding:14px;";
+    const idleBox = "display:flex;align-items:center;justify-content:space-between;background:#F2FAFB;border:1px solid rgba(20,153,174,.2);border-radius:13px;padding:14px;";
+    const ck = "width:20px;height:20px;border-radius:6px;background:#27B576;color:#fff;display:flex;align-items:center;justify-content:center;font:700 11px 'Plus Jakarta Sans';flex-shrink:0;";
+    const unck = "width:20px;height:20px;border-radius:6px;border:1.5px solid rgba(20,153,174,.3);flex-shrink:0;";
+    const sel = [false,true,false,false];
+    const extras = t.exName.map((name,i)=>({ name, price:t.exPrice[i], box: sel[i]?checkedBox:idleBox, check: sel[i]?ck:unck, mark: sel[i]?'✓':'' }));
+    const onPill = "padding:6px 13px;background:#0E7E90;color:#fff;";
+    const offPill = "padding:6px 13px;color:#0E7E90;";
+    return { t, steps, extras, setRu:()=>this.setLang('ru'), setEn:()=>this.setLang('en'),
+      ruStyle: lang==='ru'?onPill:offPill, enStyle: lang==='en'?onPill:offPill };
+  }
+}
+</script>
+</body>
+</html>

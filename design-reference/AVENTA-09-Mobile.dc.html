@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+::selection{background:#FF7A5C;color:#fff;}
+@keyframes mb-wave{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+</style>
+<template id="__bundler_thumbnail" data-bg-color="#7FD6E3"><svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg"><rect width="1200" height="800" fill="#7FD6E3"/><circle cx="900" cy="240" r="120" fill="#FFD56B"/><path d="M0 560 Q300 500 600 560 T1200 560 V800 H0Z" fill="#1399AE"/><text x="600" y="430" font-family="Georgia, serif" font-size="200" fill="#0C3B45" text-anchor="middle" font-weight="700">A</text></svg></template>
+</helmet>
+
+<div style="position:absolute;left:4px;top:8px;width:1000px;">
+<div style="font:800 24px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">AVENTA — Мобильные версии (морской стиль)</div>
+<div style="margin-top:6px;font:500 13px 'Space Mono',monospace;color:#5E8A92;">Главная · Каталог · Карточка авто · Бронирование · Личный кабинет · iPhone</div>
+</div>
+
+<!-- HOME -->
+<div style="position:absolute;left:0;top:110px;width:402px;">
+<div data-drags-parent="1" style="position:absolute;top:-30px;left:2px;font:700 13px 'Space Mono',monospace;color:#5E8A92;">Главная</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ false }}" hint-size="402px,874px">
+<div style="min-height:874px;background:#EAF7F8;color:#0C3B45;font-family:'Plus Jakarta Sans',sans-serif;padding:54px 0 40px;">
+<div style="position:relative;overflow:hidden;background:linear-gradient(180deg,#CDEFF6,#7CD3E1);padding:10px 0 0;">
+<div style="position:absolute;top:8px;right:24px;width:54px;height:54px;border-radius:50%;background:radial-gradient(circle,#FFE49B,#FFD56B 55%,#FFC24D);box-shadow:0 0 40px 12px rgba(255,213,107,.5);"></div>
+<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 18px;position:relative;z-index:2;"><div style="display:flex;align-items:center;gap:8px;"><svg width="28" height="28" viewBox="0 0 48 48" fill="none"><rect x="2" y="2" width="44" height="44" rx="14" fill="#fff"/><path d="M14 35 L24 12 L34 35" stroke="#0E7E90" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.6 27.2 H29.4" stroke="#FF7A5C" stroke-width="3.2" stroke-linecap="round"/><circle cx="24" cy="12" r="2.6" fill="#FF7A5C"/></svg><div style="font:800 18px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">AVENTA</div></div><div style="display:flex;gap:5px;font:700 11px 'Plus Jakarta Sans';"><span style="padding:5px 9px;background:#0E7E90;color:#fff;border-radius:999px;">RU</span></div></div>
+<div style="padding:14px 18px 0;position:relative;z-index:2;"><div style="font:800 26px/1.1 'Bricolage Grotesque',sans-serif;color:#0C3B45;">Море, солнце и дорога — здесь</div><div style="margin-top:8px;font:500 13px/1.5 'Plus Jakarta Sans';color:#0B5560;">Авто и весь сервис для поездки в Турцию.</div></div>
+<div style="margin:16px 16px 0;background:rgba(255,255,255,.9);border-radius:16px;padding:6px;position:relative;z-index:2;box-shadow:0 16px 34px -20px rgba(11,85,96,.5);">
+<div style="padding:11px 13px;border-bottom:1px solid rgba(12,59,69,.08);"><div style="font:700 9px 'Space Mono';letter-spacing:.1em;color:#1399AE;">ПОЛУЧЕНИЕ → ВОЗВРАТ</div><div style="margin-top:4px;font:700 14px 'Plus Jakarta Sans';color:#0C3B45;">10 → 15 авг · AYT</div></div>
+<div style="padding:7px;"><div style="text-align:center;padding:13px;background:linear-gradient(180deg,#FF8A5B,#FF6F61);color:#fff;border-radius:11px;font:700 14px 'Plus Jakarta Sans';">Найти авто</div></div>
+</div>
+<div style="height:34px;position:relative;margin-top:10px;"><div style="position:absolute;left:0;bottom:0;width:200%;height:30px;animation:mb-wave 8s linear infinite;"><svg width="100%" height="30" viewBox="0 0 2880 30" preserveAspectRatio="none" fill="#fff"><path d="M0,16 C360,4 720,4 1440,16 C2160,28 2520,28 2880,16 L2880,30 L0,30Z"/></svg></div></div>
+</div>
+<div style="padding:18px;">
+<div style="display:flex;align-items:center;justify-content:space-between;"><div style="font:800 18px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">Доступны сейчас</div><span style="font:700 12px 'Plus Jakarta Sans';color:#0E7E90;">Все →</span></div>
+<div style="margin-top:14px;display:flex;flex-direction:column;gap:14px;">
+<div style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 14px 32px -22px rgba(11,85,96,.4);"><div style="position:relative;height:120px;background:linear-gradient(135deg,#DCF3F6,#B6E6EE);display:flex;align-items:center;justify-content:center;"><div style="font:700 10px 'Space Mono';color:rgba(12,59,69,.4);">Mercedes-Benz E 200</div><span style="position:absolute;top:10px;right:10px;display:flex;align-items:center;gap:5px;padding:4px 9px;background:#E6F8EE;border-radius:999px;font:700 9px 'Plus Jakarta Sans';color:#1F9E6B;"><span style="width:5px;height:5px;border-radius:50%;background:#27B576;"></span>Свободен</span></div><div style="padding:14px;display:flex;align-items:flex-end;justify-content:space-between;"><div><div style="font:700 15px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">Mercedes-Benz E 200</div><div style="margin-top:4px;font:600 10px 'Space Mono';color:#5E8A92;">Автомат · 5 мест</div><div style="margin-top:8px;font:800 17px 'Bricolage Grotesque';color:#0C3B45;">€120<span style="font:600 10px 'Plus Jakarta Sans';color:#5E8A92;"> /сут</span></div></div><span style="padding:9px 15px;background:linear-gradient(180deg,#FF8A5B,#FF6F61);color:#fff;border-radius:999px;font:700 12px 'Plus Jakarta Sans';">Бронь</span></div></div>
+<div style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 14px 32px -22px rgba(11,85,96,.4);"><div style="position:relative;height:120px;background:linear-gradient(135deg,#DCF3F6,#B6E6EE);display:flex;align-items:center;justify-content:center;"><div style="font:700 10px 'Space Mono';color:rgba(12,59,69,.4);">Range Rover Velar</div><span style="position:absolute;top:10px;right:10px;display:flex;align-items:center;gap:5px;padding:4px 9px;background:#E6F8EE;border-radius:999px;font:700 9px 'Plus Jakarta Sans';color:#1F9E6B;"><span style="width:5px;height:5px;border-radius:50%;background:#27B576;"></span>Свободен</span></div><div style="padding:14px;display:flex;align-items:flex-end;justify-content:space-between;"><div><div style="font:700 15px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">Range Rover Velar</div><div style="margin-top:4px;font:600 10px 'Space Mono';color:#5E8A92;">Автомат · 5 мест</div><div style="margin-top:8px;font:800 17px 'Bricolage Grotesque';color:#0C3B45;">€180<span style="font:600 10px 'Plus Jakarta Sans';color:#5E8A92;"> /сут</span></div></div><span style="padding:9px 15px;background:linear-gradient(180deg,#FF8A5B,#FF6F61);color:#fff;border-radius:999px;font:700 12px 'Plus Jakarta Sans';">Бронь</span></div></div>
+</div>
+</div>
+</div>
+</x-import>
+</div>
+
+<!-- CATALOG -->
+<div style="position:absolute;left:482px;top:110px;width:402px;">
+<div data-drags-parent="1" style="position:absolute;top:-30px;left:2px;font:700 13px 'Space Mono',monospace;color:#5E8A92;">Каталог</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ false }}" hint-size="402px,874px">
+<div style="min-height:874px;background:#EAF7F8;color:#0C3B45;font-family:'Plus Jakarta Sans',sans-serif;padding:54px 0 40px;">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 18px 14px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font:700 20px 'Plus Jakarta Sans';color:#5E8A92;">‹</span><div style="font:800 20px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">Каталог</div></div><span style="padding:7px 12px;background:#fff;border-radius:10px;font:700 11px 'Plus Jakarta Sans';color:#0E7E90;box-shadow:0 6px 14px -8px rgba(11,85,96,.4);">Фильтры</span></div>
+<div style="padding:0 18px;">
+<div style="display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:12px;padding:11px 14px;box-shadow:0 8px 20px -12px rgba(11,85,96,.4);"><div style="font:700 12px 'Plus Jakarta Sans';color:#0C3B45;">10–15 авг · AYT</div><div style="display:flex;align-items:center;gap:8px;"><span style="font:600 11px 'Plus Jakarta Sans';color:#5E8A92;">Свободные</span><span style="width:34px;height:20px;border-radius:999px;background:#27B576;position:relative;"><span style="position:absolute;top:3px;right:3px;width:14px;height:14px;border-radius:50%;background:#fff;"></span></span></div></div>
+<div style="margin-top:12px;display:flex;gap:8px;"><span style="padding:8px 14px;border-radius:999px;background:#0E7E90;color:#fff;font:700 12px 'Plus Jakarta Sans';">Все · 5</span><span style="padding:8px 14px;border-radius:999px;background:#fff;color:#0C3B45;font:600 12px 'Plus Jakarta Sans';box-shadow:0 6px 14px -8px rgba(11,85,96,.3);">Бизнес</span><span style="padding:8px 14px;border-radius:999px;background:#fff;color:#0C3B45;font:600 12px 'Plus Jakarta Sans';box-shadow:0 6px 14px -8px rgba(11,85,96,.3);">SUV</span></div>
+<div style="margin-top:14px;display:flex;flex-direction:column;gap:12px;">
+<div style="display:flex;gap:12px;background:#fff;border-radius:14px;padding:12px;box-shadow:0 12px 28px -20px rgba(11,85,96,.4);"><div style="width:104px;height:80px;border-radius:11px;flex-shrink:0;background:linear-gradient(135deg,#DCF3F6,#B6E6EE);"></div><div style="flex:1;min-width:0;"><div style="font:700 14px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">Mercedes-Benz E 200</div><div style="margin-top:4px;font:600 10px 'Space Mono';color:#5E8A92;">Автомат · Бензин · 5</div><div style="margin-top:8px;display:flex;align-items:center;justify-content:space-between;"><span style="font:800 16px 'Bricolage Grotesque';color:#0C3B45;">€120<span style="font:600 10px;color:#5E8A92;">/сут</span></span><span style="padding:7px 12px;background:linear-gradient(180deg,#FF8A5B,#FF6F61);color:#fff;border-radius:999px;font:700 11px 'Plus Jakarta Sans';">Бронь</span></div></div></div>
+<div style="display:flex;gap:12px;background:#fff;border-radius:14px;padding:12px;box-shadow:0 12px 28px -20px rgba(11,85,96,.4);"><div style="width:104px;height:80px;border-radius:11px;flex-shrink:0;background:linear-gradient(135deg,#DCF3F6,#B6E6EE);"></div><div style="flex:1;min-width:0;"><div style="font:700 14px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">Range Rover Velar</div><div style="margin-top:4px;font:600 10px 'Space Mono';color:#5E8A92;">Автомат · Бензин · 5</div><div style="margin-top:8px;display:flex;align-items:center;justify-content:space-between;"><span style="font:800 16px 'Bricolage Grotesque';color:#0C3B45;">€180<span style="font:600 10px;color:#5E8A92;">/сут</span></span><span style="padding:7px 12px;background:linear-gradient(180deg,#FF8A5B,#FF6F61);color:#fff;border-radius:999px;font:700 11px 'Plus Jakarta Sans';">Бронь</span></div></div></div>
+<div style="display:flex;gap:12px;background:#fff;border-radius:14px;padding:12px;box-shadow:0 12px 28px -20px rgba(11,85,96,.4);opacity:.7;"><div style="width:104px;height:80px;border-radius:11px;flex-shrink:0;background:linear-gradient(135deg,#E4EEF0,#CFE0E4);"></div><div style="flex:1;min-width:0;"><div style="font:700 14px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">BMW 520i</div><div style="margin-top:4px;font:600 10px 'Space Mono';color:#E07A1E;">Занят до 18 авг</div><div style="margin-top:8px;display:flex;align-items:center;justify-content:space-between;"><span style="font:800 16px 'Bricolage Grotesque';color:#0C3B45;">€110<span style="font:600 10px;color:#5E8A92;">/сут</span></span><span style="padding:7px 12px;border:1.5px solid #FF7A5C;color:#FF6F61;border-radius:999px;font:700 10px 'Plus Jakarta Sans';">С 18 авг</span></div></div></div>
+</div>
+</div>
+</div>
+</x-import>
+</div>
+
+<!-- CAR DETAIL -->
+<div style="position:absolute;left:964px;top:110px;width:402px;">
+<div data-drags-parent="1" style="position:absolute;top:-30px;left:2px;font:700 13px 'Space Mono',monospace;color:#5E8A92;">Карточка авто</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ false }}" hint-size="402px,874px">
+<div style="min-height:874px;background:#EAF7F8;color:#0C3B45;font-family:'Plus Jakarta Sans',sans-serif;padding:54px 0 92px;position:relative;">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 18px 12px;"><span style="font:700 20px 'Plus Jakarta Sans';color:#5E8A92;">‹</span><span style="font:600 12px 'Plus Jakarta Sans';color:#5E8A92;">Каталог</span><span style="font:700 16px 'Plus Jakarta Sans';color:#FF6F61;">♡</span></div>
+<div style="position:relative;height:210px;margin:0 18px;border-radius:18px;background:linear-gradient(135deg,#DCF3F6,#B6E6EE);display:flex;align-items:center;justify-content:center;"><div style="font:700 11px 'Space Mono';color:rgba(12,59,69,.4);">Mercedes-Benz E 200</div><span style="position:absolute;top:12px;left:12px;padding:5px 11px;background:#fff;border-radius:999px;font:700 10px 'Plus Jakarta Sans';color:#0E7E90;">Бизнес</span><span style="position:absolute;top:12px;right:12px;display:flex;align-items:center;gap:5px;padding:5px 11px;background:#E6F8EE;border-radius:999px;font:700 10px 'Plus Jakarta Sans';color:#1F9E6B;"><span style="width:5px;height:5px;border-radius:50%;background:#27B576;"></span>Доступен</span></div>
+<div style="padding:14px 18px 0;">
+<div style="font:800 22px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">Mercedes-Benz E 200</div>
+<div style="margin-top:4px;font:500 12px 'Plus Jakarta Sans';color:#5E8A92;">2024 · Бизнес-класс · Седан</div>
+<div style="margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+<div style="background:#fff;border-radius:11px;padding:11px;box-shadow:0 8px 20px -16px rgba(11,85,96,.5);"><div style="font:700 9px 'Space Mono';color:#1399AE;">КОРОБКА</div><div style="margin-top:3px;font:700 13px 'Plus Jakarta Sans';color:#0C3B45;">Автомат</div></div>
+<div style="background:#fff;border-radius:11px;padding:11px;box-shadow:0 8px 20px -16px rgba(11,85,96,.5);"><div style="font:700 9px 'Space Mono';color:#1399AE;">ТОПЛИВО</div><div style="margin-top:3px;font:700 13px 'Plus Jakarta Sans';color:#0C3B45;">Бензин</div></div>
+<div style="background:#fff;border-radius:11px;padding:11px;box-shadow:0 8px 20px -16px rgba(11,85,96,.5);"><div style="font:700 9px 'Space Mono';color:#1399AE;">МЕСТ / ДВЕРЕЙ</div><div style="margin-top:3px;font:700 13px 'Plus Jakarta Sans';color:#0C3B45;">5 / 4</div></div>
+<div style="background:#fff;border-radius:11px;padding:11px;box-shadow:0 8px 20px -16px rgba(11,85,96,.5);"><div style="font:700 9px 'Space Mono';color:#1399AE;">ПРОБЕГ</div><div style="margin-top:3px;font:700 13px 'Plus Jakarta Sans';color:#0C3B45;">250 км/сут</div></div>
+</div>
+<div style="margin-top:14px;font:700 14px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">Условия аренды</div>
+<div style="margin-top:9px;display:flex;flex-direction:column;gap:8px;font:500 12px 'Plus Jakarta Sans';color:#0B5560;"><span style="display:flex;gap:8px;"><span style="color:#27B576;">✓</span>Возраст 21+, стаж 2+ года</span><span style="display:flex;gap:8px;"><span style="color:#27B576;">✓</span>Залог €800, базовая страховка</span></div>
+</div>
+<div style="position:absolute;left:0;right:0;bottom:0;background:#fff;border-top:1px solid rgba(12,59,69,.08);padding:14px 18px 30px;display:flex;align-items:center;justify-content:space-between;"><div><div style="font:800 21px 'Bricolage Grotesque';color:#0C3B45;">€120<span style="font:600 10px;color:#5E8A92;"> /сутки</span></div><div style="font:500 10px 'Plus Jakarta Sans';color:#5E8A92;">Залог €800</div></div><span style="padding:14px 28px;background:linear-gradient(180deg,#FF8A5B,#FF6F61);color:#fff;border-radius:12px;font:700 14px 'Plus Jakarta Sans';">Забронировать</span></div>
+</div>
+</x-import>
+</div>
+
+<!-- BOOKING -->
+<div style="position:absolute;left:1446px;top:110px;width:402px;">
+<div data-drags-parent="1" style="position:absolute;top:-30px;left:2px;font:700 13px 'Space Mono',monospace;color:#5E8A92;">Бронирование · услуги</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ false }}" hint-size="402px,874px">
+<div style="min-height:874px;background:#EAF7F8;color:#0C3B45;font-family:'Plus Jakarta Sans',sans-serif;padding:54px 0 92px;position:relative;">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 18px 12px;"><span style="font:700 20px 'Plus Jakarta Sans';color:#5E8A92;">‹</span><div style="font:800 15px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">Услуги и страховка</div><span style="font:600 11px 'Space Mono';color:#5E8A92;">2/4</span></div>
+<div style="display:flex;gap:5px;padding:0 18px 16px;"><span style="flex:1;height:3px;border-radius:2px;background:#FF7A5C;"></span><span style="flex:1;height:3px;border-radius:2px;background:#FF7A5C;"></span><span style="flex:1;height:3px;border-radius:2px;background:#CFE0E4;"></span><span style="flex:1;height:3px;border-radius:2px;background:#CFE0E4;"></span></div>
+<div style="padding:0 18px;">
+<div style="display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,#127C90,#1AA1B0);border-radius:12px;padding:13px 14px;"><span style="color:#FFD56B;font:700 16px;">✦</span><span style="font:600 12px/1.4 'Plus Jakarta Sans';color:#fff;">Расскажите о цели поездки — подберём услуги</span></div>
+<div style="margin-top:16px;font:700 13px 'Plus Jakarta Sans';color:#5E8A92;">Дополнительные услуги</div>
+<div style="margin-top:10px;display:flex;flex-direction:column;gap:10px;">
+<div style="display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:12px;padding:13px 14px;box-shadow:0 8px 20px -16px rgba(11,85,96,.4);"><div><div style="font:700 13px 'Plus Jakarta Sans';color:#0C3B45;">Детское кресло</div><div style="font:500 11px 'Plus Jakarta Sans';color:#5E8A92;">€5 / сутки</div></div><span style="width:20px;height:20px;border-radius:6px;border:1.5px solid rgba(20,153,174,.3);"></span></div>
+<div style="display:flex;align-items:center;justify-content:space-between;background:#E9FBF2;border:1.5px solid #27B576;border-radius:12px;padding:13px 14px;"><div><div style="font:700 13px 'Plus Jakarta Sans';color:#0C3B45;">Доставка авто по адресу</div><div style="font:500 11px 'Plus Jakarta Sans';color:#5E8A92;">€25</div></div><span style="width:20px;height:20px;border-radius:6px;background:#27B576;display:flex;align-items:center;justify-content:center;color:#fff;font:700 12px;">✓</span></div>
+</div>
+<div style="margin-top:16px;font:700 13px 'Plus Jakarta Sans';color:#5E8A92;">Страховка</div>
+<div style="margin-top:10px;display:flex;flex-direction:column;gap:10px;">
+<div style="display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,#FFF3EB,#FFE8DC);border:1.5px solid #FF7A5C;border-radius:12px;padding:13px 14px;"><div><div style="font:700 13px 'Plus Jakarta Sans';color:#0C3B45;">Расширенная</div><div style="font:500 11px 'Plus Jakarta Sans';color:#5E8A92;">Франшиза €300</div></div><span style="font:800 14px 'Bricolage Grotesque';color:#FF6F61;">€15/сут</span></div>
+<div style="display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid rgba(20,153,174,.2);border-radius:12px;padding:13px 14px;box-shadow:0 8px 20px -16px rgba(11,85,96,.4);"><div><div style="font:700 13px 'Plus Jakarta Sans';color:#0C3B45;">Полная без франшизы</div><div style="font:500 11px 'Plus Jakarta Sans';color:#5E8A92;">0 франшиза</div></div><span style="font:800 14px 'Bricolage Grotesque';color:#0C3B45;">€28/сут</span></div>
+</div>
+</div>
+<div style="position:absolute;left:0;right:0;bottom:0;background:#fff;border-top:1px solid rgba(12,59,69,.08);padding:13px 18px 30px;display:flex;align-items:center;justify-content:space-between;"><div><div style="font:700 9px 'Space Mono';color:#5E8A92;">ИТОГО</div><div style="font:800 20px 'Bricolage Grotesque';color:#0C3B45;">€700</div></div><span style="padding:14px 30px;background:linear-gradient(180deg,#FF8A5B,#FF6F61);color:#fff;border-radius:12px;font:700 14px 'Plus Jakarta Sans';">Далее →</span></div>
+</div>
+</x-import>
+</div>
+
+<!-- ACCOUNT -->
+<div style="position:absolute;left:1928px;top:110px;width:402px;">
+<div data-drags-parent="1" style="position:absolute;top:-30px;left:2px;font:700 13px 'Space Mono',monospace;color:#5E8A92;">Личный кабинет</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ false }}" hint-size="402px,874px">
+<div style="min-height:874px;background:#EAF7F8;color:#0C3B45;font-family:'Plus Jakarta Sans',sans-serif;padding:54px 0 40px;">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 18px 14px;"><div style="font:800 18px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">AVENTA</div><div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#FF8A5B,#FF6F61);display:flex;align-items:center;justify-content:center;color:#fff;font:700 12px 'Plus Jakarta Sans';">И</div></div>
+<div style="padding:6px 18px 0;">
+<div style="font:700 10px 'Space Mono';letter-spacing:.14em;color:#FF7A5C;">ЛИЧНЫЙ КАБИНЕТ</div>
+<div style="margin-top:8px;font:800 26px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">С возвращением, Иван</div>
+<div style="margin-top:10px;display:inline-flex;align-items:center;gap:7px;padding:8px 13px;background:#fff;border-radius:999px;box-shadow:0 8px 18px -10px rgba(11,85,96,.4);"><span style="color:#FFC24D;">★</span><span style="font:700 11px 'Plus Jakarta Sans';color:#0C3B45;">3 поездки · −10%</span></div>
+<div style="margin-top:16px;border-radius:16px;overflow:hidden;background:linear-gradient(135deg,#127C90,#1AA1B0);padding:16px;">
+<div style="font:700 9px 'Space Mono';letter-spacing:.12em;color:#BFF0F5;">ВАШ ЛЮБИМЫЙ АВТОМОБИЛЬ</div>
+<div style="margin-top:12px;display:flex;align-items:center;gap:12px;"><div style="width:84px;height:54px;border-radius:10px;flex-shrink:0;background:rgba(255,255,255,.25);"></div><div><div style="font:700 14px 'Bricolage Grotesque',sans-serif;color:#fff;">Mercedes-Benz E 200</div><div style="margin-top:3px;font:600 10px 'Space Mono';color:rgba(255,255,255,.85);">€120/сут · свободен</div></div></div>
+<div style="margin-top:14px;text-align:center;padding:13px;background:#fff;color:#FF6F61;border-radius:11px;font:700 13px 'Plus Jakarta Sans';">Забронировать снова · ≈45 сек</div>
+</div>
+<div style="margin-top:18px;font:800 16px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">История</div>
+<div style="margin-top:10px;display:flex;flex-direction:column;gap:10px;">
+<div style="display:flex;align-items:center;gap:12px;background:#fff;border-radius:12px;padding:11px;box-shadow:0 10px 24px -18px rgba(11,85,96,.4);"><div style="width:56px;height:42px;border-radius:9px;flex-shrink:0;background:linear-gradient(135deg,#DCF3F6,#B6E6EE);"></div><div style="flex:1;"><div style="font:700 13px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">Range Rover Velar</div><div style="font:500 11px 'Plus Jakarta Sans';color:#5E8A92;">12–18 мая · €1 080</div></div><span style="font:700 11px 'Plus Jakarta Sans';color:#0E7E90;">PDF</span></div>
+<div style="display:flex;align-items:center;gap:12px;background:#fff;border-radius:12px;padding:11px;box-shadow:0 10px 24px -18px rgba(11,85,96,.4);"><div style="width:56px;height:42px;border-radius:9px;flex-shrink:0;background:linear-gradient(135deg,#DCF3F6,#B6E6EE);"></div><div style="flex:1;"><div style="font:700 13px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">Mercedes-Benz E 200</div><div style="font:500 11px 'Plus Jakarta Sans';color:#5E8A92;">03–08 авг 2025 · €560</div></div><span style="font:700 11px 'Plus Jakarta Sans';color:#0E7E90;">Повтор</span></div>
+</div>
+</div>
+</div>
+</x-import>
+</div>
+
+</x-dc>
+</body>
+</html>

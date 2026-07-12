@@ -1,0 +1,563 @@
+/* ============================================================
+   AVENTA — Global stylesheet & design tokens
+   Direction: "seaside / vacation" (aqua-turquoise + coral + sand)
+   Canonical token source. See README "Design Tokens".
+   ============================================================ */
+
+:root {
+  /* ---- Client · light "seaside" ---- */
+  --av-bg: #eaf7f8;
+  --av-sky-top: #cdeff6;
+  --av-sky-mid: #a7e2ec;
+  --av-sky-low: #7cd3e1;
+  --av-sea-1: #3fb7ca;
+  --av-sea-2: #1c9db3;
+  --av-sea-3: #0e7e90;
+  --av-surface: #ffffff;
+  --av-field: #f2fafb;
+  --av-text: #0c3b45; /* primary / headings */
+  --av-body: #0b5560; /* paragraphs */
+  --av-muted: #5e8a92; /* secondary / labels */
+  --av-label: #1399ae; /* mono micro-labels */
+  --av-teal: #0e7e90; /* brand / links */
+  --av-teal-deep: #127c90;
+
+  --av-coral-1: #ff8a5b; /* gradient start */
+  --av-coral-2: #ff6f61; /* gradient end */
+  --av-coral: #ff7a5c; /* solid accent */
+
+  --av-sand-1: #ffd56b;
+  --av-sand-2: #ffc24d;
+  --av-sand-3: #ffb23e;
+
+  --av-success: #27b576;
+  --av-success-text: #1f9e6b;
+  --av-success-bg: #e6f8ee;
+  --av-success-bg2: #e9fbf2;
+
+  --av-warn: #ff9f45;
+  --av-warn-text: #e07a1e;
+  --av-warn-bg: #fff0e0;
+
+  --av-danger: #e0533e;
+  --av-danger-bg: #ffe3db;
+  --av-danger-bg2: #fff4f1;
+
+  --av-info: #2e86c9;
+  --av-info-bg: #eaf4fb;
+
+  --av-hair: rgba(20, 153, 174, 0.16);
+  --av-hair-soft: rgba(20, 153, 174, 0.14);
+  --av-hair-strong: rgba(20, 153, 174, 0.22);
+
+  /* ---- Internal · deep-sea dark ---- */
+  --d-base: #082a33;
+  --d-deep: #06222a;
+  --d-panel: #0c3540;
+  --d-card: #0e3a45;
+  --d-el: #114451;
+  --d-el-hover: #125060;
+  --d-accent: #ff7a5c;
+  --d-accent-light: #ffb48a;
+  --d-text: #ecf1f8;
+  --d-text-bright: #f4f7fb;
+  --d-muted: #9cb0cb;
+  --d-muted-2: #7e92ae;
+  --d-green: #6fbf8f;
+  --d-amber: #e0a23e;
+  --d-blue: #4e7fe0;
+  --d-red: #ce4a4a;
+  --d-hair: rgba(255, 255, 255, 0.08);
+
+  /* ---- Gradients ---- */
+  --grad-coral: linear-gradient(180deg, #ff8a5b, #ff6f61);
+  --grad-coral-135: linear-gradient(135deg, #ff8a5b, #ff6f61);
+  --grad-teal: linear-gradient(135deg, #127c90 0%, #1aa1b0 60%, #28bbc4 100%);
+  --grad-sky: linear-gradient(180deg, #cdeff6 0%, #a7e2ec 38%, #7cd3e1 56%, #36b6c9 100%);
+  --grad-sand: linear-gradient(135deg, #ffd56b, #ffb23e);
+
+  /* ---- Radius ---- */
+  --r-card: 20px;
+  --r-card-lg: 22px;
+  --r-btn: 13px;
+  --r-pill: 999px;
+  --r-field: 11px;
+  --r-chip: 9px;
+
+  /* ---- Shadows ---- */
+  --sh-card: 0 18px 40px -24px rgba(11, 85, 96, 0.38);
+  --sh-card-hover: 0 30px 56px -26px rgba(11, 85, 96, 0.5);
+  --sh-cta: 0 14px 28px -10px rgba(255, 111, 97, 0.65);
+  --sh-modal: 0 28px 64px -28px rgba(11, 85, 96, 0.55);
+
+  /* ---- Fonts ---- */
+  --f-display: "Bricolage Grotesque", "Segoe UI", sans-serif;
+  --f-ui: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+  --f-mono: "Space Mono", ui-monospace, monospace;
+
+  /* ---- Layout ---- */
+  --container: 1240px;
+  --container-narrow: 1180px;
+  --pad-x: clamp(20px, 4vw, 40px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--av-bg);
+  color: var(--av-text);
+  font-family: var(--f-ui);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Offset anchored landing sections so their titles clear the sticky header */
+section[id] {
+  scroll-margin-top: 88px;
+}
+
+/* Sticky top navigation on ALL breakpoints — stays pinned to the viewport as the page scrolls.
+   Works because page roots clip horizontal overflow with `overflow-x: clip` (NOT `hidden`), so no
+   intermediate scroll container is created between this element and the viewport. High z-index keeps
+   it above page content and — since the header has backdrop-filter (its own stacking context) — keeps
+   the mobile hamburger drawer (position:absolute inside it) above the hero. */
+.av-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Booking step-indicator rail: sticks just BELOW the (variable-height) sticky nav. --nav-h is measured
+   from the real nav band by Booking and kept in sync on resize; the 72px fallback covers first paint. */
+:root {
+  --nav-h: 72px;
+}
+.av-booking-steprail {
+  position: sticky;
+  top: var(--nav-h);
+  z-index: 90;
+}
+@media (max-width: 640px) {
+  section[id] {
+    scroll-margin-top: 76px;
+  }
+}
+
+#root {
+  min-height: 100vh;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+::selection {
+  background: var(--av-coral);
+  color: #fff;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Hide scrollbars on horizontal scroll rails while keeping scroll */
+.av-noscroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.av-noscroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Soft custom scrollbar for dark internal panels */
+.av-dark-scroll::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.av-dark-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+}
+
+/* ---- Reusable interaction helpers ---- */
+.av-lift {
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+.av-lift:hover {
+  transform: translateY(-5px);
+}
+
+.av-lift-sm {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.av-lift-sm:hover {
+  transform: translateY(-4px);
+}
+
+.av-cta {
+  transition: filter 0.18s ease, transform 0.18s ease;
+}
+.av-cta:hover {
+  filter: brightness(1.06);
+}
+.av-cta:active {
+  transform: translateY(1px);
+}
+
+.av-link-underline:hover {
+  text-decoration: underline;
+}
+
+.av-row-hover {
+  transition: background 0.16s ease;
+}
+.av-row-hover:hover {
+  background: rgba(255, 255, 255, 0.028);
+}
+
+/* ---- Car card photo carousel ---- */
+/* Coral progress tick on the active dot (restart-keyed per slide via React key). */
+@keyframes av-tick {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.av-tick {
+  animation: av-tick 4200ms linear forwards;
+}
+/* Carousel arrows: fade with hover state; hidden entirely on touch devices. */
+.av-arrow {
+  transition: opacity 0.16s ease;
+}
+@media (hover: none) {
+  .av-arrow {
+    display: none !important;
+  }
+}
+/* Keyboard focus rings for carousel controls (dots + arrows). */
+.av-arrow:focus-visible,
+.av-dot:focus-visible {
+  outline: 2px solid var(--av-coral);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   Keyframes — home coastline scene + misc motion
+   ============================================================ */
+@keyframes av-wave {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes av-cloud {
+  from {
+    transform: translateX(-30vw);
+  }
+  to {
+    transform: translateX(130vw);
+  }
+}
+@keyframes av-sway {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(4deg);
+  }
+}
+@keyframes av-sway2 {
+  0%,
+  100% {
+    transform: rotate(2deg);
+  }
+  50% {
+    transform: rotate(-4deg);
+  }
+}
+@keyframes av-sun {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.96;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+@keyframes av-shimmer {
+  0%,
+  100% {
+    opacity: 0.18;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+@keyframes av-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+@keyframes av-gull {
+  0%,
+  100% {
+    transform: translateY(0) scaleX(1);
+  }
+  50% {
+    transform: translateY(-5px) scaleX(0.82);
+  }
+}
+@keyframes av-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes av-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+@keyframes av-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Availability calendar ────────────────────────────────────────────── */
+.av-cal-months {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(238px, 1fr));
+  gap: 18px;
+}
+.av-cal-day {
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+}
+.av-cal-day--free:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 12px -5px rgba(11, 85, 96, 0.42);
+  background: var(--teal-soft, rgba(13, 148, 136, 0.1)) !important;
+  border-color: var(--teal, #0d9488) !important;
+}
+.av-cal-day:focus-visible {
+  outline: 2px solid var(--teal, #0d9488);
+  outline-offset: 1px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .av-cal-day {
+    transition: none !important;
+  }
+  .av-cal-day--free:hover {
+    transform: none !important;
+    box-shadow: none !important;
+    filter: none !important;
+  }
+}
+
+/* ============================================================
+   Mobile foundation (≤760px) — thumb-first customer + admin
+   ============================================================ */
+
+/* Belt-and-braces guard: the page itself never scrolls sideways. Individual wide widgets
+   (admin tables, kanban, code blocks) opt into their OWN horizontal scroll via .av-xscroll.
+   `clip` (not `hidden`) clips overflow WITHOUT creating a scroll container, so the sticky top
+   nav keeps sticking to the viewport on mobile. */
+@media (max-width: 760px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: clip;
+  }
+}
+
+/* Native inputs: 16px font on mobile stops iOS auto-zoom-on-focus; comfortable tap height. */
+@media (max-width: 760px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+    min-height: 44px;
+  }
+  /* checkboxes/radios keep their intrinsic size */
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-height: 0;
+  }
+}
+
+/* Utility: guarantee a comfortable ~44px thumb target. */
+.av-tap {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Show/hide by breakpoint (768 so tablets in portrait get the mobile chrome). */
+@media (max-width: 768px) {
+  .av-desktop-only {
+    display: none !important;
+  }
+}
+@media (min-width: 769px) {
+  .av-mobile-only {
+    display: none !important;
+  }
+}
+
+/* A widget that must stay wide scrolls itself instead of the page (admin tables, kanban). */
+.av-xscroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Sticky mobile action bar (booking pay-now bar, etc.) — clears the iOS home indicator. */
+.av-bottombar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 60;
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px));
+}
+
+/* iOS-style frosted mobile tab bar (logged-in customer, mobile only). */
+.av-tabbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 65;
+  display: flex;
+  align-items: stretch;
+  background: rgba(255, 255, 255, 0.78);
+  -webkit-backdrop-filter: saturate(180%) blur(22px);
+  backdrop-filter: saturate(180%) blur(22px);
+  border-top: 1px solid rgba(14, 126, 144, 0.12);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+/* Opaque fallback where backdrop-filter is unsupported (keeps text legible over content). */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .av-tabbar {
+    background: rgba(244, 251, 252, 0.98);
+  }
+}
+.av-tabbar__tab {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 50px;
+  padding: 7px 0 5px;
+  color: #7d9198;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.18s ease;
+}
+.av-tabbar__tab[aria-current="page"] {
+  color: var(--av-teal);
+}
+.av-tabbar__ico {
+  display: flex;
+  transition: transform 0.18s ease;
+}
+.av-tabbar__tab[aria-current="page"] .av-tabbar__ico {
+  transform: translateY(-1px) scale(1.06);
+}
+.av-tabbar__lbl {
+  font: 700 10px/1 var(--f-ui);
+  letter-spacing: 0.02em;
+}
+@media (prefers-reduced-motion: reduce) {
+  .av-tabbar__tab,
+  .av-tabbar__ico {
+    transition: none;
+  }
+  .av-tabbar__tab[aria-current="page"] .av-tabbar__ico {
+    transform: none;
+  }
+}
+
+/* Focus visibility everywhere (keyboard + switch access). */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--av-coral);
+  outline-offset: 2px;
+}
+
+/* Slide-in mobile admin drawer. */
+@keyframes av-drawer-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+.av-drawer {
+  animation: av-drawer-in 0.22s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .av-drawer {
+    animation: none;
+  }
+}

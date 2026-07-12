@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: aventa-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: aventa
+      POSTGRES_PASSWORD: aventa_dev_pw
+      POSTGRES_DB: aventa
+    ports:
+      - "5544:5432"
+    volumes:
+      - aventa_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aventa -d aventa"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  aventa_pgdata:

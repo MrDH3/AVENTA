@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:#EAF7F8;}
+a{text-decoration:none;color:inherit;}
+::selection{background:#FF7A5C;color:#fff;}
+</style>
+<template id="__bundler_thumbnail" data-bg-color="#7FD6E3"><svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg"><rect width="1200" height="800" fill="#7FD6E3"/><circle cx="900" cy="240" r="120" fill="#FFD56B"/><path d="M0 560 Q300 500 600 560 T1200 560 V800 H0Z" fill="#1399AE"/><text x="600" y="430" font-family="Georgia, serif" font-size="200" fill="#0C3B45" text-anchor="middle" font-weight="700">A</text></svg></template>
+</helmet>
+
+<div style="width:100%;min-height:100vh;background:#EAF7F8;color:#0C3B45;font-family:'Plus Jakarta Sans',sans-serif;">
+
+<div style="background:linear-gradient(180deg,#CDEFF6,#EAF7F8);border-bottom:1px solid rgba(20,153,174,.14);">
+<div style="max-width:1180px;margin:0 auto;padding:18px clamp(20px,4vw,40px);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+<a href="AVENTA-01-Home.dc.html" style="display:flex;align-items:center;gap:11px;"><svg width="38" height="38" viewBox="0 0 48 48" fill="none"><rect x="2" y="2" width="44" height="44" rx="14" fill="#fff"/><path d="M14 35 L24 12 L34 35" stroke="#0E7E90" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.6 27.2 H29.4" stroke="#FF7A5C" stroke-width="3.2" stroke-linecap="round"/><circle cx="24" cy="12" r="2.6" fill="#FF7A5C"/></svg><div style="font:800 23px 'Bricolage Grotesque',sans-serif;letter-spacing:.04em;color:#0C3B45;">AVENTA</div></a>
+<div style="display:flex;align-items:center;gap:13px;"><div style="display:flex;background:#fff;border:1px solid rgba(20,153,174,.2);border-radius:999px;overflow:hidden;font:700 12px 'Plus Jakarta Sans';cursor:pointer;"><span style="{{ ruStyle }}" onClick="{{ setRu }}">RU</span><span style="{{ enStyle }}" onClick="{{ setEn }}">EN</span></div><a href="AVENTA-03-Booking.dc.html" style="padding:11px 20px;background:linear-gradient(180deg,#FF8A5B,#FF6F61);color:#fff;border-radius:999px;font:700 13px 'Plus Jakarta Sans';box-shadow:0 10px 24px -8px rgba(255,111,97,.7);">{{ t.toBooking }}</a></div>
+</div>
+</div>
+
+<div style="max-width:1180px;margin:0 auto;padding:clamp(28px,4vw,44px) clamp(20px,4vw,40px) clamp(40px,5vw,64px);">
+<div style="text-align:center;max-width:640px;margin:0 auto;">
+<div style="display:inline-flex;align-items:center;gap:8px;padding:7px 15px;background:#fff;border-radius:999px;font:700 11px 'Space Mono',monospace;letter-spacing:.12em;color:#0E7E90;box-shadow:0 6px 16px -8px rgba(11,85,96,.4);">✦ {{ t.kicker }}</div>
+<div style="margin-top:16px;font:800 clamp(28px,4.4vw,42px)/1.08 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em;color:#0C3B45;">{{ t.q1 }}</div>
+<div style="margin-top:12px;font:500 15px 'Plus Jakarta Sans';color:#5E8A92;">{{ t.q1sub }}</div>
+</div>
+
+<!-- STEP 1 goals -->
+<div style="margin-top:30px;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;">
+<sc-for list="{{ goals }}" as="g" hint-placeholder-count="6">
+<div style="{{ g.box }}"><div style="{{ g.icon }}">{{ g.emoji }}</div><div style="margin-top:12px;font:700 16px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">{{ g.title }}</div><div style="margin-top:6px;font:500 12px/1.5 'Plus Jakarta Sans';color:#5E8A92;">{{ g.desc }}</div><sc-if value="{{ g.selected }}" hint-placeholder-val="{{ false }}"><div style="margin-top:12px;display:inline-flex;align-items:center;gap:6px;font:700 11px 'Plus Jakarta Sans';color:#FF6F61;">✓ {{ t.selected }}</div></sc-if></div>
+</sc-for>
+</div>
+
+<!-- STEP 2 needs -->
+<div style="margin-top:36px;background:#fff;border-radius:22px;padding:clamp(22px,3vw,32px);box-shadow:0 18px 44px -26px rgba(11,85,96,.4);">
+<div style="font:800 22px 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em;color:#0C3B45;">{{ t.q2 }}</div>
+<div style="margin-top:6px;font:500 13px 'Plus Jakarta Sans';color:#5E8A92;">{{ t.q2sub }}</div>
+<div style="margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">
+<sc-for list="{{ needs }}" as="n" hint-placeholder-count="8">
+<div style="{{ n.box }}"><span style="{{ n.check }}">{{ n.mark }}</span><span style="font:600 13px 'Plus Jakarta Sans';color:#0C3B45;">{{ n.label }}</span></div>
+</sc-for>
+</div>
+</div>
+
+<!-- STEP 3 recommendations -->
+<div style="margin-top:36px;">
+<div style="font:700 12px 'Space Mono',monospace;letter-spacing:.16em;color:#FF7A5C;">{{ t.recoKicker }}</div>
+<div style="margin-top:8px;font:800 clamp(22px,3vw,30px) 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em;color:#0C3B45;">{{ t.recoTitle }}</div>
+
+<div style="margin-top:18px;border-radius:22px;padding:clamp(24px,3vw,32px);background:linear-gradient(135deg,#127C90,#1AA1B0 60%,#28BBC4);position:relative;overflow:hidden;box-shadow:0 26px 54px -28px rgba(11,85,96,.6);">
+<div style="position:absolute;top:-24px;right:-16px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,#FFD56B,#FFC24D);opacity:.85;"></div>
+<div style="position:relative;z-index:2;max-width:680px;">
+<div style="font:800 24px 'Bricolage Grotesque',sans-serif;color:#fff;">{{ t.heroReco }}</div>
+<div style="margin-top:10px;font:500 14px/1.6 'Plus Jakarta Sans';color:rgba(255,255,255,.9);">{{ t.heroRecoSub }}</div>
+<div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;"><span style="padding:12px 22px;background:#fff;color:#0E7E90;border-radius:11px;font:700 13px 'Plus Jakarta Sans';">{{ t.getConsult }}</span><span style="padding:12px 22px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:11px;font:700 13px 'Plus Jakarta Sans';">{{ t.pickObjects }}</span></div>
+</div>
+</div>
+
+<div style="margin-top:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;">
+<sc-for list="{{ recos }}" as="r" hint-placeholder-count="6">
+<div style="background:#fff;border-radius:16px;padding:20px;box-shadow:0 14px 34px -24px rgba(11,85,96,.4);"><div style="font:700 15px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">{{ r.name }}</div><div style="margin-top:7px;font:500 12px/1.5 'Plus Jakarta Sans';color:#5E8A92;">{{ r.desc }}</div><div style="margin-top:14px;display:flex;align-items:center;justify-content:space-between;"><span style="font:800 15px 'Bricolage Grotesque';color:#0C3B45;">{{ r.price }}</span><span style="font:700 12px 'Plus Jakarta Sans';color:#FF6F61;">{{ r.cta }}</span></div></div>
+</sc-for>
+</div>
+
+<div style="margin-top:18px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;background:#E9FBF2;border:1px solid rgba(39,181,118,.3);border-radius:16px;padding:18px 22px;">
+<div style="display:flex;align-items:center;gap:12px;"><span style="width:30px;height:30px;border-radius:50%;background:#27B576;color:#fff;display:flex;align-items:center;justify-content:center;font:700 14px 'Plus Jakarta Sans';">✓</span><span style="font:500 13px 'Plus Jakarta Sans';color:#0B5560;">{{ t.savedNote }}</span></div>
+<a href="AVENTA-03-Booking.dc.html" style="padding:13px 26px;background:linear-gradient(180deg,#FF8A5B,#FF6F61);color:#fff;border-radius:12px;font:700 13px 'Plus Jakarta Sans';box-shadow:0 12px 26px -10px rgba(255,111,97,.7);">{{ t.continue }}</a>
+</div>
+</div>
+</div>
+
+<div style="background:#0C3B45;color:#CDEAEF;">
+<div style="max-width:1180px;margin:0 auto;padding:26px clamp(20px,4vw,40px);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;font:500 12px 'Plus Jakarta Sans';color:#7FB6BF;">
+<a href="AVENTA-01-Home.dc.html" style="display:flex;align-items:center;gap:10px;"><svg width="26" height="26" viewBox="0 0 48 48" fill="none"><rect x="2" y="2" width="44" height="44" rx="14" fill="#0E7E90"/><path d="M14 35 L24 12 L34 35" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.6 27.2 H29.4" stroke="#FF8A5B" stroke-width="3.2" stroke-linecap="round"/><circle cx="24" cy="12" r="2.6" fill="#FF8A5B"/></svg><span style="font:800 15px 'Bricolage Grotesque',sans-serif;color:#fff;letter-spacing:.04em;">AVENTA</span></a>
+<a href="AVENTA-00-Index.dc.html" style="color:#5FE0C8;font-weight:700;">{{ t.allScreens }} →</a>
+</div>
+</div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1180,&quot;height&quot;:1400}}">
+class Component extends DCLogic {
+  state = { lang: 'ru' };
+  componentDidMount() { try { const l = localStorage.getItem('aventa_lang'); if (l==='ru'||l==='en') this.setState({lang:l}); } catch(e){} }
+  setLang(l){ try{ localStorage.setItem('aventa_lang',l);}catch(e){} this.setState({lang:l}); }
+  renderVals() {
+    const lang = this.state.lang;
+    const dict = {
+      ru: { toBooking:'К бронированию', kicker:'ПЕРСОНАЛЬНЫЙ ПОДБОР',
+        q1:'Какова цель вашей поездки в Турцию?', q1sub:'Подберём релевантные услуги и сделаем поездку удобнее.', selected:'Выбрано',
+        q2:'Чем мы можем быть полезны?', q2sub:'Выберите всё, что интересно — менеджер учтёт это заранее.',
+        recoKicker:'ПЕРСОНАЛЬНЫЕ РЕКОМЕНДАЦИИ', recoTitle:'Подобрали под вашу поездку',
+        heroReco:'Поможем с покупкой недвижимости под ключ', heroRecoSub:'Организуем просмотр объектов, встречу с агентом и сопровождение переводчика на всех этапах сделки.',
+        getConsult:'Получить консультацию', pickObjects:'Подобрать объекты',
+        savedNote:'Цель и услуги сохранены — менеджер увидит их в вашей карточке (CRM).', continue:'Продолжить бронирование', allScreens:'Все экраны',
+        goals:[['🏖','Отдых','Море, экскурсии, яхты',false],['💼','Бизнес','Авто бизнес-класса, водитель',false],['🏠','Покупка недвижимости','Просмотры, агент, сделка',true],['🔑','Просмотр недвижимости','Тур по объектам',false],['⚕','Медицинский туризм','Трансфер, ожидание, переводчик',false],['📦','Переезд','Жильё, документы, вещи',false]],
+        needs:[['Только аренда авто',true],['Трансфер из аэропорта',true],['VIP-встреча',false],['Покупка недвижимости',true],['Просмотр объектов',true],['Переводчик',true],['Консультация по инвестициям',true],['Экскурсии и яхты',false]],
+        recos:[['Просмотр объектов','Тур по 5–7 объектам с агентом за день','от €80','Добавить +'],['Встреча с агентом','Русскоязычный эксперт по региону','Бесплатно','Записаться'],['Переводчик на сделке','На просмотрах и у нотариуса','€60 / день','Добавить +'],['Долгосрочная аренда','−20% на аренду от 14 дней','€96 / сут','Выбрать'],['Трансфер из аэропорта','Встретим с табличкой','€35','Добавить +'],['Помощь с документами','ВНЖ, налоговый номер, счёт','по запросу','Узнать']] },
+      en: { toBooking:'To booking', kicker:'PERSONAL MATCH',
+        q1:'What is the purpose of your trip to Turkey?', q1sub:'We will suggest relevant services to make your trip easier.', selected:'Selected',
+        q2:'How can we help you?', q2sub:'Pick anything of interest — your manager will prepare in advance.',
+        recoKicker:'PERSONAL RECOMMENDATIONS', recoTitle:'Tailored to your trip',
+        heroReco:'Full support buying property in Turkey', heroRecoSub:'We arrange property viewings, a meeting with an agent and an interpreter at every step of the deal.',
+        getConsult:'Get a consultation', pickObjects:'Find properties',
+        savedNote:'Goal and services saved — your manager sees them in your CRM card.', continue:'Continue booking', allScreens:'All screens',
+        goals:[['🏖','Leisure','Sea, tours, yachts',false],['💼','Business','Business-class car, driver',false],['🏠','Buying property','Viewings, agent, deal',true],['🔑','Property viewing','Tour of objects',false],['⚕','Medical tourism','Transfer, waiting, interpreter',false],['📦','Relocation','Housing, documents, goods',false]],
+        needs:[['Car rental only',true],['Airport transfer',true],['VIP meet & greet',false],['Buying property',true],['Property viewings',true],['Interpreter',true],['Investment consultation',true],['Tours & yachts',false]],
+        recos:[['Property viewings','Tour of 5–7 objects with an agent in a day','from €80','Add +'],['Meet the agent','Region expert in your language','Free','Book'],['Interpreter at the deal','At viewings and the notary','€60 / day','Add +'],['Long-term rental','−20% on rentals from 14 days','€96 / day','Choose'],['Airport transfer','Meet you with a sign','€35','Add +'],['Document help','Residence permit, tax number, account','on request','Learn more']] }
+    };
+    const t = dict[lang];
+    const goalSelBox = "background:#fff;border:2px solid #FF7A5C;border-radius:18px;padding:22px;box-shadow:0 18px 40px -24px rgba(255,111,97,.5);";
+    const goalBox = "background:#fff;border:2px solid transparent;border-radius:18px;padding:22px;box-shadow:0 14px 34px -24px rgba(11,85,96,.35);";
+    const iconWrap = "width:44px;height:44px;border-radius:13px;background:#E0F6F2;display:flex;align-items:center;justify-content:center;font-size:22px;";
+    const iconSel = "width:44px;height:44px;border-radius:13px;background:#FFEEDD;display:flex;align-items:center;justify-content:center;font-size:22px;";
+    const goals = t.goals.map(g => ({ emoji:g[0], title:g[1], desc:g[2], selected:g[3], box: g[3]?goalSelBox:goalBox, icon: g[3]?iconSel:iconWrap }));
+    const ckBox = "display:flex;align-items:center;gap:10px;background:#E9FBF2;border:1.5px solid #27B576;border-radius:12px;padding:13px 14px;";
+    const idBox = "display:flex;align-items:center;gap:10px;background:#F2FAFB;border:1px solid rgba(20,153,174,.18);border-radius:12px;padding:13px 14px;";
+    const ck = "width:18px;height:18px;border-radius:5px;background:#27B576;color:#fff;display:flex;align-items:center;justify-content:center;font:700 10px 'Plus Jakarta Sans';flex-shrink:0;";
+    const unck = "width:18px;height:18px;border-radius:5px;border:1.5px solid rgba(20,153,174,.3);flex-shrink:0;";
+    const needs = t.needs.map(n => ({ label:n[0], box: n[1]?ckBox:idBox, check: n[1]?ck:unck, mark: n[1]?'✓':'' }));
+    const recos = t.recos.map(r => ({ name:r[0], desc:r[1], price:r[2], cta:r[3] }));
+    const onPill = "padding:6px 13px;background:#0E7E90;color:#fff;";
+    const offPill = "padding:6px 13px;color:#0E7E90;";
+    return { t, goals, needs, recos, setRu:()=>this.setLang('ru'), setEn:()=>this.setLang('en'),
+      ruStyle: lang==='ru'?onPill:offPill, enStyle: lang==='en'?onPill:offPill };
+  }
+}
+</script>
+</body>
+</html>

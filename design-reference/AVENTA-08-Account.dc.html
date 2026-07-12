@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:#EAF7F8;}
+a{text-decoration:none;color:inherit;}
+::selection{background:#FF7A5C;color:#fff;}
+</style>
+<template id="__bundler_thumbnail" data-bg-color="#7FD6E3"><svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg"><rect width="1200" height="800" fill="#7FD6E3"/><circle cx="900" cy="240" r="120" fill="#FFD56B"/><path d="M0 560 Q300 500 600 560 T1200 560 V800 H0Z" fill="#1399AE"/><text x="600" y="430" font-family="Georgia, serif" font-size="200" fill="#0C3B45" text-anchor="middle" font-weight="700">A</text></svg></template>
+</helmet>
+
+<div style="width:100%;min-height:100vh;background:#EAF7F8;color:#0C3B45;font-family:'Plus Jakarta Sans',sans-serif;">
+
+<div style="background:linear-gradient(180deg,#CDEFF6,#EAF7F8);border-bottom:1px solid rgba(20,153,174,.14);">
+<div style="max-width:1180px;margin:0 auto;padding:18px clamp(20px,4vw,40px);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+<a href="AVENTA-01-Home.dc.html" style="display:flex;align-items:center;gap:11px;"><svg width="38" height="38" viewBox="0 0 48 48" fill="none"><rect x="2" y="2" width="44" height="44" rx="14" fill="#fff"/><path d="M14 35 L24 12 L34 35" stroke="#0E7E90" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.6 27.2 H29.4" stroke="#FF7A5C" stroke-width="3.2" stroke-linecap="round"/><circle cx="24" cy="12" r="2.6" fill="#FF7A5C"/></svg><div style="font:800 23px 'Bricolage Grotesque',sans-serif;letter-spacing:.04em;color:#0C3B45;">AVENTA</div></a>
+<div style="display:flex;align-items:center;gap:13px;"><div style="display:flex;background:#fff;border:1px solid rgba(20,153,174,.2);border-radius:999px;overflow:hidden;font:700 12px 'Plus Jakarta Sans';cursor:pointer;"><span style="{{ ruStyle }}" onClick="{{ setRu }}">RU</span><span style="{{ enStyle }}" onClick="{{ setEn }}">EN</span></div><div style="display:flex;align-items:center;gap:9px;"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#FF8A5B,#FF6F61);display:flex;align-items:center;justify-content:center;color:#fff;font:700 13px 'Plus Jakarta Sans';">И</div><span style="font:700 13px 'Plus Jakarta Sans';color:#0C3B45;">Иван</span></div></div>
+</div>
+</div>
+
+<div style="max-width:1180px;margin:0 auto;padding:clamp(28px,4vw,40px) clamp(20px,4vw,40px) clamp(40px,5vw,60px);">
+<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+<div><div style="font:700 12px 'Space Mono',monospace;letter-spacing:.16em;color:#FF7A5C;">{{ t.kicker }}</div><div style="margin-top:8px;font:800 clamp(30px,4.4vw,44px) 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em;color:#0C3B45;">{{ t.welcome }}</div></div>
+<div style="display:flex;align-items:center;gap:9px;padding:10px 16px;background:#fff;border-radius:999px;box-shadow:0 8px 20px -10px rgba(11,85,96,.35);"><span style="color:#FFC24D;">★</span><span style="font:700 13px 'Plus Jakarta Sans';color:#0C3B45;">{{ t.loyal }}</span></div>
+</div>
+
+<!-- book again -->
+<div style="margin-top:22px;border-radius:22px;overflow:hidden;display:flex;flex-wrap:wrap;box-shadow:0 24px 50px -28px rgba(11,85,96,.5);">
+<div style="flex:1 1 360px;min-width:0;background:linear-gradient(135deg,#127C90,#1AA1B0);padding:30px;">
+<div style="font:700 11px 'Space Mono',monospace;letter-spacing:.14em;color:#BFF0F5;">{{ t.favCar }}</div>
+<div style="margin-top:14px;display:flex;align-items:center;gap:16px;"><div style="width:120px;height:78px;border-radius:13px;flex-shrink:0;background:linear-gradient(135deg,#DCF3F6,#B6E6EE);display:flex;align-items:center;justify-content:center;font:700 9px 'Space Mono';color:rgba(12,59,69,.45);">E 200</div><div><div style="font:800 21px 'Bricolage Grotesque',sans-serif;color:#fff;">Mercedes-Benz E 200</div><div style="margin-top:5px;font:600 12px 'Space Mono';color:rgba(255,255,255,.85);">€120/сут · {{ t.freeNow }}</div></div></div>
+</div>
+<div style="flex:1 1 320px;min-width:0;background:#fff;padding:30px;">
+<div style="font:700 18px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">{{ t.bookAgain }}</div>
+<div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+<div style="background:#F2FAFB;border:1px solid rgba(20,153,174,.18);border-radius:11px;padding:10px 13px;"><div style="font:700 9px 'Space Mono';color:#1399AE;">{{ t.dates }}</div><div style="margin-top:3px;font:700 13px 'Plus Jakarta Sans';color:#0C3B45;">10 – 15 авг</div></div>
+<div style="background:#F2FAFB;border:1px solid rgba(20,153,174,.18);border-radius:11px;padding:10px 13px;"><div style="font:700 9px 'Space Mono';color:#1399AE;">{{ t.pickup }}</div><div style="margin-top:3px;font:700 13px 'Plus Jakarta Sans';color:#0C3B45;">Аэропорт AYT</div></div>
+</div>
+<div style="margin-top:12px;font:500 12px 'Plus Jakarta Sans';color:#1F9E6B;">✓ {{ t.prefilled }}</div>
+<a href="AVENTA-03-Booking.dc.html" style="margin-top:14px;display:block;text-align:center;padding:15px;background:linear-gradient(180deg,#FF8A5B,#FF6F61);color:#fff;border-radius:13px;font:700 15px 'Plus Jakarta Sans';box-shadow:0 14px 28px -10px rgba(255,111,97,.7);">{{ t.bookAgainCta }}</a>
+</div>
+</div>
+
+<div style="margin-top:22px;display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;">
+<!-- history -->
+<div style="flex:1 1 460px;min-width:0;">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;"><div style="font:800 22px 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em;color:#0C3B45;">{{ t.history }}</div><span style="font:700 12px 'Plus Jakarta Sans';color:#0E7E90;">{{ t.allBookings }} →</span></div>
+<div style="display:flex;flex-direction:column;gap:12px;">
+<sc-for list="{{ history }}" as="h" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:16px;padding:16px;box-shadow:0 14px 34px -26px rgba(11,85,96,.4);">
+<div style="width:88px;height:60px;border-radius:11px;flex-shrink:0;background:linear-gradient(135deg,#DCF3F6,#B6E6EE);"></div>
+<div style="flex:1;min-width:0;"><div style="display:flex;align-items:center;gap:9px;"><span style="font:700 15px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">{{ h.car }}</span><span style="font:600 10px 'Space Mono';color:#5E8A92;">{{ h.id }}</span></div><div style="margin-top:5px;font:500 12px 'Plus Jakarta Sans';color:#5E8A92;">{{ h.dates }} · {{ h.total }}</div></div>
+<span style="{{ h.badge }}">{{ h.status }}</span>
+<span style="padding:8px 14px;border:1.5px solid rgba(20,153,174,.3);color:#0E7E90;border-radius:10px;font:700 11px 'Plus Jakarta Sans';white-space:nowrap;">{{ h.action }}</span>
+</div>
+</sc-for>
+</div>
+</div>
+
+<!-- side cards -->
+<div style="flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:16px;">
+<div style="background:#fff;border-radius:18px;padding:22px;box-shadow:0 14px 34px -24px rgba(11,85,96,.4);">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;"><div style="font:700 16px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">{{ t.docs }}</div><span style="font:700 11px 'Plus Jakarta Sans';color:#0E7E90;">{{ t.update }}</span></div>
+<div style="display:flex;flex-direction:column;gap:10px;">
+<div style="display:flex;align-items:center;justify-content:space-between;background:#E9FBF2;border:1px solid rgba(39,181,118,.3);border-radius:11px;padding:12px 14px;"><span style="font:700 13px 'Plus Jakarta Sans';color:#0C3B45;">{{ t.passport }}</span><span style="font:700 11px 'Plus Jakarta Sans';color:#1F9E6B;">✓ {{ t.verified }}</span></div>
+<div style="display:flex;align-items:center;justify-content:space-between;background:#E9FBF2;border:1px solid rgba(39,181,118,.3);border-radius:11px;padding:12px 14px;"><span style="font:700 13px 'Plus Jakarta Sans';color:#0C3B45;">{{ t.licence }}</span><span style="font:700 11px 'Plus Jakarta Sans';color:#1F9E6B;">✓ {{ t.verified }}</span></div>
+</div>
+<div style="margin-top:12px;font:500 11px/1.4 'Plus Jakarta Sans';color:#5E8A92;">🔒 {{ t.encrypted }}</div>
+</div>
+<div style="background:#fff;border-radius:18px;padding:22px;box-shadow:0 14px 34px -24px rgba(11,85,96,.4);">
+<div style="font:700 16px 'Bricolage Grotesque',sans-serif;color:#0C3B45;margin-bottom:14px;">{{ t.addresses }}</div>
+<div style="display:flex;flex-direction:column;gap:12px;font:600 13px 'Plus Jakarta Sans';">
+<div style="display:flex;align-items:center;gap:11px;"><span style="width:30px;height:30px;border-radius:9px;background:#E0F6F2;display:flex;align-items:center;justify-content:center;">✈</span><div><div style="color:#0C3B45;">Аэропорт Анталии (AYT)</div><div style="font:500 11px 'Plus Jakarta Sans';color:#5E8A92;">{{ t.byDefault }}</div></div></div>
+<div style="display:flex;align-items:center;gap:11px;"><span style="width:30px;height:30px;border-radius:9px;background:#E0F6F2;display:flex;align-items:center;justify-content:center;">⌂</span><div><div style="color:#0C3B45;">Отель Rixos Downtown</div><div style="font:500 11px 'Plus Jakarta Sans';color:#5E8A92;">Коньяалты</div></div></div>
+</div>
+</div>
+<div style="background:linear-gradient(135deg,#FFF3EB,#FFE8DC);border:1px solid rgba(255,122,92,.3);border-radius:18px;padding:20px;display:flex;align-items:center;gap:14px;">
+<div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#FF8A5B,#FF6F61);flex-shrink:0;"></div>
+<div style="flex:1;"><div style="font:700 14px 'Plus Jakarta Sans';color:#0C3B45;">{{ t.manager }} · Елена</div><div style="margin-top:2px;font:500 12px 'Plus Jakarta Sans';color:#5E8A92;">Telegram · WhatsApp</div></div>
+<span style="padding:9px 14px;background:#fff;color:#FF6F61;border-radius:10px;font:700 12px 'Plus Jakarta Sans';">{{ t.write }}</span>
+</div>
+</div>
+</div>
+
+</div>
+
+<div style="background:#0C3B45;color:#CDEAEF;">
+<div style="max-width:1180px;margin:0 auto;padding:26px clamp(20px,4vw,40px);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;font:500 12px 'Plus Jakarta Sans';color:#7FB6BF;">
+<a href="AVENTA-01-Home.dc.html" style="display:flex;align-items:center;gap:10px;"><svg width="26" height="26" viewBox="0 0 48 48" fill="none"><rect x="2" y="2" width="44" height="44" rx="14" fill="#0E7E90"/><path d="M14 35 L24 12 L34 35" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.6 27.2 H29.4" stroke="#FF8A5B" stroke-width="3.2" stroke-linecap="round"/><circle cx="24" cy="12" r="2.6" fill="#FF8A5B"/></svg><span style="font:800 15px 'Bricolage Grotesque',sans-serif;color:#fff;letter-spacing:.04em;">AVENTA</span></a>
+<a href="AVENTA-00-Index.dc.html" style="color:#5FE0C8;font-weight:700;">{{ t.allScreens }} →</a>
+</div>
+</div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1180,&quot;height&quot;:1100}}">
+class Component extends DCLogic {
+  state = { lang: 'ru' };
+  componentDidMount() { try { const l = localStorage.getItem('aventa_lang'); if (l==='ru'||l==='en') this.setState({lang:l}); } catch(e){} }
+  setLang(l){ try{ localStorage.setItem('aventa_lang',l);}catch(e){} this.setState({lang:l}); }
+  renderVals() {
+    const lang = this.state.lang;
+    const dict = {
+      ru: { kicker:'ЛИЧНЫЙ КАБИНЕТ', welcome:'С возвращением, Иван', loyal:'3 поездки · −10% на следующую',
+        favCar:'ВАШ ЛЮБИМЫЙ АВТОМОБИЛЬ', freeNow:'свободен', bookAgain:'Забронировать снова', dates:'ДАТЫ', pickup:'ПОДАЧА',
+        prefilled:'Данные, документы и оплата заполнены', bookAgainCta:'Забронировать снова · ≈45 сек',
+        history:'История бронирований', allBookings:'Все', docs:'Мои документы', update:'Обновить', passport:'Паспорт / ID', licence:'Вод. удостоверение',
+        verified:'проверен', encrypted:'Документы хранятся в зашифрованном виде, доступны только администратору.',
+        addresses:'Сохранённые адреса', byDefault:'по умолчанию', manager:'Ваш менеджер', write:'Написать', allScreens:'Все экраны',
+        hist:[['Mercedes-Benz E 200','AVN-0042','10 – 15 авг 2026','€700','Ожидает','amber','Детали'],['Range Rover Velar','AVN-0021','12 – 18 мая 2026','€1 080','Завершено','grey','Договор'],['Mercedes-Benz E 200','AVN-0009','03 – 08 авг 2025','€560','Завершено','grey','Повтор']] },
+      en: { kicker:'PERSONAL CABINET', welcome:'Welcome back, Ivan', loyal:'3 trips · −10% next time',
+        favCar:'YOUR FAVOURITE CAR', freeNow:'available', bookAgain:'Book again', dates:'DATES', pickup:'PICK-UP',
+        prefilled:'Details, documents and payment are filled in', bookAgainCta:'Book again · ≈45 sec',
+        history:'Booking history', allBookings:'All', docs:'My documents', update:'Update', passport:'Passport / ID', licence:'Driving licence',
+        verified:'verified', encrypted:'Documents are stored encrypted, accessible only to the administrator.',
+        addresses:'Saved addresses', byDefault:'default', manager:'Your manager', write:'Message', allScreens:'All screens',
+        hist:[['Mercedes-Benz E 200','AVN-0042','Aug 10 – 15, 2026','€700','Pending','amber','Details'],['Range Rover Velar','AVN-0021','May 12 – 18, 2026','€1 080','Completed','grey','Contract'],['Mercedes-Benz E 200','AVN-0009','Aug 03 – 08, 2025','€560','Completed','grey','Repeat']] }
+    };
+    const t = dict[lang];
+    const amber = "display:inline-flex;align-items:center;padding:5px 11px;border-radius:999px;background:#FFF0E0;color:#E07A1E;font:700 11px 'Plus Jakarta Sans';white-space:nowrap;";
+    const grey = "display:inline-flex;align-items:center;padding:5px 11px;border-radius:999px;background:#EAF2F4;color:#5E8A92;font:700 11px 'Plus Jakarta Sans';white-space:nowrap;";
+    const history = t.hist.map(h => ({ car:h[0], id:h[1], dates:h[2], total:h[3], status:h[4], action:h[6], badge: h[5]==='amber'?amber:grey }));
+    const onPill = "padding:6px 13px;background:#0E7E90;color:#fff;";
+    const offPill = "padding:6px 13px;color:#0E7E90;";
+    return { t, history, setRu:()=>this.setLang('ru'), setEn:()=>this.setLang('en'),
+      ruStyle: lang==='ru'?onPill:offPill, enStyle: lang==='en'?onPill:offPill };
+  }
+}
+</script>
+</body>
+</html>

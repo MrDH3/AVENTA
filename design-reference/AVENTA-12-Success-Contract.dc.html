@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+::selection{background:#FF7A5C;color:#fff;}
+</style>
+<template id="__bundler_thumbnail" data-bg-color="#7FD6E3"><svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg"><rect width="1200" height="800" fill="#7FD6E3"/><circle cx="900" cy="240" r="120" fill="#FFD56B"/><path d="M0 560 Q300 500 600 560 T1200 560 V800 H0Z" fill="#1399AE"/><text x="600" y="430" font-family="Georgia, serif" font-size="200" fill="#0C3B45" text-anchor="middle" font-weight="700">A</text></svg></template>
+</helmet>
+
+<div style="position:absolute;left:4px;top:8px;width:1000px;">
+<div style="font:800 24px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">AVENTA — Успех бронирования + договор аренды (PDF)</div>
+<div style="margin-top:6px;font:500 13px 'Space Mono',monospace;color:#5E8A92;">Финальный экран после заявки · автоматический договор · «морской» стиль</div>
+</div>
+
+<!-- SUCCESS -->
+<div style="position:absolute;left:0;top:110px;width:600px;">
+<div data-drags-parent="1" style="position:absolute;top:-30px;left:2px;font:700 13px 'Space Mono',monospace;color:#5E8A92;">Заявка принята</div>
+<div style="width:600px;border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -34px rgba(11,85,96,.5);background:linear-gradient(180deg,#CDEFF6,#A7E2EC);font-family:'Plus Jakarta Sans',sans-serif;color:#0C3B45;padding:42px 38px;">
+<div style="display:flex;flex-direction:column;align-items:center;text-align:center;">
+<div style="width:88px;height:88px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 16px 36px -16px rgba(39,181,118,.6);"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#27B576" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+<div style="margin-top:20px;font:800 32px 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em;color:#0C3B45;">Заявка принята!</div>
+<div style="margin-top:10px;font:500 15px/1.6 'Plus Jakarta Sans';color:#3F6670;max-width:420px;">Спасибо, Иван. Администратор свяжется в течение часа для подтверждения. Детали отправлены в Email, Telegram и WhatsApp.</div>
+<div style="margin-top:16px;display:inline-flex;align-items:center;gap:8px;padding:9px 16px;background:#fff;border-radius:999px;box-shadow:0 8px 20px -10px rgba(11,85,96,.4);"><span style="font:600 11px 'Space Mono';color:#5E8A92;">НОМЕР ЗАЯВКИ</span><span style="font:800 13px 'Space Mono';color:#FF6F61;">AVN-2026-0042</span></div>
+</div>
+<div style="margin-top:26px;background:#fff;border-radius:16px;padding:20px 22px;box-shadow:0 14px 32px -22px rgba(11,85,96,.4);">
+<div style="display:flex;align-items:center;gap:14px;"><div style="width:72px;height:52px;border-radius:10px;background:linear-gradient(135deg,#DCF3F6,#B6E6EE);"></div><div><div style="font:700 16px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">Mercedes-Benz E 200</div><div style="font:500 12px 'Plus Jakarta Sans';color:#5E8A92;">10–15 авг · 5 сут · AYT → AYT</div></div><div style="margin-left:auto;text-align:right;"><div style="font:800 18px 'Bricolage Grotesque';color:#0C3B45;">€700</div><div style="font:600 11px 'Plus Jakarta Sans';color:#1F9E6B;">€210 предоплата ✓</div></div></div>
+</div>
+<div style="margin-top:22px;font:700 11px 'Space Mono';letter-spacing:.12em;color:#5E8A92;">ЧТО ДАЛЬШЕ</div>
+<div style="margin-top:14px;display:flex;flex-direction:column;">
+<div style="display:flex;gap:14px;"><div style="display:flex;flex-direction:column;align-items:center;"><div style="width:28px;height:28px;border-radius:50%;background:#27B576;display:flex;align-items:center;justify-content:center;color:#fff;font:700 12px 'Plus Jakarta Sans';">✓</div><div style="width:2px;flex:1;background:rgba(20,153,174,.2);"></div></div><div style="padding-bottom:16px;"><div style="font:700 14px 'Plus Jakarta Sans';color:#0C3B45;">Заявка получена</div><div style="font:500 12px 'Plus Jakarta Sans';color:#5E8A92;">только что</div></div></div>
+<div style="display:flex;gap:14px;"><div style="display:flex;flex-direction:column;align-items:center;"><div style="width:28px;height:28px;border-radius:50%;background:#FFEEDD;border:1.5px solid #FF7A5C;display:flex;align-items:center;justify-content:center;color:#FF6F61;font:700 12px 'Plus Jakarta Sans';">2</div><div style="width:2px;flex:1;background:rgba(20,153,174,.2);"></div></div><div style="padding-bottom:16px;"><div style="font:700 14px 'Plus Jakarta Sans';color:#0C3B45;">Подтверждение менеджером</div><div style="font:500 12px 'Plus Jakarta Sans';color:#5E8A92;">в течение часа · проверка документов</div></div></div>
+<div style="display:flex;gap:14px;"><div style="display:flex;flex-direction:column;align-items:center;"><div style="width:28px;height:28px;border-radius:50%;background:#F2FAFB;border:1.5px solid rgba(20,153,174,.3);display:flex;align-items:center;justify-content:center;color:#5E8A92;font:700 12px 'Plus Jakarta Sans';">3</div></div><div><div style="font:700 14px 'Plus Jakarta Sans';color:#0C3B45;">Договор и подача автомобиля</div><div style="font:500 12px 'Plus Jakarta Sans';color:#5E8A92;">10 авг, 12:00 · Аэропорт AYT</div></div></div>
+</div>
+<div style="margin-top:24px;display:flex;gap:10px;">
+<div style="flex:1;display:flex;align-items:center;justify-content:center;gap:9px;padding:14px;background:linear-gradient(180deg,#FF8A5B,#FF6F61);color:#fff;border-radius:12px;font:700 13px 'Plus Jakarta Sans';box-shadow:0 14px 28px -10px rgba(255,111,97,.7);"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M9 13l2 2 4-4"/></svg>Скачать договор PDF</div>
+<a href="AVENTA-08-Account.dc.html" style="padding:14px 18px;background:#fff;color:#0E7E90;border-radius:12px;font:700 13px 'Plus Jakarta Sans';box-shadow:0 10px 24px -14px rgba(11,85,96,.5);">В кабинет</a>
+</div>
+</div>
+</div>
+
+<!-- CONTRACT PDF -->
+<div style="position:absolute;left:680px;top:110px;width:600px;">
+<div data-drags-parent="1" style="position:absolute;top:-30px;left:2px;font:700 13px 'Space Mono',monospace;color:#5E8A92;">Договор аренды · PDF</div>
+<div style="width:600px;border-radius:18px;overflow:hidden;box-shadow:0 30px 70px -34px rgba(11,85,96,.5);background:#234049;padding:22px;">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;"><span style="font:600 13px 'Plus Jakarta Sans';color:#CDEAEF;">Договор-AVN-2026-0042.pdf</span><div style="display:flex;gap:8px;"><span style="padding:6px 12px;background:linear-gradient(180deg,#FF8A5B,#FF6F61);color:#fff;border-radius:8px;font:700 11px 'Plus Jakarta Sans';">Скачать</span><span style="padding:6px 12px;background:rgba(255,255,255,.14);color:#CDEAEF;border-radius:8px;font:700 11px 'Plus Jakarta Sans';">Печать</span></div></div>
+<div style="background:#fff;border-radius:6px;padding:40px 42px;font-family:'Plus Jakarta Sans',sans-serif;color:#1a2330;box-shadow:0 12px 30px rgba(0,0,0,.25);">
+<div style="display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #0E7E90;padding-bottom:16px;">
+<div style="display:flex;align-items:center;gap:11px;"><svg width="38" height="38" viewBox="0 0 48 48" fill="none"><rect x="2" y="2" width="44" height="44" rx="14" fill="#0E7E90"/><path d="M14 35 L24 12 L34 35" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.6 27.2 H29.4" stroke="#FF8A5B" stroke-width="3.2" stroke-linecap="round"/><circle cx="24" cy="12" r="2.6" fill="#FF8A5B"/></svg><div><div style="font:800 20px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">AVENTA</div><div style="font:600 8px 'Space Mono';letter-spacing:.14em;color:#8a93a0;">PREMIUM CAR RENTAL · TURKEY</div></div></div>
+<div style="text-align:right;"><div style="font:600 9px 'Space Mono';color:#8a93a0;">ДОГОВОР №</div><div style="font:700 13px 'Space Mono';color:#0C3B45;">AVN-2026-0042</div></div>
+</div>
+<div style="margin-top:18px;font:800 17px 'Bricolage Grotesque',sans-serif;color:#0C3B45;text-align:center;">ДОГОВОР АРЕНДЫ ТРАНСПОРТНОГО СРЕДСТВА</div>
+<div style="margin-top:3px;font:500 11px 'Plus Jakarta Sans';color:#8a93a0;text-align:center;">г. Анталия, Турция · 09 августа 2026 г.</div>
+<div style="margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+<div><div style="font:700 10px 'Space Mono';letter-spacing:.08em;color:#FF6F61;margin-bottom:6px;">АРЕНДОДАТЕЛЬ</div><div style="font:500 11px/1.6 'Plus Jakarta Sans';color:#3a4452;">AVENTA Rental LLC<br>Antalya, Konyaaltı<br>VKN 1234567890<br>+90 555 000 00 00</div></div>
+<div><div style="font:700 10px 'Space Mono';letter-spacing:.08em;color:#FF6F61;margin-bottom:6px;">АРЕНДАТОР</div><div style="font:500 11px/1.6 'Plus Jakarta Sans';color:#3a4452;">Иван Петров<br>Паспорт 75 1234567<br>ВУ 99 АА 123456 (РФ)<br>+90 555 123 45 67</div></div>
+</div>
+<div style="margin-top:18px;font:700 10px 'Space Mono';letter-spacing:.08em;color:#FF6F61;margin-bottom:8px;">1. ПРЕДМЕТ ДОГОВОРА</div>
+<div style="border:1px solid #e2e5ea;border-radius:8px;overflow:hidden;">
+<div style="display:flex;border-bottom:1px solid #e2e5ea;"><div style="flex:1;padding:9px 12px;font:500 11px 'Plus Jakarta Sans';color:#8a93a0;background:#F2FAFB;">Автомобиль</div><div style="flex:1.4;padding:9px 12px;font:700 11px 'Plus Jakarta Sans';color:#1a2330;">Mercedes-Benz E 200, 2024</div></div>
+<div style="display:flex;border-bottom:1px solid #e2e5ea;"><div style="flex:1;padding:9px 12px;font:500 11px 'Plus Jakarta Sans';color:#8a93a0;background:#F2FAFB;">Период</div><div style="flex:1.4;padding:9px 12px;font:700 11px 'Plus Jakarta Sans';color:#1a2330;">10.08.2026 12:00 — 15.08.2026 12:00</div></div>
+<div style="display:flex;"><div style="flex:1;padding:9px 12px;font:500 11px 'Plus Jakarta Sans';color:#8a93a0;background:#F2FAFB;">Подача / возврат</div><div style="flex:1.4;padding:9px 12px;font:700 11px 'Plus Jakarta Sans';color:#1a2330;">Аэропорт Анталии (AYT)</div></div>
+</div>
+<div style="margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+<div><div style="font:700 10px 'Space Mono';letter-spacing:.08em;color:#FF6F61;margin-bottom:8px;">2. СТОИМОСТЬ</div><div style="font:500 11px/1.9 'Plus Jakarta Sans';color:#3a4452;"><div style="display:flex;justify-content:space-between;"><span>Аренда 5 сут × €120</span><span style="font-weight:700;">€600</span></div><div style="display:flex;justify-content:space-between;"><span>Доп. услуги</span><span style="font-weight:700;">€100</span></div><div style="display:flex;justify-content:space-between;border-top:1px solid #e2e5ea;margin-top:4px;padding-top:4px;"><span style="font-weight:800;color:#0C3B45;">Итого</span><span style="font-weight:800;color:#0C3B45;">€700</span></div><div style="display:flex;justify-content:space-between;"><span>Залог</span><span style="font-weight:700;">€800</span></div></div></div>
+<div><div style="font:700 10px 'Space Mono';letter-spacing:.08em;color:#FF6F61;margin-bottom:8px;">3. УСЛОВИЯ</div><div style="font:500 10px/1.7 'Plus Jakarta Sans';color:#3a4452;">· Возраст 21+, стаж 2+ года<br>· Лимит 250 км/сут, далее €0,30/км<br>· Топливо «полный → полный»<br>· Страховка: расширенная, франшиза €300</div></div>
+</div>
+<div style="margin-top:22px;display:flex;justify-content:space-between;align-items:flex-end;">
+<div style="width:42%;"><div style="border-bottom:1px solid #1a2330;height:32px;"></div><div style="margin-top:5px;font:500 10px 'Plus Jakarta Sans';color:#8a93a0;">Арендодатель · AVENTA</div></div>
+<div style="width:42%;"><div style="border-bottom:1px solid #1a2330;height:32px;"></div><div style="margin-top:5px;font:500 10px 'Plus Jakarta Sans';color:#8a93a0;">Арендатор · И. Петров</div></div>
+</div>
+<div style="margin-top:18px;display:flex;align-items:center;gap:8px;background:#E0F6F2;border-radius:9px;padding:10px 12px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0E7E90" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg><span style="font:500 10px 'Plus Jakarta Sans';color:#0B5560;">Доступна электронная подпись. Договор формируется автоматически из данных заявки.</span></div>
+</div>
+</div>
+</div>
+
+</x-dc>
+</body>
+</html>

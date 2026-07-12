@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:#EAF7F8;}
+a{text-decoration:none;color:inherit;}
+::selection{background:#FF7A5C;color:#fff;}
+</style>
+<template id="__bundler_thumbnail" data-bg-color="#7FD6E3"><svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg"><rect width="1200" height="800" fill="#7FD6E3"/><circle cx="900" cy="240" r="120" fill="#FFD56B"/><path d="M0 560 Q300 500 600 560 T1200 560 V800 H0Z" fill="#1399AE"/><text x="600" y="430" font-family="Georgia, serif" font-size="200" fill="#0C3B45" text-anchor="middle" font-weight="700">A</text></svg></template>
+</helmet>
+
+<div style="width:100%;min-height:100vh;background:#EAF7F8;color:#0C3B45;font-family:'Plus Jakarta Sans',sans-serif;">
+
+<div style="background:linear-gradient(180deg,#CDEFF6,#EAF7F8);border-bottom:1px solid rgba(20,153,174,.14);">
+<div style="max-width:1180px;margin:0 auto;padding:18px clamp(20px,4vw,40px);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+<a href="AVENTA-01-Home.dc.html" style="display:flex;align-items:center;gap:11px;"><svg width="38" height="38" viewBox="0 0 48 48" fill="none"><rect x="2" y="2" width="44" height="44" rx="14" fill="#fff"/><path d="M14 35 L24 12 L34 35" stroke="#0E7E90" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.6 27.2 H29.4" stroke="#FF7A5C" stroke-width="3.2" stroke-linecap="round"/><circle cx="24" cy="12" r="2.6" fill="#FF7A5C"/></svg><div style="font:800 23px 'Bricolage Grotesque',sans-serif;letter-spacing:.04em;color:#0C3B45;">AVENTA</div></a>
+<div style="display:flex;align-items:center;gap:22px;font:600 14px 'Plus Jakarta Sans';color:#0C3B45;flex-wrap:wrap;"><a href="AVENTA-02-Catalog-Card.dc.html">{{ t.navCars }}</a><a href="AVENTA-04-Smart-Services.dc.html">{{ t.navServices }}</a><a href="AVENTA-14-About-Trust.dc.html" style="color:#0E7E90;">{{ t.navAbout }}</a></div>
+<div style="display:flex;align-items:center;gap:13px;"><div style="display:flex;background:#fff;border:1px solid rgba(20,153,174,.2);border-radius:999px;overflow:hidden;font:700 12px 'Plus Jakarta Sans';cursor:pointer;"><span style="{{ ruStyle }}" onClick="{{ setRu }}">RU</span><span style="{{ enStyle }}" onClick="{{ setEn }}">EN</span></div><a href="AVENTA-02-Catalog-Card.dc.html" style="padding:11px 20px;background:linear-gradient(180deg,#FF8A5B,#FF6F61);color:#fff;border-radius:999px;font:700 13px 'Plus Jakarta Sans';box-shadow:0 10px 24px -8px rgba(255,111,97,.7);">{{ t.chooseCar }}</a></div>
+</div>
+</div>
+
+<div style="max-width:1180px;margin:0 auto;padding:clamp(40px,6vw,64px) clamp(20px,4vw,40px) 30px;text-align:center;">
+<div style="display:inline-flex;align-items:center;gap:8px;padding:7px 15px;background:#fff;border-radius:999px;font:700 11px 'Space Mono',monospace;letter-spacing:.12em;color:#0E7E90;box-shadow:0 6px 16px -8px rgba(11,85,96,.4);">☀ {{ t.kicker }}</div>
+<div style="margin-top:18px;font:800 clamp(30px,5vw,50px)/1.08 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em;color:#0C3B45;max-width:720px;margin-left:auto;margin-right:auto;">{{ t.title }}</div>
+<div style="margin-top:16px;font:500 16px/1.65 'Plus Jakarta Sans';color:#5E8A92;max-width:600px;margin-left:auto;margin-right:auto;">{{ t.lead }}</div>
+</div>
+
+<div style="max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,40px);">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;">
+<sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+<div style="background:#fff;border-radius:20px;padding:26px 22px;text-align:center;box-shadow:0 16px 38px -26px rgba(11,85,96,.4);"><div style="font:800 38px 'Bricolage Grotesque',sans-serif;color:#FF6F61;">{{ s.v }}</div><div style="margin-top:6px;font:500 12px 'Plus Jakarta Sans';color:#5E8A92;">{{ s.l }}</div></div>
+</sc-for>
+</div>
+</div>
+
+<div style="max-width:1180px;margin:0 auto;padding:clamp(40px,5vw,56px) clamp(20px,4vw,40px) 20px;">
+<div style="font:700 12px 'Space Mono',monospace;letter-spacing:.16em;color:#FF7A5C;text-align:center;">{{ t.guaranteesKicker }}</div>
+<div style="margin-top:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;">
+<sc-for list="{{ guarantees }}" as="g" hint-placeholder-count="4">
+<div style="background:#fff;border-radius:20px;padding:26px;box-shadow:0 16px 38px -26px rgba(11,85,96,.4);"><div style="{{ g.icon }}">{{ g.emoji }}</div><div style="margin-top:16px;font:700 18px 'Bricolage Grotesque',sans-serif;color:#0C3B45;">{{ g.title }}</div><div style="margin-top:7px;font:500 13px/1.55 'Plus Jakarta Sans';color:#5E8A92;">{{ g.desc }}</div></div>
+</sc-for>
+</div>
+</div>
+
+<div style="max-width:1180px;margin:0 auto;padding:clamp(30px,4vw,44px) clamp(20px,4vw,40px) 20px;">
+<div style="font:700 12px 'Space Mono',monospace;letter-spacing:.16em;color:#FF7A5C;text-align:center;">{{ t.reviewsKicker }}</div>
+<div style="margin-top:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;">
+<sc-for list="{{ reviews }}" as="r" hint-placeholder-count="3">
+<div style="background:#fff;border-radius:20px;padding:26px;box-shadow:0 16px 38px -26px rgba(11,85,96,.4);"><div style="color:#FFC24D;font-size:15px;letter-spacing:2px;">★★★★★</div><div style="margin-top:14px;font:500 14px/1.65 'Plus Jakarta Sans';color:#0C3B45;">{{ r.text }}</div><div style="margin-top:16px;display:flex;align-items:center;gap:11px;"><div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#7FD6E3,#1399AE);display:flex;align-items:center;justify-content:center;font:700 13px 'Plus Jakarta Sans';color:#fff;">{{ r.initials }}</div><div><div style="font:700 13px 'Plus Jakarta Sans';color:#0C3B45;">{{ r.name }}</div><div style="font:500 11px 'Plus Jakarta Sans';color:#5E8A92;">{{ r.meta }}</div></div></div></div>
+</sc-for>
+</div>
+</div>
+
+<div style="max-width:1180px;margin:0 auto;padding:clamp(30px,4vw,44px) clamp(20px,4vw,40px) clamp(40px,5vw,60px);">
+<div style="border-radius:22px;padding:clamp(26px,4vw,38px);background:linear-gradient(135deg,#127C90,#1AA1B0 60%,#28BBC4);position:relative;overflow:hidden;box-shadow:0 26px 54px -28px rgba(11,85,96,.6);">
+<div style="position:absolute;top:-26px;right:-16px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,#FFD56B,#FFC24D);opacity:.85;"></div>
+<div style="position:relative;z-index:2;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;">
+<div><div style="font:700 11px 'Space Mono',monospace;letter-spacing:.14em;color:#BFF0F5;">{{ t.reqKicker }}</div><div style="margin-top:12px;font:500 13px/1.9 'Plus Jakarta Sans';color:#fff;">AVENTA Rental LLC<br>Antalya, Konyaaltı, Türkiye<br>VKN: 1234567890<br>{{ t.licence }} TÜRSAB: 12345</div></div>
+<div><div style="font:700 11px 'Space Mono',monospace;letter-spacing:.14em;color:#BFF0F5;">{{ t.contactsKicker }}</div><div style="margin-top:12px;font:500 13px/1.9 'Plus Jakarta Sans';color:#fff;">+90 555 000 00 00<br>hello@aventa-rental.com<br>Telegram · WhatsApp<br>{{ t.hours }}</div></div>
+<div><div style="font:700 11px 'Space Mono',monospace;letter-spacing:.14em;color:#BFF0F5;">{{ t.payKicker }}</div><div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:7px;"><span style="padding:6px 11px;background:rgba(255,255,255,.18);border-radius:8px;font:700 11px 'Space Mono';color:#fff;">VISA</span><span style="padding:6px 11px;background:rgba(255,255,255,.18);border-radius:8px;font:700 11px 'Space Mono';color:#fff;">MC</span><span style="padding:6px 11px;background:rgba(255,255,255,.18);border-radius:8px;font:700 11px 'Space Mono';color:#fff;">IBAN</span><span style="padding:6px 11px;background:rgba(255,255,255,.18);border-radius:8px;font:700 11px 'Space Mono';color:#fff;">USDT</span><span style="padding:6px 11px;background:rgba(255,255,255,.18);border-radius:8px;font:700 11px 'Space Mono';color:#fff;">USDC</span></div><div style="margin-top:12px;display:flex;align-items:center;gap:8px;font:600 12px 'Plus Jakarta Sans';color:#BFF0F5;">🔒 SSL · {{ t.dataSafe }}</div></div>
+</div>
+</div>
+</div>
+
+<div style="background:#0C3B45;color:#CDEAEF;">
+<div style="max-width:1180px;margin:0 auto;padding:26px clamp(20px,4vw,40px);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;font:500 12px 'Plus Jakarta Sans';color:#7FB6BF;">
+<span>AVENTA · © 2026 · {{ t.footRights }}</span>
+<div style="display:flex;gap:18px;"><a href="AVENTA-15-Legal.dc.html" style="color:#5FE0C8;">{{ t.privacy }}</a><a href="AVENTA-15-Legal.dc.html" style="color:#5FE0C8;">{{ t.offer }}</a><a href="AVENTA-00-Index.dc.html" style="color:#5FE0C8;">{{ t.allScreens }}</a></div>
+</div>
+</div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1180,&quot;height&quot;:1300}}">
+class Component extends DCLogic {
+  state = { lang: 'ru' };
+  componentDidMount() { try { const l = localStorage.getItem('aventa_lang'); if (l==='ru'||l==='en') this.setState({lang:l}); } catch(e){} }
+  setLang(l){ try{ localStorage.setItem('aventa_lang',l);}catch(e){} this.setState({lang:l}); }
+  renderVals() {
+    const lang = this.state.lang;
+    const dict = {
+      ru: { navCars:'Автомобили', navServices:'Услуги', navAbout:'О нас', chooseCar:'Выбрать авто',
+        kicker:'О КОМПАНИИ · АНТАЛИЯ С 2018', title:'Премиум-аренда, которой доверяют гости Турции',
+        lead:'Мы не просто сдаём автомобили — мы сопровождаем вашу поездку: от встречи в аэропорту до покупки недвижимости. Прозрачно, на вашем языке, с заботой о деталях.',
+        guaranteesKicker:'НАШИ ГАРАНТИИ', reviewsKicker:'ОТЗЫВЫ ГОСТЕЙ',
+        reqKicker:'РЕКВИЗИТЫ КОМПАНИИ', licence:'Лицензия', contactsKicker:'КОНТАКТЫ', hours:'Пн–Вс, 09:00–21:00',
+        payKicker:'ОПЛАТА И ВАЛЮТЫ', dataSafe:'данные под защитой',
+        footRights:'Премиум-аренда авто, Анталия', privacy:'Политика конфиденциальности', offer:'Оферта', allScreens:'Все экраны',
+        stats:[['8 лет','на рынке Антальи'],['2 000+','довольных гостей'],['4.9★','средняя оценка'],['41%','возвращаются снова']],
+        guarantees:[['🏷','Прозрачная цена','Без скрытых платежей. Цена, залог и услуги — в договоре.'],['🛡','Полное страхование','Базовая, расширенная и полная без франшизы — на ваш выбор.'],['🕑','Поддержка 24/7','Менеджер на связи на русском весь срок аренды.'],['✨','Проверенные авто','Свежий парк, ТО и проверка перед каждой подачей.']],
+        reviews:[['«Встретили в аэропорту, машина чистая и новая. Помогли с просмотром квартир — в итоге купили. Сервис уровня консьержа.»','ИП','Иван П.','Россия · август 2025'],['«Brought the car to our hotel, perfect support. Extended insurance gave real peace of mind on mountain roads.»','LB','Lukas B.','Germany · July 2025'],['«Долгосрочная аренда на месяц для бизнеса. Авто бизнес-класса, водитель по запросу. Рекомендую.»','МА','Mehmet A.','Türkiye · сентябрь 2025']] },
+      en: { navCars:'Cars', navServices:'Services', navAbout:'About', chooseCar:'Choose a car',
+        kicker:'ABOUT · ANTALYA SINCE 2018', title:'Premium rental trusted by guests of Turkey',
+        lead:'We do more than rent cars — we accompany your trip, from the airport welcome to buying property. Transparent, in your language, with care for the details.',
+        guaranteesKicker:'OUR GUARANTEES', reviewsKicker:'GUEST REVIEWS',
+        reqKicker:'COMPANY DETAILS', licence:'Licence', contactsKicker:'CONTACTS', hours:'Mon–Sun, 09:00–21:00',
+        payKicker:'PAYMENT & CURRENCIES', dataSafe:'data protected',
+        footRights:'Premium car rental, Antalya', privacy:'Privacy policy', offer:'Offer', allScreens:'All screens',
+        stats:[['8 yrs','in Antalya'],['2,000+','happy guests'],['4.9★','average rating'],['41%','come back again']],
+        guarantees:[['🏷','Transparent price','No hidden fees. Price, deposit and extras — in the contract.'],['🛡','Full insurance','Basic, extended and zero-excess — your choice.'],['🕑','24/7 support','A manager available in your language throughout the rental.'],['✨','Checked cars','Fresh fleet, service and inspection before each handover.']],
+        reviews:[['“Met us at the airport, the car was clean and new. Helped with apartment viewings — we ended up buying. Concierge-level service.”','IP','Ivan P.','Russia · Aug 2025'],['“Brought the car to our hotel, perfect support. Extended insurance gave real peace of mind on mountain roads.”','LB','Lukas B.','Germany · Jul 2025'],['“Long-term monthly rental for business. Business-class car, driver on request. Recommended.”','MA','Mehmet A.','Türkiye · Sep 2025']] }
+    };
+    const t = dict[lang];
+    const stats = t.stats.map(s => ({ v:s[0], l:s[1] }));
+    const colors = ['#E0F6F2','#FFEEDD','#E3F2FB','#FFF3D6'];
+    const guarantees = t.guarantees.map((g,i) => ({ emoji:g[0], title:g[1], desc:g[2], icon:`width:46px;height:46px;border-radius:14px;background:${colors[i]};display:flex;align-items:center;justify-content:center;font-size:22px;` }));
+    const reviews = t.reviews.map(r => ({ text:r[0], initials:r[1], name:r[2], meta:r[3] }));
+    const onPill = "padding:6px 13px;background:#0E7E90;color:#fff;";
+    const offPill = "padding:6px 13px;color:#0E7E90;";
+    return { t, stats, guarantees, reviews, setRu:()=>this.setLang('ru'), setEn:()=>this.setLang('en'),
+      ruStyle: lang==='ru'?onPill:offPill, enStyle: lang==='en'?onPill:offPill };
+  }
+}
+</script>
+</body>
+</html>
