@@ -26,10 +26,10 @@ services:
     region: frankfurt
     branch: main
     # --include=dev forces devDependencies (typescript, prisma, tsx) even though NODE_ENV=production
-    # is set below — without them Next can't read tsconfig paths / type-check the build.
-    buildCommand: npm install --include=dev && npm run build
-    # Apply DB migrations at startup: at runtime the internal DB host resolves, and
-    # `prisma migrate deploy` only applies unapplied migrations (safe to run every boot).
+    # is set below — without them Next can't type-check / build. `migrate deploy` runs BEFORE
+    # `next build` so the schema exists when Next prerenders DB-backed routes (idempotent).
+    buildCommand: npm install --include=dev && npx prisma migrate deploy && npm run build
+    # Re-run migrations at startup too (idempotent) in case the DB wasn't reachable at build time.
     startCommand: npx prisma migrate deploy && npm start
     healthCheckPath: /
     autoDeploy: true         # redeploy automatically on every push to `main`
