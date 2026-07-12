@@ -1,0 +1,7 @@
+# Caddy auto-provisions and renews a Let's Encrypt TLS certificate for $DOMAIN,
+# and reverse-proxies HTTPS traffic to the Next.js app container on port 3000.
+# $DOMAIN is injected from the .env (see docker-compose.prod.yml).
+{$DOMAIN} {
+	encode zstd gzip
+	reverse_proxy app:3000
+}

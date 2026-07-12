@@ -1,0 +1,59 @@
+# AVENTA — production stack for a single Hetzner VPS.
+#   db    → PostgreSQL 16 (private; not exposed to the internet)
+#   app   → the Next.js app (built from ./Dockerfile); runs migrations + fleet seed on start
+#   caddy → reverse proxy that terminates HTTPS with automatic Let's Encrypt certificates
+#
+# Usage on the server:
+#   cp .env.hetzner.example .env   # then fill it in
+#   docker compose -f docker-compose.prod.yml up -d --build
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-aventa}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-aventa}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-aventa} -d ${POSTGRES_DB:-aventa}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    # No `ports:` — the DB is reachable only by the app over the private compose network.
+
+  app:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - storage:/app/.storage          # encrypted customer documents (persist!)
+      - uploads:/app/public/uploads    # car photos written by the seed
+    expose:
+      - "3000"
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      - app
+    environment:
+      DOMAIN: ${DOMAIN:?set DOMAIN in .env}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data          # stores the issued TLS certificates — persist!
+      - caddy_config:/config
+
+volumes:
+  pgdata:
+  storage:
+  uploads:
+  caddy_data:
+  caddy_config:

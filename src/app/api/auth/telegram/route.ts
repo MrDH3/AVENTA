@@ -6,6 +6,9 @@ import { logAudit } from '@/lib/audit'
 import { env } from '@/lib/env'
 import { getProviderPublicConfig, getDecryptedSecret } from '@/lib/provider-credentials'
 
+// OAuth callback — reads request params + the DB at request time; never prerender at build.
+export const dynamic = 'force-dynamic'
+
 /**
  * Telegram Login Widget callback. Verifies the HMAC signature per
  * https://core.telegram.org/widgets/login#checking-authorization, then signs in.

@@ -1,0 +1,20 @@
+# Never bake these into the image — rebuilt inside, or secret/ephemeral.
+node_modules
+.next
+out
+.git
+.gitignore
+*.tsbuildinfo
+
+# Secrets & local/ephemeral data (provided at runtime via env_file + volumes)
+.env
+.env.*
+!.env.example
+.storage
+backups
+public/uploads
+
+# Docs / editor noise
+*.md
+.DS_Store
+npm-debug.log*
