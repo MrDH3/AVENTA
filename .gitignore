@@ -8,6 +8,10 @@ node_modules
 out
 next-env.d.ts
 
+# typescript incremental build cache (must NOT be committed — breaks fresh CI/deploy builds)
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
 # production
 build
 dist
