@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type ChangeEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
-import ClientNav from '../components/ClientNav'
+import SiteNav from '../components/SiteNav'
 import ClientFooter from '../components/ClientFooter'
 import AccountShell from '../components/AccountShell'
 import { useDict, useLang } from '../i18n/lang'
@@ -2185,14 +2185,8 @@ export default function Booking({ car, extras, rates, currentUser, profile, trip
       {/* guest chrome: standalone top-nav band. Signed-in customers get the cabinet left-sidebar shell
           (wrapped at the bottom of this component) instead, so this band is hidden for them. */}
       {!authed && (
-        <div
-          className="av-sticky-header"
-          style={{
-            background: 'linear-gradient(180deg,#CDEFF6,#EAF7F8)',
-            borderBottom: '1px solid rgba(20,153,174,.14)',
-          }}
-        >
-          <ClientNav glass />
+        <div className="av-sticky-header" style={{ background: 'transparent' }}>
+          <SiteNav />
         </div>
       )}
 

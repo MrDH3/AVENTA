@@ -10,6 +10,7 @@ import type { CarView } from '../lib/view'
 import type { AboutReview } from '../components/AboutSection'
 import { searchAvailabilityAction } from '../server/misc-actions'
 import { Ic, I, RdCarCard, RD_CSS } from '../components/RdKit'
+import CarDetailDrawer from '../components/CarDetailDrawer'
 
 /* ════════════════════════════════════════════════════════════════════════════
    AVENTA — Landing (redesign per design_handoff_aventa_landing).
@@ -241,6 +242,7 @@ export default function Home({ cars, reviews = [], resumeSlugs = [] }: { cars: C
   const [pending, startTransition] = useTransition()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [detailCar, setDetailCar] = useState<CarView | null>(null)
   const [motion, setMotion] = useState(false) // pointer-fine + motion allowed → enables tilt
   const progressRef = useRef<HTMLDivElement>(null)
   const heroBgRef = useRef<HTMLDivElement>(null)
@@ -404,7 +406,7 @@ export default function Home({ cars, reviews = [], resumeSlugs = [] }: { cars: C
               <button onClick={() => { setAvailableSlugs(null); setErr(null) }}>{t.reset}</button>
             </div>
           )}
-          <div className="rd-fleet rv">{shown.map((car) => <RdCarCard key={car.id} car={car} t={t} motion={motion} />)}</div>
+          <div className="rd-fleet rv">{shown.map((car) => <RdCarCard key={car.id} car={car} t={t} motion={motion} onOpen={() => setDetailCar(car)} />)}</div>
         </div>
       </section>
 
@@ -523,6 +525,9 @@ export default function Home({ cars, reviews = [], resumeSlugs = [] }: { cars: C
       </section>
 
       <ClientFooter />
+
+      {/* Car detail drawer — opens when a fleet card is clicked (Book now on the card still deep-links). */}
+      <CarDetailDrawer car={detailCar} onClose={() => setDetailCar(null)} />
     </div>
   )
 }

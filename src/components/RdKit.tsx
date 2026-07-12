@@ -48,7 +48,7 @@ export type RdCardT = {
 }
 
 /* ═══════════════════════════ Fleet card (3D tilt, real photo) ═══════════════ */
-export function RdCarCard({ car, t, motion }: { car: CarView; t: RdCardT; motion: boolean }) {
+export function RdCarCard({ car, t, motion, onOpen }: { car: CarView; t: RdCardT; motion: boolean; onOpen?: () => void }) {
   const photo = car.photos[0]?.full ?? car.coverUrl ?? null
   const glare = useRef<HTMLDivElement>(null)
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -68,7 +68,7 @@ export function RdCarCard({ car, t, motion }: { car: CarView; t: RdCardT; motion
     if (glare.current) glare.current.style.opacity = '0'
   }
   return (
-    <article className="rd-car" onMouseMove={onMove} onMouseLeave={onLeave}>
+    <article className="rd-car" onMouseMove={onMove} onMouseLeave={onLeave} onClick={onOpen} style={onOpen ? { cursor: 'pointer' } : undefined}>
       <div className="rd-car-img">
         {photo
           // eslint-disable-next-line @next/next/no-img-element
@@ -98,8 +98,8 @@ export function RdCarCard({ car, t, motion }: { car: CarView; t: RdCardT; motion
             <div className="rd-dep">{t.deposit} €{car.deposit}{car.mileageLimitPerDay ? ` · ${car.mileageLimitPerDay} km/day` : ''}</div>
           </div>
           {car.available
-            ? <Link href={`/booking?car=${encodeURIComponent(car.slug)}`} className="rd-btn rd-btn-coral rd-btn-sm">{t.bookNow}<Ic d={I.arrow} s={16} c="#fff" /></Link>
-            : <Link href={`/booking?car=${encodeURIComponent(car.slug)}`} className="rd-btn rd-btn-ghost-coral rd-btn-sm">{t.checkDates}</Link>}
+            ? <Link href={`/booking?car=${encodeURIComponent(car.slug)}`} onClick={(e) => e.stopPropagation()} className="rd-btn rd-btn-coral rd-btn-sm">{t.bookNow}<Ic d={I.arrow} s={16} c="#fff" /></Link>
+            : <Link href={`/booking?car=${encodeURIComponent(car.slug)}`} onClick={(e) => e.stopPropagation()} className="rd-btn rd-btn-ghost-coral rd-btn-sm">{t.checkDates}</Link>}
         </div>
       </div>
     </article>
