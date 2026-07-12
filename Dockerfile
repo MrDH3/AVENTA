@@ -12,12 +12,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends openssl ca-cert
 
 # Install ALL dependencies (dev included — needed to build and to run prisma/tsx at startup).
 # NODE_ENV is not "production" yet here, so devDependencies are installed.
+# The Prisma schema is copied BEFORE `npm ci` because the package's postinstall runs
+# `prisma generate`, which needs prisma/schema.prisma to exist.
 COPY package.json package-lock.json ./
+COPY prisma ./prisma
 RUN npm ci
 
-# App source, generate the Prisma client, build Next.
+# App source + build (npm run build = prisma generate && next build).
 COPY . .
-RUN npx prisma generate && npm run build
+RUN npm run build
 
 ENV NODE_ENV=production
 EXPOSE 3000
