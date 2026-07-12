@@ -1,3 +1,8 @@
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
 /** @type {import('next').NextConfig} */
 
 // Baseline security headers (CSP is added in middleware where it can be nonce-aware).
@@ -19,6 +24,15 @@ const securityHeaders = [
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // Define the `@/*` → `src/*` alias explicitly so module resolution never depends on Render
+  // reading tsconfig `paths` (which it wasn't — the build failed to resolve every `@/…` import).
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      '@': path.resolve(__dirname, 'src'),
+    }
+    return config
+  },
   async headers() {
     return [
       {

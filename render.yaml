@@ -25,7 +25,9 @@ services:
     plan: free              # free web spins down after ~15 min idle; use `starter` to stay warm
     region: frankfurt
     branch: main
-    buildCommand: npm install && npm run build
+    # --include=dev forces devDependencies (typescript, prisma, tsx) even though NODE_ENV=production
+    # is set below — without them Next can't read tsconfig paths / type-check the build.
+    buildCommand: npm install --include=dev && npm run build
     # Apply DB migrations at startup: at runtime the internal DB host resolves, and
     # `prisma migrate deploy` only applies unapplied migrations (safe to run every boot).
     startCommand: npx prisma migrate deploy && npm start
