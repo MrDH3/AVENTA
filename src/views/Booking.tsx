@@ -1324,16 +1324,40 @@ export default function Booking({ car, extras, rates, currentUser, profile, trip
   // The SERVER draft (bound to the account) takes precedence — it survives the sign-up email
   // detour that a sessionStorage tab would not — and resumes at the step the user left off.
   const hydrated = useRef(false)
-  // Keep --nav-h in sync with the real (variable-height) sticky nav so the step rail pins right below it.
+  // Keep two CSS vars in sync with the real, variable-height sticky headers:
+  //  • --nav-h            → the step rail pins right below the sticky nav.
+  //  • --booking-sticky-top → the sticky summary card must clear ALL sticky chrome above it, so its
+  //    car photo never slides under the header. That's nav + step rail as a guest, or the AccountShell
+  //    header when signed in (the rail is static there). We sum only elements that are actually sticky.
   useEffect(() => {
-    const nav = document.querySelector('.av-sticky-header') as HTMLElement | null
-    if (!nav) return
-    const apply = () => document.documentElement.style.setProperty('--nav-h', `${nav.offsetHeight}px`)
-    apply()
-    const ro = new ResizeObserver(apply)
-    ro.observe(nav)
-    return () => ro.disconnect()
-  }, [])
+    const root = document.documentElement
+    const selectors = ['.av-sticky-header', '.acs-hd-d', '.acs-hd-m', '.av-booking-steprail']
+    const measure = () => {
+      let navH = 0
+      let stickyChrome = 0
+      for (const sel of selectors) {
+        const el = document.querySelector(sel) as HTMLElement | null
+        if (!el) continue
+        const h = el.offsetHeight
+        if (h === 0) continue // hidden (e.g. the mobile header while on desktop)
+        if (sel === '.av-sticky-header') navH = h
+        if (getComputedStyle(el).position === 'sticky') stickyChrome += h
+      }
+      root.style.setProperty('--nav-h', `${navH || 72}px`)
+      root.style.setProperty('--booking-sticky-top', `${stickyChrome + 14}px`)
+    }
+    measure()
+    const ro = new ResizeObserver(measure)
+    for (const sel of selectors) {
+      const el = document.querySelector(sel)
+      if (el) ro.observe(el)
+    }
+    window.addEventListener('resize', measure)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', measure)
+    }
+  }, [authed, isMobile])
 
   // (draft hydration + within-tab persistence effects live below, after fullSnapshot/restoreSnapshot)
 
@@ -3224,7 +3248,7 @@ export default function Booking({ car, extras, rates, currentUser, profile, trip
 
         {/* RIGHT — sticky summary (desktop only; mobile uses the fixed bottom bar below) */}
         {!isMobile && (
-        <div style={{ flex: '0 0 380px', width: 380, minWidth: 0, position: 'sticky', top: 18 }}>
+        <div style={{ flex: '0 0 380px', width: 380, minWidth: 0, position: 'sticky', top: authed ? 'var(--booking-sticky-top, 72px)' : 'var(--booking-sticky-top, 170px)' }}>
           <div
             style={{
               background: 'var(--surface)',
