@@ -96,6 +96,11 @@ export async function loginAction(_prev: ActionResult, formData: FormData): Prom
     return { ok: false, error: 'Неверный email или пароль' }
   }
 
+  if (user.archivedAt) {
+    await logAudit({ action: 'auth.login.archived', meta: { email: user.email } })
+    return { ok: false, error: 'Этот аккаунт отключён. Обратитесь к владельцу компании.' }
+  }
+
   await createSession(user.id)
   await logAudit({ userId: user.id, action: 'auth.login', entity: 'User', entityId: user.id })
   // Return a client to where they came from (e.g. their in-progress booking) when it's a safe

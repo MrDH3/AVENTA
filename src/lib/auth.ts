@@ -62,6 +62,8 @@ export async function getCurrentUser(): Promise<User | null> {
     include: { user: true },
   })
   if (!session || session.expiresAt < new Date()) return null
+  // An archived staff account is treated as logged-out everywhere (owner disabled it).
+  if (session.user.archivedAt) return null
   return session.user
 }
 
@@ -83,6 +85,11 @@ export async function requireRole(...roles: Role[]): Promise<User> {
 
 export async function requireStaff(): Promise<User> {
   return requireRole('ADMIN', 'OWNER')
+}
+
+/** Owner-only actions (managing admins, recovery contacts). */
+export async function requireOwner(): Promise<User> {
+  return requireRole('OWNER')
 }
 
 export class AuthError extends Error {

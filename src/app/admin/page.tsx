@@ -238,6 +238,7 @@ export interface AdminMapConfig {
 }
 
 export interface AdminProps {
+  isOwner: boolean
   tab: AdminNavKey
   bookings: AdminBookingRow[]
   statusCounts: Record<string, number>
@@ -589,6 +590,7 @@ export default async function AdminPage({
       rates={rates}
       settings={settings}
       mapConfig={mapConfig}
+      isOwner={user.role === 'OWNER'}
     />
   )
 }

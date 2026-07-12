@@ -21,6 +21,7 @@ export type AdminNavKey =
   | 'services'
   | 'notifications'
   | 'settings'
+  | 'team'
 
 interface Strings {
   // nav item labels (keyed to AdminNavKey)
@@ -36,6 +37,7 @@ interface Strings {
   navServices: string
   navNotifications: string
   navSettings: string
+  navTeam: string
   // sidebar section label
   sectionManagement: string
   // profile card + menu
@@ -61,6 +63,7 @@ const dict: Dict<Strings> = {
     navServices: 'Услуги',
     navNotifications: 'Уведомления',
     navSettings: 'Настройки',
+    navTeam: 'Команда',
     sectionManagement: 'УПРАВЛЕНИЕ',
     logout: 'Выйти',
     roleAdmin: 'Администратор',
@@ -81,6 +84,7 @@ const dict: Dict<Strings> = {
     navServices: 'Services',
     navNotifications: 'Notifications',
     navSettings: 'Settings',
+    navTeam: 'Team',
     sectionManagement: 'MANAGEMENT',
     logout: 'Log out',
     roleAdmin: 'Administrator',
@@ -101,6 +105,7 @@ const dict: Dict<Strings> = {
     navServices: 'Hizmetler',
     navNotifications: 'Bildirimler',
     navSettings: 'Ayarlar',
+    navTeam: 'Ekip',
     sectionManagement: 'YÖNETİM',
     logout: 'Çıkış',
     roleAdmin: 'Yönetici',
@@ -121,6 +126,7 @@ const dict: Dict<Strings> = {
     navServices: 'Servicios',
     navNotifications: 'Notificaciones',
     navSettings: 'Ajustes',
+    navTeam: 'Equipo',
     sectionManagement: 'GESTIÓN',
     logout: 'Cerrar sesión',
     roleAdmin: 'Administrador',
@@ -141,6 +147,7 @@ const dict: Dict<Strings> = {
     navServices: 'Leistungen',
     navNotifications: 'Benachrichtigungen',
     navSettings: 'Einstellungen',
+    navTeam: 'Team',
     sectionManagement: 'VERWALTUNG',
     logout: 'Abmelden',
     roleAdmin: 'Administrator',
@@ -162,6 +169,15 @@ const icon = (key: AdminNavKey) => {
     strokeLinejoin: 'round' as const,
   }
   switch (key) {
+    case 'team':
+      return (
+        <svg {...p}>
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </svg>
+      )
     case 'dashboard':
       return (
         <svg {...p}>
@@ -283,12 +299,14 @@ export default function AdminShell({
   subtitle,
   children,
   headerExtra,
+  isOwner = false,
 }: {
   active: AdminNavKey
   title: string
   subtitle?: string
   children: ReactNode
   headerExtra?: ReactNode
+  isOwner?: boolean
 }) {
   const isMobile = useIsMobile()
   const t = useDict(dict)
@@ -327,6 +345,7 @@ export default function AdminShell({
     services: t.navServices,
     notifications: t.navNotifications,
     settings: t.navSettings,
+    team: t.navTeam,
   }
 
   // Sidebar inner content, shared between the desktop rail and the mobile drawer.
@@ -358,7 +377,7 @@ export default function AdminShell({
         {t.sectionManagement}
       </div>
       <nav style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? 5 : 3 }}>
-        {NAV.map((n) => {
+        {(isOwner ? [...NAV, { key: 'team' as const, to: '/admin/team' }] : NAV).map((n) => {
           const on = n.key === active
           return (
             <Link

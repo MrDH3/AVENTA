@@ -200,10 +200,14 @@ model User {
   phoneVerified Boolean   @default(false)
   locale        String    @default("ru")
   loyaltyTier   String?
+  // Set when a staff account is archived by the owner: login/sessions are refused while non-null,
+  // but the account + its history are kept. Cleared on un-archive. (Owner accounts can't be archived.)
+  archivedAt    DateTime?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
   profile         ClientProfile?
+  recoveryEmails  RecoveryEmail[]
   bookings        Booking[]
   documents       Document[]
   sessions        Session[]
@@ -217,6 +221,22 @@ model User {
   auditLogs       AuditLog[]
   bookingDrafts   BookingDraft[]
   savedPlaces     SavedPlace[]
+}
+
+/// A trusted recovery email for a staff/owner account. When that account uses "forgot password",
+/// the reset link is ALSO sent to these addresses, so a trusted person can restore access if the
+/// account holder loses their own inbox. Owner-managed (max 2), never used to log in directly.
+model RecoveryEmail {
+  id        String   @id @default(cuid())
+  userId    String
+  email     String
+  label     String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, email])
+  @@index([userId])
 }
 
 /// A customer's saved destination (e.g. "My hotel", "Beach") — a labelled point they can get

@@ -400,6 +400,7 @@ const dict: Dict<Strings> = {
       services: ['Услуги', 'Каталог дополнительных услуг'],
       notifications: ['Уведомления', 'Системные события'],
       settings: ['Настройки', 'Параметры и доступы'],
+      team: ['Команда', 'Администраторы и восстановление'],
     },
     orderTitle: (n) => `Заявка ${n}`,
     open: 'Открыть →',
@@ -693,6 +694,7 @@ const dict: Dict<Strings> = {
       services: ['Services', 'Add-on services catalogue'],
       notifications: ['Notifications', 'System events'],
       settings: ['Settings', 'Parameters and access'],
+      team: ['Team', 'Admins & recovery'],
     },
     orderTitle: (n) => `Order ${n}`,
     open: 'Open →',
@@ -986,6 +988,7 @@ const dict: Dict<Strings> = {
       services: ['Hizmetler', 'Ek hizmetler kataloğu'],
       notifications: ['Bildirimler', 'Sistem olayları'],
       settings: ['Ayarlar', 'Parametreler ve erişim'],
+      team: ['Ekip', 'Yöneticiler ve kurtarma'],
     },
     orderTitle: (n) => `Sipariş ${n}`,
     open: 'Aç →',
@@ -1279,6 +1282,7 @@ const dict: Dict<Strings> = {
       services: ['Servicios', 'Catálogo de servicios adicionales'],
       notifications: ['Notificaciones', 'Eventos del sistema'],
       settings: ['Ajustes', 'Parámetros y accesos'],
+      team: ['Equipo', 'Admins y recuperación'],
     },
     orderTitle: (n) => `Pedido ${n}`,
     open: 'Abrir →',
@@ -1572,6 +1576,7 @@ const dict: Dict<Strings> = {
       services: ['Leistungen', 'Katalog der Zusatzleistungen'],
       notifications: ['Benachrichtigungen', 'Systemereignisse'],
       settings: ['Einstellungen', 'Parameter und Zugänge'],
+      team: ['Team', 'Admins & Wiederherstellung'],
     },
     orderTitle: (n) => `Auftrag ${n}`,
     open: 'Öffnen →',
@@ -2018,7 +2023,7 @@ export default function Admin(props: AdminProps) {
     : subtitle
 
   return (
-    <AdminShell active={activeNav} title={pageTitle} subtitle={pageSub}>
+    <AdminShell active={activeNav} title={pageTitle} subtitle={pageSub} isOwner={props.isOwner}>
       {tab === 'bookings' && detail && <BookingDetail detail={detail} />}
       {tab === 'bookings' && !detail && (
         <BookingsView bookings={props.bookings} statusCounts={props.statusCounts} />

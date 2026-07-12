@@ -40,7 +40,18 @@ export async function requestPasswordResetAction(emailRaw: string): Promise<Rese
       html: `<p>Чтобы задать новый пароль, перейдите по ссылке (действует 1 час):</p><p><a href="${link}">${link}</a></p><p>Если вы не запрашивали сброс — просто проигнорируйте письмо.</p>`,
       event: 'password.reset',
     })
-    await logAudit({ userId: user.id, action: 'auth.reset.request' })
+    // Trusted recovery contacts (owner-configured) receive the SAME link, so they can restore
+    // access if the account holder has lost their own inbox.
+    const recovery = await prisma.recoveryEmail.findMany({ where: { userId: user.id } })
+    for (const r of recovery) {
+      await sendEmail({
+        to: r.email,
+        subject: 'AVENTA — recovery link for a staff account',
+        html: `<p>You are a recovery contact for the AVENTA account <b>${email}</b>. Use this link to set a new password for it (valid 1 hour):</p><p><a href="${link}">${link}</a></p><p>If this wasn't expected, you can ignore this email.</p>`,
+        event: 'password.reset.recovery',
+      })
+    }
+    await logAudit({ userId: user.id, action: 'auth.reset.request', meta: { recoveryCopies: recovery.length } })
     if (process.env.NODE_ENV !== 'production') return { ok: true, devLink: link }
   }
   return { ok: true }
