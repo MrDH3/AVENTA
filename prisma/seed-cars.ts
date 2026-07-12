@@ -7,10 +7,10 @@
  *
  * Run:  npm run db:seed:cars     (locally, or in the Render Shell after deploy)
  *
- * Idempotent: cars are upserted by slug; photo FILES are always (re)copied from the
- * committed prisma/seed-assets/cars into public/uploads/cars (so images come back after
- * a Render redeploy wipes the ephemeral uploads dir), while CarPhoto DB rows are only
- * created once per car (never duplicated on re-run).
+ * Idempotent & safe to run on every deploy: cars are CREATE-ONLY (existing rows are left
+ * untouched, so admin edits are never clobbered); photo FILES are always (re)copied from the
+ * committed prisma/seed-assets/cars into public/uploads/cars (so images come back after a
+ * Render redeploy wipes the ephemeral uploads dir); CarPhoto DB rows are created once per car.
  */
 import { PrismaClient, type Prisma } from '@prisma/client'
 import { promises as fs } from 'node:fs'
@@ -78,7 +78,8 @@ async function main() {
   let filesCopied = 0
 
   for (const c of cars) {
-    const car = await prisma.car.upsert({ where: { slug: c.slug }, update: c, create: c })
+    // CREATE-ONLY: never overwrite an existing car (preserves admin edits across deploys).
+    const car = await prisma.car.upsert({ where: { slug: c.slug }, update: {}, create: c })
     carCount++
 
     // Only create DB rows the first time; but ALWAYS re-copy the files (ephemeral uploads dir).
