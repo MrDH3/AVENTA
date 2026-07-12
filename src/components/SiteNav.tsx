@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useDict } from '../i18n/lang'
 import LanguageDropdown from './LanguageDropdown'
@@ -44,12 +44,24 @@ const SNAV_CSS = `
 .snav-menu a{padding:12px 14px;font:600 15px var(--sn-fu);color:var(--sn-ink);border-radius:10px;text-decoration:none}
 .snav-menu a:hover{background:var(--sn-bg)}
 .snav-menu .snav-btn{margin-top:6px}
+.snav-menu-lang{padding:6px 6px 8px}
 @media(max-width:900px){.snav-links,.snav-right .snav-btn,.snav-lang{display:none}.snav-burger{display:inline-flex}}
 `
 
 export default function SiteNav() {
   const t = useDict(dict)
   const [open, setOpen] = useState(false)
+  // Close the mobile menu when tapping/clicking anywhere outside the nav.
+  useEffect(() => {
+    if (!open) return
+    const onDown = (e: MouseEvent | TouchEvent) => {
+      const nav = document.querySelector('.snav')
+      if (nav && !nav.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', onDown)
+    document.addEventListener('touchstart', onDown)
+    return () => { document.removeEventListener('mousedown', onDown); document.removeEventListener('touchstart', onDown) }
+  }, [open])
   const links: [string, string][] = [
     ['/#fleet', t.cars],
     ['/#how', t.how],
@@ -73,6 +85,7 @@ export default function SiteNav() {
         </div>
         {open && (
           <div className="snav-menu">
+            <div className="snav-menu-lang"><LanguageDropdown variant="bar" /></div>
             {links.map(([h, l]) => <Link key={h} href={h} onClick={() => setOpen(false)}>{l}</Link>)}
             <Link href="/auth" onClick={() => setOpen(false)}>{t.signIn}</Link>
             <Link href="/catalog" className="snav-btn snav-coral" onClick={() => setOpen(false)}>{t.choose}</Link>

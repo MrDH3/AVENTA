@@ -12,6 +12,18 @@ import { searchAvailabilityAction } from '../server/misc-actions'
 import { Ic, I, RdCarCard, RD_CSS } from '../components/RdKit'
 import CarDetailDrawer from '../components/CarDetailDrawer'
 
+/** All 81 provinces of Türkiye, for the hero "Select the city" dropdown. */
+const TR_CITIES = [
+  'Adana', 'Adıyaman', 'Afyonkarahisar', 'Ağrı', 'Aksaray', 'Amasya', 'Ankara', 'Antalya', 'Ardahan', 'Artvin',
+  'Aydın', 'Balıkesir', 'Bartın', 'Batman', 'Bayburt', 'Bilecik', 'Bingöl', 'Bitlis', 'Bolu', 'Burdur',
+  'Bursa', 'Çanakkale', 'Çankırı', 'Çorum', 'Denizli', 'Diyarbakır', 'Düzce', 'Edirne', 'Elazığ', 'Erzincan',
+  'Erzurum', 'Eskişehir', 'Gaziantep', 'Giresun', 'Gümüşhane', 'Hakkâri', 'Hatay', 'Iğdır', 'Isparta', 'İstanbul',
+  'İzmir', 'Kahramanmaraş', 'Karabük', 'Karaman', 'Kars', 'Kastamonu', 'Kayseri', 'Kırıkkale', 'Kırklareli', 'Kırşehir',
+  'Kilis', 'Kocaeli', 'Konya', 'Kütahya', 'Malatya', 'Manisa', 'Mardin', 'Mersin', 'Muğla', 'Muş',
+  'Nevşehir', 'Niğde', 'Ordu', 'Osmaniye', 'Rize', 'Sakarya', 'Samsun', 'Siirt', 'Sinop', 'Sivas',
+  'Şanlıurfa', 'Şırnak', 'Tekirdağ', 'Tokat', 'Trabzon', 'Tunceli', 'Uşak', 'Van', 'Yalova', 'Yozgat', 'Zonguldak',
+]
+
 /* ════════════════════════════════════════════════════════════════════════════
    AVENTA — Landing (redesign per design_handoff_aventa_landing).
    Sleek/tech-forward, "wow while scrolling": dark cinematic hero (keeps the real
@@ -27,10 +39,10 @@ const dict = {
     signIn: 'Войти', choose: 'Выбрать авто',
     heroKicker: 'ПРЕМИУМ-АРЕНДА · АНТАЛИЯ', heroT1: 'Готовы отправиться ', heroT2: 'в путь?',
     heroSub: 'Премиальные авто с подачей по всей Анталии — с полным страхованием, без кредитной карты.',
-    fPickup: 'ПОЛУЧЕНИЕ', fReturn: 'ВОЗВРАТ', fLoc: 'МЕСТО ПОДАЧИ', findBtn: 'Найти авто', searching: 'Ищем…',
+    fPickup: 'ПОЛУЧЕНИЕ', fReturn: 'ВОЗВРАТ', fLoc: 'ГОРОД', findBtn: 'Найти авто', searching: 'Ищем…',
     searchNote: 'Показываем только свободные на ваши даты авто', dateErr: 'Проверьте даты — возврат должен быть позже получения',
     freeOn: (n: number, r: string) => `Свободно на ${r}: ${n} авто`, noneFree: 'На эти даты свободных авто нет — измените даты', reset: 'Показать все',
-    tYears: '8 ЛЕТ В АНТАЛИИ', tGuests: '2 000+ ДОВОЛЬНЫХ ГОСТЕЙ', tRated: '4.9★ РЕЙТИНГ', tFleet: (n: number) => `ПАРК · ${n} АВТО`, scrollLbl: 'ЛИСТАЙТЕ',
+    tYears: '8 ЛЕТ В АНТАЛИИ', tGuests: '2 000+ ДОВОЛЬНЫХ ГОСТЕЙ', tRated: '4.9★ РЕЙТИНГ', tFleet: (n: number) => `ПАРК · ${n} АВТО`, scrollLbl: 'ЛИСТАЙТЕ', scrollTop: 'Наверх',
     fleetKicker: (n: number) => `АВТОПАРК · ${n} АВТО`, fleetTitle: 'Выберите свой автомобиль',
     fleetSub: 'От экономичных хэтчбеков до представительских седанов и внедорожников — всё с полным страхованием.',
     available: 'Свободно', bookNow: 'Забронировать', checkDates: 'Проверить даты', perDay: '/сут', deposit: 'Залог',
@@ -67,10 +79,10 @@ const dict = {
     signIn: 'Sign in', choose: 'Choose a car',
     heroKicker: 'PREMIUM CAR RENTAL · ANTALYA', heroT1: 'Ready to hit ', heroT2: 'the road?',
     heroSub: 'Premium cars delivered across Antalya — fully insured, no credit card.',
-    fPickup: 'PICK-UP', fReturn: 'RETURN', fLoc: 'PICK-UP POINT', findBtn: 'Find a car', searching: 'Searching…',
+    fPickup: 'PICK-UP', fReturn: 'RETURN', fLoc: 'CITY', findBtn: 'Find a car', searching: 'Searching…',
     searchNote: 'We show only cars free for your dates', dateErr: 'Check your dates — return must be after pick-up',
     freeOn: (n: number, r: string) => `Free on ${r}: ${n} cars`, noneFree: 'No cars free for those dates — try other dates', reset: 'Show all',
-    tYears: '8 YEARS IN ANTALYA', tGuests: '2,000+ HAPPY GUESTS', tRated: '4.9★ RATED', tFleet: (n: number) => `${n}-CAR FLEET`, scrollLbl: 'SCROLL',
+    tYears: '8 YEARS IN ANTALYA', tGuests: '2,000+ HAPPY GUESTS', tRated: '4.9★ RATED', tFleet: (n: number) => `${n}-CAR FLEET`, scrollLbl: 'SCROLL', scrollTop: 'Scroll to top',
     fleetKicker: (n: number) => `FLEET · ${n} CARS`, fleetTitle: 'Choose your car',
     fleetSub: 'From frugal hatchbacks to executive saloons and SUVs — every one with full insurance.',
     available: 'Available', bookNow: 'Book now', checkDates: 'Check dates', perDay: '/day', deposit: 'Deposit',
@@ -107,10 +119,10 @@ const dict = {
     signIn: 'Giriş', choose: 'Araç seç',
     heroKicker: 'PREMIUM KİRALAMA · ANTALYA', heroT1: 'Yola çıkmaya ', heroT2: 'hazır mısınız?',
     heroSub: 'Antalya genelinde teslim edilen premium araçlar — tam sigortalı, kredi kartı gerekmez.',
-    fPickup: 'ALIŞ', fReturn: 'İADE', fLoc: 'ALIŞ NOKTASI', findBtn: 'Araç bul', searching: 'Aranıyor…',
+    fPickup: 'ALIŞ', fReturn: 'İADE', fLoc: 'ŞEHİR', findBtn: 'Araç bul', searching: 'Aranıyor…',
     searchNote: 'Yalnızca tarihlerinize uygun müsait araçları gösteriyoruz', dateErr: 'Tarihleri kontrol edin — iade, alıştan sonra olmalı',
     freeOn: (n: number, r: string) => `${r} için müsait: ${n} araç`, noneFree: 'Bu tarihlerde müsait araç yok — başka tarih deneyin', reset: 'Tümünü göster',
-    tYears: 'ANTALYA’DA 8 YIL', tGuests: '2000+ MUTLU MİSAFİR', tRated: '4.9★ PUAN', tFleet: (n: number) => `FİLO · ${n} ARAÇ`, scrollLbl: 'KAYDIR',
+    tYears: 'ANTALYA’DA 8 YIL', tGuests: '2000+ MUTLU MİSAFİR', tRated: '4.9★ PUAN', tFleet: (n: number) => `FİLO · ${n} ARAÇ`, scrollLbl: 'KAYDIR', scrollTop: 'Yukarı çık',
     fleetKicker: (n: number) => `FİLO · ${n} ARAÇ`, fleetTitle: 'Aracınızı seçin',
     fleetSub: 'Ekonomik otomobillerden üst sınıf sedanlara ve SUV modellerine kadar — hepsi tam sigortalı.',
     available: 'Müsait', bookNow: 'Rezerve et', checkDates: 'Tarihleri kontrol et', perDay: '/gün', deposit: 'Depozito',
@@ -147,10 +159,10 @@ const dict = {
     signIn: 'Entrar', choose: 'Elegir coche',
     heroKicker: 'ALQUILER PREMIUM · ANTALYA', heroT1: '¿Listo para salir ', heroT2: 'a la carretera?',
     heroSub: 'Coches premium entregados por toda Antalya — con seguro completo, sin tarjeta de crédito.',
-    fPickup: 'RECOGIDA', fReturn: 'DEVOLUCIÓN', fLoc: 'PUNTO DE RECOGIDA', findBtn: 'Buscar coche', searching: 'Buscando…',
+    fPickup: 'RECOGIDA', fReturn: 'DEVOLUCIÓN', fLoc: 'CIUDAD', findBtn: 'Buscar coche', searching: 'Buscando…',
     searchNote: 'Solo mostramos coches disponibles para tus fechas', dateErr: 'Revisa las fechas — la devolución debe ser posterior a la recogida',
     freeOn: (n: number, r: string) => `Disponibles ${r}: ${n} coches`, noneFree: 'No hay coches disponibles para esas fechas — prueba con otras', reset: 'Mostrar todos',
-    tYears: '8 AÑOS EN ANTALYA', tGuests: '2000+ CLIENTES FELICES', tRated: '4.9★ VALORADO', tFleet: (n: number) => `FLOTA · ${n} COCHES`, scrollLbl: 'DESLIZA',
+    tYears: '8 AÑOS EN ANTALYA', tGuests: '2000+ CLIENTES FELICES', tRated: '4.9★ VALORADO', tFleet: (n: number) => `FLOTA · ${n} COCHES`, scrollLbl: 'DESLIZA', scrollTop: 'Volver arriba',
     fleetKicker: (n: number) => `FLOTA · ${n} COCHES`, fleetTitle: 'Elige tu coche',
     fleetSub: 'Desde utilitarios económicos hasta berlinas ejecutivas y SUV — todos con seguro completo.',
     available: 'Disponible', bookNow: 'Reservar', checkDates: 'Ver fechas', perDay: '/día', deposit: 'Depósito',
@@ -187,10 +199,10 @@ const dict = {
     signIn: 'Anmelden', choose: 'Auto wählen',
     heroKicker: 'PREMIUM-VERMIETUNG · ANTALYA', heroT1: 'Bereit für ', heroT2: 'die Straße?',
     heroSub: 'Premium-Autos, geliefert in ganz Antalya — vollversichert, ohne Kreditkarte.',
-    fPickup: 'ABHOLUNG', fReturn: 'RÜCKGABE', fLoc: 'ABHOLORT', findBtn: 'Auto finden', searching: 'Suche läuft…',
+    fPickup: 'ABHOLUNG', fReturn: 'RÜCKGABE', fLoc: 'STADT', findBtn: 'Auto finden', searching: 'Suche läuft…',
     searchNote: 'Wir zeigen nur Autos, die in Ihrem Zeitraum verfügbar sind', dateErr: 'Bitte Daten prüfen — die Rückgabe muss nach der Abholung liegen',
     freeOn: (n: number, r: string) => `Verfügbar ${r}: ${n} Autos`, noneFree: 'Keine Autos für diese Daten verfügbar — andere Daten wählen', reset: 'Alle anzeigen',
-    tYears: '8 JAHRE IN ANTALYA', tGuests: '2000+ ZUFRIEDENE GÄSTE', tRated: '4.9★ BEWERTET', tFleet: (n: number) => `FLOTTE · ${n} AUTOS`, scrollLbl: 'SCROLLEN',
+    tYears: '8 JAHRE IN ANTALYA', tGuests: '2000+ ZUFRIEDENE GÄSTE', tRated: '4.9★ BEWERTET', tFleet: (n: number) => `FLOTTE · ${n} AUTOS`, scrollLbl: 'SCROLLEN', scrollTop: 'Nach oben',
     fleetKicker: (n: number) => `FLOTTE · ${n} AUTOS`, fleetTitle: 'Wählen Sie Ihr Auto',
     fleetSub: 'Vom sparsamen Kleinwagen bis zur Oberklasse-Limousine und zum SUV — alle mit Vollversicherung.',
     available: 'Verfügbar', bookNow: 'Jetzt buchen', checkDates: 'Termine prüfen', perDay: '/Tag', deposit: 'Kaution',
@@ -235,13 +247,14 @@ export default function Home({ cars, reviews = [], resumeSlugs = [] }: { cars: C
   const isMobile = useIsMobile()
   const [pickup, setPickup] = useState('')
   const [ret, setRet] = useState('')
-  const [loc, setLoc] = useState('airport')
+  const [loc, setLoc] = useState('Antalya')
   const [availableSlugs, setAvailableSlugs] = useState<string[] | null>(null)
   const [rangeLabel, setRangeLabel] = useState('')
   const [err, setErr] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [showTop, setShowTop] = useState(false)
   const [detailCar, setDetailCar] = useState<CarView | null>(null)
   const [motion, setMotion] = useState(false) // pointer-fine + motion allowed → enables tilt
   const progressRef = useRef<HTMLDivElement>(null)
@@ -264,6 +277,7 @@ export default function Home({ cars, reviews = [], resumeSlugs = [] }: { cars: C
         raf = 0
         const y = window.scrollY
         setScrolled(y > 40)
+        setShowTop(y > 620)
         const doc = document.documentElement
         const p = doc.scrollHeight > doc.clientHeight ? y / (doc.scrollHeight - doc.clientHeight) : 0
         if (progressRef.current) progressRef.current.style.width = `${Math.min(100, p * 100)}%`
@@ -275,6 +289,18 @@ export default function Home({ cars, reviews = [], resumeSlugs = [] }: { cars: C
     onScroll()
     return () => { window.removeEventListener('scroll', onScroll); if (raf) cancelAnimationFrame(raf) }
   }, [])
+
+  // Close the mobile menu when tapping/clicking anywhere outside the nav.
+  useEffect(() => {
+    if (!menuOpen) return
+    const onDocDown = (e: MouseEvent | TouchEvent) => {
+      const header = document.querySelector('.rd-nav')
+      if (header && !header.contains(e.target as Node)) setMenuOpen(false)
+    }
+    document.addEventListener('mousedown', onDocDown)
+    document.addEventListener('touchstart', onDocDown)
+    return () => { document.removeEventListener('mousedown', onDocDown); document.removeEventListener('touchstart', onDocDown) }
+  }, [menuOpen])
 
   // Scroll-reveal + count-up stats via IntersectionObserver
   useEffect(() => {
@@ -318,7 +344,6 @@ export default function Home({ cars, reviews = [], resumeSlugs = [] }: { cars: C
     })
   }
   const shown = availableSlugs ? cars.filter((c) => availableSlugs.includes(c.slug)) : cars
-  const locs: [string, string][] = [['airport', t.locAirport], ['lara', t.locLara], ['konyaalti', t.locKonyaalti], ['oldtown', t.locOldtown], ['belek', t.locBelek], ['address', t.locAddress]]
   const avg = reviews.length ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1) : '4.9'
   const navLinks: [string, string][] = [['#fleet', t.navCars], ['#how', t.navHow], ['#why', t.navWhy], ['#about', t.navAbout], ['#reviews', t.navReviews]]
 
@@ -345,6 +370,7 @@ export default function Home({ cars, reviews = [], resumeSlugs = [] }: { cars: C
         </div>
         {menuOpen && (
           <div className="rd-menu">
+            <div className="rd-menu-lang"><LanguageDropdown variant="bar" /></div>
             {navLinks.map(([h, l]) => <a key={h} href={h} onClick={() => setMenuOpen(false)}>{l}</a>)}
             <Link href="/auth" onClick={() => setMenuOpen(false)}>{t.signIn}</Link>
             <Link href="/catalog" className="rd-btn rd-btn-coral" onClick={() => setMenuOpen(false)}>{t.choose}</Link>
@@ -370,7 +396,7 @@ export default function Home({ cars, reviews = [], resumeSlugs = [] }: { cars: C
                 <label><span>{t.fReturn}</span><input type="date" value={ret} min={pickup} onChange={(e) => setRet(e.target.value)} /></label>
               </div>
               <label className="rd-form-sel"><span>{t.fLoc}</span>
-                <select value={loc} onChange={(e) => setLoc(e.target.value)}>{locs.map(([v, l]) => <option key={v} value={v}>{l}</option>)}</select>
+                <select value={loc} onChange={(e) => setLoc(e.target.value)}>{TR_CITIES.map((city) => <option key={city} value={city}>{city}</option>)}</select>
               </label>
               <button className="rd-btn rd-btn-coral rd-form-btn" onClick={search} disabled={pending} aria-busy={pending}>
                 {pending ? t.searching : t.findBtn}{!pending && <Ic d={I.arrow} s={18} c="#fff" />}
@@ -525,6 +551,26 @@ export default function Home({ cars, reviews = [], resumeSlugs = [] }: { cars: C
       </section>
 
       <ClientFooter />
+
+      {/* Scroll-to-top — appears after scrolling; smoothly returns to the top (desktop + mobile). */}
+      <button
+        type="button"
+        aria-label={t.scrollTop}
+        onClick={() => window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })}
+        style={{
+          position: 'fixed', right: 18, bottom: 18, zIndex: 70,
+          width: 48, height: 48, borderRadius: '50%', border: 'none',
+          background: 'var(--accent)', color: '#fff', display: 'grid', placeItems: 'center',
+          boxShadow: '0 14px 30px -10px rgba(251,109,76,.6)',
+          cursor: 'pointer',
+          opacity: showTop ? 1 : 0,
+          transform: showTop ? 'translateY(0)' : 'translateY(16px)',
+          pointerEvents: showTop ? 'auto' : 'none',
+          transition: 'opacity .3s ease, transform .3s ease, background .16s',
+        }}
+      >
+        <Ic d={<path d="m18 15-6-6-6 6" />} s={22} c="#fff" />
+      </button>
 
       {/* Car detail drawer — opens when a fleet card is clicked (Book now on the card still deep-links). */}
       <CarDetailDrawer car={detailCar} onClose={() => setDetailCar(null)} />
