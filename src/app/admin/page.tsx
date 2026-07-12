@@ -15,7 +15,7 @@ import type {
   ServiceCategory,
   TripGoal,
 } from '@prisma/client'
-import { getCurrentUser } from '@/lib/auth'
+import { getCurrentUser, canManageSettings } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { buildReviewDocs, type ReviewDoc } from '@/lib/verification'
 import { getMapConfig } from '@/lib/map-provider'
@@ -239,6 +239,7 @@ export interface AdminMapConfig {
 
 export interface AdminProps {
   isOwner: boolean
+  canSettings: boolean
   tab: AdminNavKey
   bookings: AdminBookingRow[]
   statusCounts: Record<string, number>
@@ -291,8 +292,12 @@ export default async function AdminPage({
   const user = await getCurrentUser()
   if (!user || (user.role !== 'ADMIN' && user.role !== 'OWNER')) redirect('/auth')
 
+  // The Settings tab (keys, payment/insurance config, locations, verification) is owner + granted admins only.
+  const canSettings = canManageSettings(user)
+
   const rawTab = searchParams.tab as AdminNavKey | undefined
   const tab: AdminNavKey = rawTab && KNOWN_TABS.includes(rawTab) ? rawTab : 'bookings'
+  if (tab === 'settings' && !canSettings) redirect('/admin')
   const bookingId = searchParams.booking
 
   const [
@@ -591,6 +596,7 @@ export default async function AdminPage({
       settings={settings}
       mapConfig={mapConfig}
       isOwner={user.role === 'OWNER'}
+      canSettings={canSettings}
     />
   )
 }

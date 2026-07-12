@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { requireStaff } from '@/lib/auth'
+import { requireStaff, requireSettingsAccess } from '@/lib/auth'
 import { logAudit } from '@/lib/audit'
 import { prisma } from '@/lib/db'
 import { setVerificationMethod } from '@/lib/verification-method'
@@ -73,7 +73,7 @@ export async function setDocumentDecisionAction(input: {
 
 /** Staff-only: switch the active verification method (MANUAL ⇄ SUMSUB, or a future provider). */
 export async function saveVerificationMethodAction(method: string): Promise<{ ok: boolean }> {
-  const staff = await requireStaff()
+  const staff = await requireSettingsAccess()
   await setVerificationMethod(method)
   await logAudit({ userId: staff.id, action: 'verification.method.set', entity: 'Setting', entityId: 'verification_method', meta: { method } })
   revalidatePath('/admin/settings/sumsub')

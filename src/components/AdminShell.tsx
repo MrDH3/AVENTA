@@ -42,6 +42,7 @@ interface Strings {
   sectionManagement: string
   // profile card + menu
   logout: string
+  password: string
   roleAdmin: string
   officeLine: string
   // top bar
@@ -66,6 +67,7 @@ const dict: Dict<Strings> = {
     navTeam: 'Команда',
     sectionManagement: 'УПРАВЛЕНИЕ',
     logout: 'Выйти',
+    password: 'Сменить пароль',
     roleAdmin: 'Администратор',
     officeLine: 'Анталия · офис',
     openMenu: 'Открыть меню',
@@ -87,6 +89,7 @@ const dict: Dict<Strings> = {
     navTeam: 'Team',
     sectionManagement: 'MANAGEMENT',
     logout: 'Log out',
+    password: 'Change password',
     roleAdmin: 'Administrator',
     officeLine: 'Antalya · office',
     openMenu: 'Open menu',
@@ -108,6 +111,7 @@ const dict: Dict<Strings> = {
     navTeam: 'Ekip',
     sectionManagement: 'YÖNETİM',
     logout: 'Çıkış',
+    password: 'Parolayı değiştir',
     roleAdmin: 'Yönetici',
     officeLine: 'Antalya · ofis',
     openMenu: 'Menüyü aç',
@@ -129,6 +133,7 @@ const dict: Dict<Strings> = {
     navTeam: 'Equipo',
     sectionManagement: 'GESTIÓN',
     logout: 'Cerrar sesión',
+    password: 'Cambiar contraseña',
     roleAdmin: 'Administrador',
     officeLine: 'Antalya · oficina',
     openMenu: 'Abrir menú',
@@ -150,6 +155,7 @@ const dict: Dict<Strings> = {
     navTeam: 'Team',
     sectionManagement: 'VERWALTUNG',
     logout: 'Abmelden',
+    password: 'Passwort ändern',
     roleAdmin: 'Administrator',
     officeLine: 'Antalya · Büro',
     openMenu: 'Menü öffnen',
@@ -300,6 +306,7 @@ export default function AdminShell({
   children,
   headerExtra,
   isOwner = false,
+  canSettings = true,
 }: {
   active: AdminNavKey
   title: string
@@ -307,6 +314,8 @@ export default function AdminShell({
   children: ReactNode
   headerExtra?: ReactNode
   isOwner?: boolean
+  /** Show the Settings nav item. Owner + granted admins only; defaults true for privileged surfaces. */
+  canSettings?: boolean
 }) {
   const isMobile = useIsMobile()
   const t = useDict(dict)
@@ -377,7 +386,10 @@ export default function AdminShell({
         {t.sectionManagement}
       </div>
       <nav style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? 5 : 3 }}>
-        {(isOwner ? [...NAV, { key: 'team' as const, to: '/admin/team' }] : NAV).map((n) => {
+        {(() => {
+          const base = canSettings ? NAV : NAV.filter((n) => n.key !== 'settings')
+          return isOwner ? [...base, { key: 'team' as const, to: '/admin/team' }] : base
+        })().map((n) => {
           const on = n.key === active
           return (
             <Link
@@ -435,6 +447,33 @@ export default function AdminShell({
               padding: 6,
             }}
           >
+            {/* Personal password change — available to every staff member, independent of the
+                business Settings permission. */}
+            <Link
+              href="/admin/settings/security"
+              role="menuitem"
+              onClick={() => setProfileMenuOpen(false)}
+              className="av-tap"
+              style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+                padding: '11px 12px',
+                background: 'transparent',
+                border: 'none',
+                borderRadius: 9,
+                color: 'var(--d-text)',
+                font: '600 13px var(--f-ui)',
+                cursor: 'pointer',
+                textAlign: 'left',
+                textDecoration: 'none',
+                boxSizing: 'border-box',
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0110 0v4" /></svg>
+              {t.password}
+            </Link>
             <form action={logoutAction}>
               <button
                 type="submit"

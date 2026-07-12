@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getCurrentUser, isStaff } from '@/lib/auth'
+import { getCurrentUser, isStaff, canManageSettings } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import type { NotificationChannel, NotificationStatus } from '@prisma/client'
 import Notifications from '@/views/Notifications'
@@ -40,5 +40,5 @@ export default async function NotificationsPage() {
     sentAt: n.sentAt ? n.sentAt.toISOString() : null,
   }))
 
-  return <Notifications recent={recent} />
+  return <Notifications recent={recent} canSettings={canManageSettings(user)} />
 }

@@ -1802,7 +1802,7 @@ function RecentSent({ recent }: { recent: RecentNotification[] }) {
  * Page
  * ------------------------------------------------------------------ */
 
-export default function Notifications({ recent }: { recent: RecentNotification[] }) {
+export default function Notifications({ recent, canSettings }: { recent: RecentNotification[]; canSettings: boolean }) {
   const t = useDict(dict)
   const isMobile = useIsMobile()
   return (
@@ -1810,6 +1810,7 @@ export default function Notifications({ recent }: { recent: RecentNotification[]
       active="notifications"
       title={t.pageTitle}
       subtitle={t.pageSubtitle}
+      canSettings={canSettings}
     >
       <div
         style={{

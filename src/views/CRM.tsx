@@ -26,6 +26,7 @@ interface CRMProps {
   interest: CrmInterestRow[]
   todayEvents: CrmTodayEvent[]
   returnsDueTodayCount: number
+  canSettings: boolean
 }
 
 /* ----------------------------------------------------------------------------
@@ -280,6 +281,7 @@ export default function CRM({
   interest,
   todayEvents,
   returnsDueTodayCount,
+  canSettings,
 }: CRMProps) {
   const isMobile = useIsMobile()
   const t = useDict(dict)
@@ -362,7 +364,7 @@ export default function CRM({
   const bestCar = profitBars.find((p) => p.best)
 
   return (
-    <AdminShell active="dashboard" title={t.shellTitle} subtitle={t.shellSubtitle(monthLabel)}>
+    <AdminShell active="dashboard" title={t.shellTitle} subtitle={t.shellSubtitle(monthLabel)} canSettings={canSettings}>
       {/* Header range toggle + report action */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: isMobile ? 'flex-start' : 'flex-end', gap: 10, marginBottom: 20, flexWrap: 'wrap' }}>
         <div

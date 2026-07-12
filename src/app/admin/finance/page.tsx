@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getCurrentUser } from '@/lib/auth'
+import { getCurrentUser, canManageSettings } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import AdminShell from '@/components/AdminShell'
 import Finance from '@/views/Finance'
@@ -88,7 +88,7 @@ export default async function FinancePage({ searchParams }: { searchParams: { fr
   }))
 
   return (
-    <AdminShell active="finance" title="Финансы" subtitle="Учёт денег — счета, доходы, расходы, прибыль и касса (упрощённый, одностатейный)">
+    <AdminShell active="finance" title="Финансы" subtitle="Учёт денег — счета, доходы, расходы, прибыль и касса (упрощённый, одностатейный)" canSettings={canManageSettings(user)}>
       <Finance
         from={fromStr}
         to={toStr}

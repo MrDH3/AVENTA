@@ -11,7 +11,8 @@ export const dynamic = 'force-dynamic'
 
 export default async function SumsubSettingsPage() {
   const user = await getCurrentUser()
-  if (!user || (user.role !== 'ADMIN' && user.role !== 'OWNER')) redirect('/auth')
+  if (!user) redirect('/auth')
+  if (user.role !== 'OWNER' && !user.settingsAccess) redirect('/admin') // owner + granted admins only
 
   const [config, retentionDays, method] = await Promise.all([getSumsubConfig(), getRetentionDays(), getVerificationMethod()])
 

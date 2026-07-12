@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/db'
-import { requireStaff } from '@/lib/auth'
+import { requireSettingsAccess } from '@/lib/auth'
 import { logAudit } from '@/lib/audit'
 
 export interface OfficeActionResult {
@@ -33,7 +33,7 @@ export async function saveOfficeAction(input: {
   lng: number | string
   enabled?: boolean
 }): Promise<OfficeActionResult> {
-  const staff = await requireStaff()
+  const staff = await requireSettingsAccess()
   const name = input.name.trim()
   const address = input.address.trim()
   if (!name) return { ok: false, error: 'Введите название офиса' }
@@ -60,7 +60,7 @@ export async function saveOfficeAction(input: {
 
 /** Remove an office. */
 export async function deleteOfficeAction(input: { id: string }): Promise<OfficeActionResult> {
-  const staff = await requireStaff()
+  const staff = await requireSettingsAccess()
   await prisma.office.delete({ where: { id: input.id } })
   await logAudit({ userId: staff.id, action: 'office.delete', entity: 'Office', entityId: input.id })
   revalidate()

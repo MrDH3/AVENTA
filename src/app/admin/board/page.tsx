@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getCurrentUser } from '@/lib/auth'
+import { getCurrentUser, canManageSettings } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import AdminShell from '@/components/AdminShell'
 import KanbanBoard, { type BoardCard } from '@/views/KanbanBoard'
@@ -56,6 +56,7 @@ export default async function BoardPage() {
       active="board"
       title="Доска заказов"
       subtitle="Канбан по этапам аренды — перетащите карточку, чтобы сменить статус"
+      canSettings={canManageSettings(user)}
     >
       <KanbanBoard cards={cards} />
     </AdminShell>

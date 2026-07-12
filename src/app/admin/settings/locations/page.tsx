@@ -9,7 +9,8 @@ export const dynamic = 'force-dynamic'
 
 export default async function LocationsPage() {
   const user = await getCurrentUser()
-  if (!user || (user.role !== 'ADMIN' && user.role !== 'OWNER')) redirect('/auth')
+  if (!user) redirect('/auth')
+  if (user.role !== 'OWNER' && !user.settingsAccess) redirect('/admin') // owner + granted admins only
 
   const [cities, offices, mapClient] = await Promise.all([listCitiesAdmin(), listOfficesAdmin(), getMapClientConfig()])
 

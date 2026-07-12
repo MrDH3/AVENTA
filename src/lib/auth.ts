@@ -92,6 +92,18 @@ export async function requireOwner(): Promise<User> {
   return requireRole('OWNER')
 }
 
+/** Can this account open the sensitive Settings area? Owner always; an admin only if granted. */
+export function canManageSettings(user: Pick<User, 'role' | 'settingsAccess'>): boolean {
+  return user.role === 'OWNER' || (user.role === 'ADMIN' && user.settingsAccess)
+}
+
+/** Guard for every settings page/action (keys, payment config, company details, …). */
+export async function requireSettingsAccess(): Promise<User> {
+  const user = await requireUser()
+  if (!canManageSettings(user)) throw new AuthError('FORBIDDEN')
+  return user
+}
+
 export class AuthError extends Error {
   constructor(public code: 'UNAUTHENTICATED' | 'FORBIDDEN') {
     super(code)

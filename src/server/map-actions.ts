@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/db'
-import { requireStaff, getCurrentUser } from '@/lib/auth'
+import { requireSettingsAccess, getCurrentUser } from '@/lib/auth'
 import { logAudit } from '@/lib/audit'
 import { saveMapConfig, MAP_PROVIDERS, type MapProvider } from '@/lib/map-provider'
 
@@ -13,7 +13,7 @@ export interface MapResult {
 
 /** Admin: pick the active map provider + (optionally) store an encrypted Google/Yandex key. */
 export async function saveMapConfigAction(input: { activeProvider: string; googleKey?: string; yandexKey?: string }): Promise<MapResult> {
-  const staff = await requireStaff()
+  const staff = await requireSettingsAccess()
   const provider: MapProvider = (MAP_PROVIDERS as string[]).includes(input.activeProvider) ? (input.activeProvider as MapProvider) : 'osm'
   await saveMapConfig({ activeProvider: provider, googleKey: input.googleKey, yandexKey: input.yandexKey })
   await logAudit({ userId: staff.id, action: 'map.config', entity: 'MapProviderConfig', entityId: 'default', meta: { provider, googleKey: !!input.googleKey?.trim(), yandexKey: !!input.yandexKey?.trim() } })

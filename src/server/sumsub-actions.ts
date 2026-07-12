@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { requireStaff, getCurrentUser } from '@/lib/auth'
+import { requireSettingsAccess, getCurrentUser } from '@/lib/auth'
 import { logAudit } from '@/lib/audit'
 import { prisma } from '@/lib/db'
 import { saveSumsubConfig, createAccessToken } from '@/lib/sumsub'
@@ -18,7 +18,7 @@ export interface SumsubSaveResult {
  * blank fields keep the existing value. NEVER returns or logs a secret.
  */
 export async function saveSumsubConfigAction(_prev: SumsubSaveResult, formData: FormData): Promise<SumsubSaveResult> {
-  const staff = await requireStaff()
+  const staff = await requireSettingsAccess()
   const levelName = String(formData.get('levelName') ?? '')
   const enabled = formData.get('enabled') === 'on' || formData.get('enabled') === 'true'
   const appToken = String(formData.get('appToken') ?? '')

@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { requireStaff } from '@/lib/auth'
+import { requireSettingsAccess } from '@/lib/auth'
 import { logAudit } from '@/lib/audit'
 import { saveProviderCredential, SOCIAL_PROVIDERS, type SocialProvider } from '@/lib/provider-credentials'
 
@@ -16,7 +16,7 @@ export interface ProviderSaveResult {
  * NOTE: this action never returns the secret.
  */
 export async function saveAuthProviderAction(_prev: ProviderSaveResult, formData: FormData): Promise<ProviderSaveResult> {
-  const staff = await requireStaff()
+  const staff = await requireSettingsAccess()
   const provider = String(formData.get('provider') ?? '') as SocialProvider
   if (!SOCIAL_PROVIDERS.includes(provider)) return { ok: false, error: 'Неизвестный провайдер' }
 

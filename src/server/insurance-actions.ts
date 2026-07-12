@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { requireStaff } from '@/lib/auth'
+import { requireSettingsAccess } from '@/lib/auth'
 import { logAudit } from '@/lib/audit'
 import { saveInsuranceTier, type CoverageItemRaw } from '@/lib/insurance'
 
@@ -27,7 +27,7 @@ export async function saveInsuranceTierAction(input: {
   excessEn?: string
   coverage: CoverageItemRaw[]
 }): Promise<InsuranceSaveResult> {
-  const staff = await requireStaff()
+  const staff = await requireSettingsAccess()
   if (!VALID_KEYS.includes(input.key)) return { ok: false, error: 'Неизвестный тариф' }
   if (!input.nameRu.trim() || !input.nameEn.trim()) return { ok: false, error: 'Введите название тарифа (RU и EN)' }
 

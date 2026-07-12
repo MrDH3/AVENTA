@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import type { BookingStatus, DocumentStatus, InsuranceStatus, PaymentStatus } from '@prisma/client'
 import { prisma } from '@/lib/db'
-import { requireStaff } from '@/lib/auth'
+import { requireStaff, requireSettingsAccess } from '@/lib/auth'
 import { logAudit } from '@/lib/audit'
 import { carUpsertSchema, serviceUpsertSchema, fieldErrors } from '@/lib/validation'
 import { recomputeBookingBalance } from '@/lib/balance'
@@ -49,7 +49,7 @@ export async function setBookingStatus(bookingId: string, status: BookingStatus,
 
 /** Admin/owner: run the reservation-hold timeout sweep now (also runs on a schedule via cron). */
 export async function runReservationTimeoutAction(): Promise<{ ok: boolean; scanned?: number; expired?: number; holdHours?: number }> {
-  const staff = await requireStaff()
+  const staff = await requireSettingsAccess()
   const res = await runReservationTimeout()
   await logAudit({ userId: staff.id, action: 'booking.hold.sweep.manual', entity: 'Booking', entityId: 'reservation-timeout', meta: { ...res } })
   revalidatePath('/admin')
@@ -60,7 +60,7 @@ export async function runReservationTimeoutAction(): Promise<{ ok: boolean; scan
 /** Admin/owner: set how many hours an unconfirmed MANUAL (bank/crypto) booking holds the car before it
  *  auto-expires. Default 24. Applies to the next sweep. */
 export async function setReservationHoldHoursAction(hours: number): Promise<StaffResult> {
-  const staff = await requireStaff()
+  const staff = await requireSettingsAccess()
   if (!Number.isFinite(hours) || hours < 1) return { ok: false, error: 'Минимум 1 час' }
   await setReservationHoldHours(hours)
   await logAudit({ userId: staff.id, action: 'setting.reservation_hold_hours', entity: 'Setting', entityId: 'reservation_hold_hours', meta: { hours: Math.floor(hours) } })
@@ -71,7 +71,7 @@ export async function setReservationHoldHoursAction(hours: number): Promise<Staf
 /** Admin/owner: run the abandoned-DRAFT sweep now (deletes half-filled booking forms past their TTL).
  *  DISTINCT from the reservation-hold sweep above — this touches no booking/car, only draft form data. */
 export async function runBookingDraftCleanupAction(): Promise<{ ok: boolean; deleted?: number; ttlHours?: number }> {
-  const staff = await requireStaff()
+  const staff = await requireSettingsAccess()
   const res = await runBookingDraftCleanup()
   await logAudit({ userId: staff.id, action: 'booking.draft.sweep.manual', entity: 'BookingDraft', entityId: 'draft-sweep', meta: { ...res } })
   return { ok: true, ...res }
@@ -79,7 +79,7 @@ export async function runBookingDraftCleanupAction(): Promise<{ ok: boolean; del
 
 /** Admin/owner: set how many hours a saved booking DRAFT is kept before auto-delete. Default 24. */
 export async function setBookingDraftTtlHoursAction(hours: number): Promise<StaffResult> {
-  const staff = await requireStaff()
+  const staff = await requireSettingsAccess()
   if (!Number.isFinite(hours) || hours < 1) return { ok: false, error: 'Минимум 1 час' }
   await setBookingDraftTtlHours(hours)
   await logAudit({ userId: staff.id, action: 'setting.booking_draft_ttl_hours', entity: 'Setting', entityId: 'booking_draft_ttl_hours', meta: { hours: Math.floor(hours) } })
@@ -90,7 +90,7 @@ export async function setBookingDraftTtlHoursAction(hours: number): Promise<Staf
 /** Admin/owner: run the stranded card-deposit reconciliation now (refunds captured deposits that never
  *  became a booking). SEPARATE from the reservation-hold + draft sweeps — touches only Stripe charges. */
 export async function runCardReconcileAction(): Promise<{ ok: boolean; scanned?: number; refunded?: number; refundFailed?: number; graceMinutes?: number }> {
-  const staff = await requireStaff()
+  const staff = await requireSettingsAccess()
   const res = await reconcileOrphanedCardDeposits()
   await logAudit({ userId: staff.id, action: 'payment.stripe.reconcile.manual', entity: 'PaymentIntent', entityId: 'card-reconcile', meta: { ...res } })
   return { ok: true, ...res }
@@ -99,7 +99,7 @@ export async function runCardReconcileAction(): Promise<{ ok: boolean; scanned?:
 /** Admin/owner: set the grace window (minutes) before a captured-but-unbooked deposit is treated as
  *  stranded and refunded. Default 30. Longer = more time for a slow create to complete before refunding. */
 export async function setCardReconcileGraceMinutesAction(minutes: number): Promise<StaffResult> {
-  const staff = await requireStaff()
+  const staff = await requireSettingsAccess()
   if (!Number.isFinite(minutes) || minutes < 1) return { ok: false, error: 'Минимум 1 минута' }
   await setCardReconcileGraceMinutes(minutes)
   await logAudit({ userId: staff.id, action: 'setting.card_reconcile_grace_minutes', entity: 'Setting', entityId: 'card_reconcile_grace_minutes', meta: { minutes: Math.floor(minutes) } })

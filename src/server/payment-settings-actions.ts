@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import type { Currency } from '@prisma/client'
 import { prisma } from '@/lib/db'
-import { requireStaff } from '@/lib/auth'
+import { requireSettingsAccess } from '@/lib/auth'
 import { savePaymentSettings, WALLET_SLOTS } from '@/lib/payment-settings'
 import { logAudit } from '@/lib/audit'
 
@@ -24,7 +24,7 @@ const RATE_SYMBOL: Record<Currency, string> = { EUR: '€', USD: '$', RUB: '₽'
 export async function savePaymentSettingsAction(_prev: PaySaveResult, formData: FormData): Promise<PaySaveResult> {
   let staffId: string
   try {
-    const staff = await requireStaff()
+    const staff = await requireSettingsAccess()
     staffId = staff.id
   } catch {
     return { ok: false, error: 'Доступ только для администратора или владельца' }

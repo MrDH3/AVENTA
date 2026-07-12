@@ -8,6 +8,7 @@ import {
   archiveAdminAction,
   unarchiveAdminAction,
   removeAdminAction,
+  setSettingsAccessAction,
   addRecoveryEmailAction,
   removeRecoveryEmailAction,
   type StaffRow,
@@ -28,6 +29,7 @@ function primaryBtn(pending: boolean): CSSProperties {
 }
 const ghostBtn: CSSProperties = { padding: '8px 13px', borderRadius: 9, border: '1px solid var(--d-hair)', background: 'transparent', color: 'var(--d-text)', font: '700 12px var(--f-ui)', cursor: 'pointer' }
 const dangerBtn: CSSProperties = { padding: '8px 13px', borderRadius: 9, border: '1px solid rgba(214,75,61,.4)', background: 'rgba(214,75,61,.12)', color: 'var(--d-red,#e06a5a)', font: '700 12px var(--f-ui)', cursor: 'pointer' }
+const accentBtn: CSSProperties = { padding: '8px 13px', borderRadius: 9, border: '1px solid var(--d-accent)', background: 'rgba(13,148,136,.12)', color: 'var(--d-accent)', font: '700 12px var(--f-ui)', cursor: 'pointer' }
 
 function Submit({ children }: { children: string }) {
   const { pending } = useFormStatus()
@@ -61,6 +63,15 @@ export default function OwnerTeam({ staff, recovery }: { staff: StaffRow[]; reco
     else alert(r.error ?? 'Ошибка')
   }
 
+  // Grant/revoke an admin's access to the sensitive Settings area.
+  const toggleSettings = async (id: string, allow: boolean) => {
+    setBusy(id)
+    const r = await setSettingsAccessAction(id, allow)
+    setBusy(null)
+    if (r.ok) router.refresh()
+    else alert(r.error ?? 'Ошибка')
+  }
+
   const admins = staff.filter((s) => s.role === 'ADMIN')
   const canAddRecovery = recovery.length < 2
 
@@ -70,7 +81,7 @@ export default function OwnerTeam({ staff, recovery }: { staff: StaffRow[]; reco
       {/* ───────── Admins ───────── */}
       <section style={card}>
         <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
-          <div><h2 style={h2}>Администраторы</h2><p style={sub}>Добавляйте, архивируйте и удаляйте администраторов. Доступно только владельцу.</p></div>
+          <div><h2 style={h2}>Администраторы</h2><p style={sub}>Добавляйте, архивируйте и удаляйте администраторов. «Доступ к настройкам» открывает раздел с ключами, платёжными и другими приватными настройками — выдавайте только доверенным. Доступно только владельцу.</p></div>
           <span style={{ font: '700 12px var(--f-mono,monospace)', color: 'var(--d-muted)' }}>{admins.length} админ.</span>
         </div>
 
@@ -109,8 +120,12 @@ export default function OwnerTeam({ staff, recovery }: { staff: StaffRow[]; reco
                 </div>
                 <span style={{ font: '700 9.5px var(--f-mono,monospace)', letterSpacing: '.08em', padding: '4px 9px', borderRadius: 999, background: isOwnerRow ? 'rgba(245,180,0,.16)' : 'rgba(13,148,136,.16)', color: isOwnerRow ? '#e7b94b' : 'var(--d-accent)' }}>{isOwnerRow ? 'ВЛАДЕЛЕЦ' : 'АДМИН'}</span>
                 {s.archived && <span style={{ font: '700 9.5px var(--f-mono,monospace)', letterSpacing: '.08em', padding: '4px 9px', borderRadius: 999, background: 'rgba(214,75,61,.14)', color: 'var(--d-red,#e06a5a)' }}>В АРХИВЕ</span>}
+                {s.settingsAccess && <span title="Может открывать раздел «Настройки»" style={{ font: '700 9.5px var(--f-mono,monospace)', letterSpacing: '.08em', padding: '4px 9px', borderRadius: 999, background: 'rgba(129,140,248,.16)', color: '#a5b4fc' }}>НАСТРОЙКИ</span>}
                 {!isOwnerRow && (
-                  <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
+                  <div style={{ marginLeft: 'auto', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                    {!s.archived && (s.settingsAccess
+                      ? <button type="button" disabled={busy === s.id} style={ghostBtn} onClick={() => toggleSettings(s.id, false)}>Убрать доступ к настройкам</button>
+                      : <button type="button" disabled={busy === s.id} style={accentBtn} onClick={() => toggleSettings(s.id, true)}>Дать доступ к настройкам</button>)}
                     {s.archived
                       ? <button type="button" disabled={busy === s.id} style={ghostBtn} onClick={() => run(s.id, unarchiveAdminAction)}>Вернуть</button>
                       : <button type="button" disabled={busy === s.id} style={ghostBtn} onClick={() => run(s.id, archiveAdminAction)}>Архивировать</button>}

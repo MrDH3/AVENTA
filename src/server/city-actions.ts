@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/db'
-import { requireStaff } from '@/lib/auth'
+import { requireSettingsAccess } from '@/lib/auth'
 import { logAudit } from '@/lib/audit'
 
 export interface CityActionResult {
@@ -17,7 +17,7 @@ function revalidate() {
 
 /** Add a city (admin/owner). New city goes to the end of the order. */
 export async function createCityAction(input: { name: string; country?: string }): Promise<CityActionResult> {
-  const staff = await requireStaff()
+  const staff = await requireSettingsAccess()
   const name = input.name.trim()
   if (!name) return { ok: false, error: 'Введите название города' }
   const country = (input.country ?? '').trim() || 'Türkiye'
@@ -30,7 +30,7 @@ export async function createCityAction(input: { name: string; country?: string }
 
 /** Edit a city's name/country. */
 export async function updateCityAction(input: { id: string; name: string; country?: string }): Promise<CityActionResult> {
-  const staff = await requireStaff()
+  const staff = await requireSettingsAccess()
   const name = input.name.trim()
   if (!name) return { ok: false, error: 'Введите название города' }
   const country = (input.country ?? '').trim() || 'Türkiye'
@@ -42,7 +42,7 @@ export async function updateCityAction(input: { id: string; name: string; countr
 
 /** Enable/disable a city. Disabled cities never appear in the booking form. */
 export async function toggleCityAction(input: { id: string; enabled: boolean }): Promise<CityActionResult> {
-  const staff = await requireStaff()
+  const staff = await requireSettingsAccess()
   await prisma.city.update({ where: { id: input.id }, data: { enabled: input.enabled } })
   await logAudit({ userId: staff.id, action: 'city.toggle', entity: 'City', entityId: input.id, meta: { enabled: input.enabled } })
   revalidate()
@@ -51,7 +51,7 @@ export async function toggleCityAction(input: { id: string; enabled: boolean }):
 
 /** Move a city up/down by swapping order with its neighbour. */
 export async function moveCityAction(input: { id: string; dir: 'up' | 'down' }): Promise<CityActionResult> {
-  const staff = await requireStaff()
+  const staff = await requireSettingsAccess()
   const cities = await prisma.city.findMany({ orderBy: [{ order: 'asc' }, { name: 'asc' }], select: { id: true, order: true } })
   const idx = cities.findIndex((c) => c.id === input.id)
   if (idx === -1) return { ok: false, error: 'Город не найден' }
@@ -70,7 +70,7 @@ export async function moveCityAction(input: { id: string; dir: 'up' | 'down' }):
 
 /** Remove a city. */
 export async function deleteCityAction(input: { id: string }): Promise<CityActionResult> {
-  const staff = await requireStaff()
+  const staff = await requireSettingsAccess()
   await prisma.city.delete({ where: { id: input.id } })
   await logAudit({ userId: staff.id, action: 'city.delete', entity: 'City', entityId: input.id })
   revalidate()

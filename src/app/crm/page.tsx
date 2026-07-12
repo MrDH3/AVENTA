@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getCurrentUser, isStaff } from '@/lib/auth'
+import { getCurrentUser, isStaff, canManageSettings } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { formatMoney } from '@/lib/money'
 import type { BookingStatus, TripGoal } from '@prisma/client'
@@ -331,6 +331,7 @@ export default async function CrmPage() {
       interest={interest}
       todayEvents={todayEvents}
       returnsDueTodayCount={returnsDueToday.length}
+      canSettings={canManageSettings(user)}
     />
   )
 }

@@ -194,6 +194,7 @@ export interface FleetCalendarProps {
   /** ?month= targets for the ‹ › navigation (YYYY-MM). */
   prevMonth: string
   nextMonth: string
+  canSettings: boolean
 }
 
 export default function FleetCalendar({
@@ -204,6 +205,7 @@ export default function FleetCalendar({
   subtitle,
   prevMonth,
   nextMonth,
+  canSettings,
 }: FleetCalendarProps) {
   const [view, setView] = useState<ViewMode>('month')
   const isMobile = useIsMobile()
@@ -296,6 +298,7 @@ export default function FleetCalendar({
       title={t.pageTitle}
       subtitle={subtitle}
       headerExtra={headerExtra}
+      canSettings={canSettings}
     >
       {/* KPI chips + legend */}
       <div

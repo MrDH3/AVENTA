@@ -2023,7 +2023,7 @@ export default function Admin(props: AdminProps) {
     : subtitle
 
   return (
-    <AdminShell active={activeNav} title={pageTitle} subtitle={pageSub} isOwner={props.isOwner}>
+    <AdminShell active={activeNav} title={pageTitle} subtitle={pageSub} isOwner={props.isOwner} canSettings={props.canSettings}>
       {tab === 'bookings' && detail && <BookingDetail detail={detail} />}
       {tab === 'bookings' && !detail && (
         <BookingsView bookings={props.bookings} statusCounts={props.statusCounts} />

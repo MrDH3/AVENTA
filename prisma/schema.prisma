@@ -203,6 +203,9 @@ model User {
   // Set when a staff account is archived by the owner: login/sessions are refused while non-null,
   // but the account + its history are kept. Cleared on un-archive. (Owner accounts can't be archived.)
   archivedAt    DateTime?
+  // Owner-granted permission for an ADMIN to open the sensitive Settings area (keys, payment config,
+  // company details…). The OWNER always has access; regular admins default to false.
+  settingsAccess Boolean  @default(false)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 

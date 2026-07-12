@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getCurrentUser } from '@/lib/auth'
+import { getCurrentUser, canManageSettings } from '@/lib/auth'
 import AdminShell from '@/components/AdminShell'
 import { getVerificationQueue, getPendingVerificationCount } from '@/lib/verification-queue'
 import VerificationQueue from '@/views/VerificationQueue'
@@ -14,7 +14,7 @@ export default async function VerificationsPage({ searchParams }: { searchParams
   const [rows, pendingCount] = await Promise.all([getVerificationQueue(filter), getPendingVerificationCount()])
 
   return (
-    <AdminShell active="verifications" title="Проверка личности — очередь" subtitle="Ручная проверка документов клиентов · одобрение и отклонение с причиной">
+    <AdminShell active="verifications" title="Проверка личности — очередь" subtitle="Ручная проверка документов клиентов · одобрение и отклонение с причиной" canSettings={canManageSettings(user)}>
       <VerificationQueue rows={rows} filter={filter} pendingCount={pendingCount} />
     </AdminShell>
   )

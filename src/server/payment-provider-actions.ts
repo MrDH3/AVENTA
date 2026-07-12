@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { requireStaff } from '@/lib/auth'
+import { requireSettingsAccess } from '@/lib/auth'
 import { logAudit } from '@/lib/audit'
 import { savePaymentProvider, isProviderKey } from '@/lib/payment-providers'
 import { getAdapter } from '@/lib/payment-gateway/registry'
@@ -20,7 +20,7 @@ export async function savePaymentProviderAction(
   _prev: PaymentProviderSaveResult,
   formData: FormData,
 ): Promise<PaymentProviderSaveResult> {
-  const staff = await requireStaff()
+  const staff = await requireSettingsAccess()
   const key = String(formData.get('provider') ?? '')
   if (!isProviderKey(key)) return { ok: false, error: 'Неизвестный провайдер' }
 

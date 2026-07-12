@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import type { BookingStatus } from '@prisma/client'
-import { getCurrentUser, isStaff } from '@/lib/auth'
+import { getCurrentUser, isStaff, canManageSettings } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { BLOCKING_STATUSES } from '@/lib/availability'
 import { CLASS_LABEL, formatDayMonth } from '@/lib/view'
@@ -242,6 +242,7 @@ export default async function CalendarPage({
       kpis={kpis}
       prevMonth={monthKey(prevDate.getFullYear(), prevDate.getMonth())}
       nextMonth={monthKey(nextDate.getFullYear(), nextDate.getMonth())}
+      canSettings={canManageSettings(user)}
     />
   )
 }

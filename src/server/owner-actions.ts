@@ -30,6 +30,7 @@ export interface StaffRow {
   lastName: string | null
   role: 'ADMIN' | 'OWNER'
   archived: boolean
+  settingsAccess: boolean // may this admin open the sensitive Settings area (owner is always true)
   createdAt: string
 }
 export interface RecoveryRow {
@@ -46,7 +47,7 @@ export async function listStaffAction(): Promise<StaffRow[]> {
   const rows = await prisma.user.findMany({
     where: { role: { in: ['ADMIN', 'OWNER'] } },
     orderBy: [{ role: 'asc' }, { createdAt: 'asc' }],
-    select: { id: true, email: true, firstName: true, lastName: true, role: true, archivedAt: true, createdAt: true },
+    select: { id: true, email: true, firstName: true, lastName: true, role: true, archivedAt: true, settingsAccess: true, createdAt: true },
   })
   return rows.map((r) => ({
     id: r.id,
@@ -55,6 +56,7 @@ export async function listStaffAction(): Promise<StaffRow[]> {
     lastName: r.lastName,
     role: r.role as 'ADMIN' | 'OWNER',
     archived: !!r.archivedAt,
+    settingsAccess: r.role === 'OWNER' || r.settingsAccess, // owner always has it
     createdAt: r.createdAt.toISOString(),
   }))
 }
@@ -139,6 +141,22 @@ export async function removeAdminAction(userId: string): Promise<ActionResult> {
     prisma.user.delete({ where: { id: userId } }),
   ])
   await logAudit({ action: 'staff.admin.remove', entity: 'User', entityId: userId, meta: { email: target.email } })
+  revalidatePath('/admin/team')
+  return { ok: true }
+}
+
+/**
+ * Grant or revoke an admin's access to the sensitive Settings area (API keys, payment/insurance
+ * config, locations, verification). Only the owner can flip this; the owner's own access is implicit
+ * and can't be toggled. Revoking takes effect on the admin's next request (server-enforced).
+ */
+export async function setSettingsAccessAction(userId: string, allow: boolean): Promise<ActionResult> {
+  const owner = await requireOwner()
+  if (userId === owner.id) return { ok: false, error: 'Доступ владельца изменить нельзя' }
+  const target = await prisma.user.findUnique({ where: { id: userId } })
+  if (!target || target.role !== 'ADMIN') return { ok: false, error: 'Доступ можно выдать только администратору' }
+  await prisma.user.update({ where: { id: userId }, data: { settingsAccess: allow } })
+  await logAudit({ action: allow ? 'staff.settings.grant' : 'staff.settings.revoke', entity: 'User', entityId: userId, meta: { email: target.email } })
   revalidatePath('/admin/team')
   return { ok: true }
 }
