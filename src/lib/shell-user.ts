@@ -5,15 +5,20 @@ export interface ShellUser {
   fullName: string
   initial: string
   tierName: string
+  email: string
+  /** A client who hasn't confirmed their email yet — drives the top-of-cabinet verify banner. */
+  emailUnverified: boolean
 }
 
 /** Derive the shell profile chip from a logged-in user (no extra DB call). */
 export function toShellUser(
-  user: Pick<User, 'firstName' | 'lastName' | 'email' | 'loyaltyTier'>,
+  user: Pick<User, 'firstName' | 'lastName' | 'email' | 'loyaltyTier' | 'role' | 'emailVerified'>,
 ): ShellUser {
   return {
     fullName: [user.firstName, user.lastName].filter(Boolean).join(' ') || user.email || 'AVENTA',
     initial: ((user.firstName || user.email || 'A').trim()[0] || 'A').toUpperCase(),
     tierName: (user.loyaltyTier as string) || 'SILVER',
+    email: user.email,
+    emailUnverified: user.role === 'CLIENT' && !user.emailVerified,
   }
 }

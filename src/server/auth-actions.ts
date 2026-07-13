@@ -9,6 +9,8 @@ import { rateLimit, clientIp } from '@/lib/rate-limit'
 import { logAudit } from '@/lib/audit'
 import { normalizePhone } from '@/lib/phone'
 import { safeInternalPath } from '@/lib/safe-path'
+import { isDisposableEmail, domainCanReceiveMail } from '@/lib/email-validation'
+import { sendVerificationEmail } from '@/lib/email-verify'
 
 export interface ActionResult {
   ok: boolean
@@ -45,6 +47,12 @@ export async function registerAction(_prev: ActionResult, formData: FormData): P
   if (!parsed.success) return { ok: false, fieldErrors: fieldErrors(parsed.error) }
 
   const data = parsed.data
+
+  // Reject throwaway / temporary-mail providers up front (cheap, in-memory).
+  if (isDisposableEmail(data.email)) {
+    return { ok: false, fieldErrors: { email: 'Укажите постоянный email — временные адреса не принимаются' } }
+  }
+
   const existing = await prisma.user.findUnique({ where: { email: data.email } })
   if (existing) return { ok: false, fieldErrors: { email: 'Этот email уже зарегистрирован' } }
 
@@ -57,6 +65,11 @@ export async function registerAction(_prev: ActionResult, formData: FormData): P
     }
   }
 
+  // Deliverability: reject dead / mistyped domains that can't receive mail (best-effort, fails open).
+  if (!(await domainCanReceiveMail(data.email))) {
+    return { ok: false, fieldErrors: { email: 'Похоже, такого почтового домена не существует — проверьте адрес' } }
+  }
+
   const user = await prisma.user.create({
     data: {
       email: data.email,
@@ -65,10 +78,12 @@ export async function registerAction(_prev: ActionResult, formData: FormData): P
       lastName: data.lastName,
       phone,
       role: 'CLIENT',
+      // emailVerified defaults false — the confirmation email below flips it once they click the link.
     },
   })
   await recordConsent(user.id, 'personal_data')
   await recordConsent(user.id, 'offer')
+  await sendVerificationEmail({ id: user.id, email: user.email, firstName: user.firstName })
   await createSession(user.id)
   await logAudit({ userId: user.id, action: 'auth.register', entity: 'User', entityId: user.id })
 

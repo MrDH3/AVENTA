@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import LangToggle from '../components/LangToggle'
 import ClientFooter from '../components/ClientFooter'
+import VerifyEmailBanner from '@/components/VerifyEmailBanner'
 import { useIsMobile } from '@/components/useIsMobile'
 import { useDict, useLang, type Dict, type Lang } from '../i18n/lang'
 import { logoutAction } from '@/server/auth-actions'
@@ -21,6 +22,7 @@ import SavedPlaces from '../components/SavedPlaces'
 
 interface Props {
   user: AccountUser
+  emailUnverified: boolean
   bookings: AccountBooking[]
   favouriteCar: AccountCar | null
   lastPickupCity: string | null
@@ -753,6 +755,7 @@ function StatCard({ icon, tint, ink, value, label }: { icon: ReactNode; tint: st
 
 export default function Account({
   user,
+  emailUnverified,
   bookings,
   favouriteCar,
   lastPickupCity,
@@ -1037,6 +1040,7 @@ export default function Account({
 
         <div className="cab-mscroll">
           <div className="cab-mview" key={tab}>
+            {emailUnverified && <div style={{ padding: '14px 16px 0' }}><VerifyEmailBanner email={user.email} /></div>}
 
             {tab === 'home' && (
               <>
@@ -1341,6 +1345,7 @@ export default function Account({
         </header>
 
         <main style={{ flex: 1, padding: 'clamp(20px,3vw,40px) clamp(18px,3vw,40px) 0' }}>
+          {emailUnverified && <div style={{ marginBottom: 20 }}><VerifyEmailBanner email={user.email} /></div>}
           <div style={{ maxWidth: 1200, margin: '0 auto', width: '100%' }}>
 
             {/* ══ OVERVIEW ══ */}

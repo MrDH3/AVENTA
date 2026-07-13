@@ -1,19 +1,16 @@
 'use server'
 
-import crypto from 'node:crypto'
 import { headers } from 'next/headers'
 import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/db'
-import { getCurrentUser } from '@/lib/auth'
-import { emailSchema } from '@/lib/validation'
+import { getCurrentUser, hashPassword, createSession } from '@/lib/auth'
+import { emailSchema, passwordSchema } from '@/lib/validation'
 import { saveDraft, claimAnonDraftForUser, discardDraftForCar } from '@/lib/booking-draft'
-import { sendEmail } from '@/lib/notify'
+import { isDisposableEmail, domainCanReceiveMail } from '@/lib/email-validation'
+import { sendVerificationEmail } from '@/lib/email-verify'
 import { rateLimit, clientIp } from '@/lib/rate-limit'
 import { logAudit } from '@/lib/audit'
-import { env } from '@/lib/env'
 import { safeInternalPath } from '@/lib/safe-path'
-
-const hashToken = (t: string) => crypto.createHash('sha256').update(t).digest('hex')
 
 /**
  * Persist the visitor's step-1 booking selections as a draft (bound to the user if signed in,
@@ -56,18 +53,20 @@ export interface RequestAccountResult {
   ok: boolean
   error?: string
   fieldErrors?: Record<string, string>
-  devLink?: string
+  redirectTo?: string // on success — where the now-signed-in client should land
 }
 
 /**
- * Simplified sign-up: email + name + data-processing consent only. Creates a passwordless
- * account, BINDS the visitor's own anonymous draft to it (server-side, cookie-scoped — a user
- * can only bind a draft they created), then emails a set-password link that returns them to
- * their in-progress booking. No password is collected here.
+ * Sign-up: email + name + password + data-processing consent. The visitor CHOOSES their password
+ * here (no emailed set-password link), we BIND their own anonymous booking draft (cookie-scoped —
+ * a user can only bind a draft they created), send a CONFIRMATION email to verify the address, and
+ * sign them in immediately. The unverified state drives the "confirm your email" banner in the
+ * cabinet until they click the link. Throwaway / dead-domain emails are rejected.
  */
 export async function requestAccountAction(input: {
   email: string
   name: string
+  password: string
   consentPersonalData: boolean
   next?: string
 }): Promise<RequestAccountResult> {
@@ -78,7 +77,14 @@ export async function requestAccountAction(input: {
   if (!email.success) return { ok: false, fieldErrors: { email: 'Некорректный email' } }
   const name = String(input.name ?? '').trim()
   if (name.length < 1) return { ok: false, fieldErrors: { name: 'Укажите имя' } }
+  const pw = passwordSchema.safeParse(String(input.password ?? ''))
+  if (!pw.success) return { ok: false, fieldErrors: { password: pw.error.issues[0]?.message ?? 'Минимум 8 символов' } }
   if (!input.consentPersonalData) return { ok: false, fieldErrors: { consentPersonalData: 'Требуется согласие на обработку данных' } }
+
+  // Reject throwaway / temporary-mail providers up front (cheap, in-memory).
+  if (isDisposableEmail(email.data)) {
+    return { ok: false, fieldErrors: { email: 'Укажите постоянный email — временные адреса не принимаются' } }
+  }
 
   const next = safeInternalPath(input.next)
   const h = headers()
@@ -92,29 +98,31 @@ export async function requestAccountAction(input: {
     // Existing full account — don't create a duplicate; guide them to sign in.
     return { ok: false, error: 'Этот email уже зарегистрирован — войдите в аккаунт.' }
   }
+
+  // Deliverability: reject dead / mistyped domains that can't receive mail (best-effort, fails open).
+  if (!(await domainCanReceiveMail(email.data))) {
+    return { ok: false, fieldErrors: { email: 'Похоже, такого почтового домена не существует — проверьте адрес' } }
+  }
+
+  const passwordHash = await hashPassword(pw.data)
   if (!user) {
     const [firstName, ...rest] = name.split(/\s+/)
     user = await prisma.user.create({
-      data: { email: email.data, firstName, lastName: rest.join(' ') || null, role: 'CLIENT' },
+      data: { email: email.data, firstName, lastName: rest.join(' ') || null, role: 'CLIENT', passwordHash },
     })
     await prisma.consentRecord.create({ data: { userId: user.id, type: 'personal_data', ...consentMeta } }).catch(() => {})
+  } else {
+    // An existing passwordless account (created via OAuth/OTP) — set the password they just chose.
+    user = await prisma.user.update({ where: { id: user.id }, data: { passwordHash } })
   }
 
   // Bind the visitor's OWN anon draft to this account (cookie-scoped; safe).
   await claimAnonDraftForUser(user.id).catch(() => null)
 
-  // Issue a single-use set-password token and email the return-to-booking link.
-  const token = crypto.randomBytes(32).toString('base64url')
-  await prisma.passwordResetToken.create({
-    data: { userId: user.id, tokenHash: hashToken(token), expiresAt: new Date(Date.now() + 3600_000) },
-  })
-  const link = `${env.appUrl}/auth?reset_token=${token}${next ? `&next=${encodeURIComponent(next)}` : ''}`
-  await sendEmail({
-    to: email.data,
-    subject: 'AVENTA — задайте пароль и продолжите бронирование',
-    html: `<p>Здравствуйте${user.firstName ? `, ${user.firstName}` : ''}!</p><p>Чтобы завершить создание аккаунта, задайте пароль по ссылке (действует 1 час) — после этого вы вернётесь к своему бронированию:</p><p><a href="${link}">${link}</a></p><p>Если вы этого не запрашивали — просто проигнорируйте письмо.</p>`,
-    event: 'account.setpassword',
-  })
-  await logAudit({ userId: user.id, action: 'auth.signup.request', meta: { hasNext: !!next } })
-  return { ok: true, ...(process.env.NODE_ENV !== 'production' ? { devLink: link } : {}) }
+  // Email a confirmation link (verify the address), then sign them in right away.
+  await sendVerificationEmail({ id: user.id, email: user.email, firstName: user.firstName })
+  await createSession(user.id)
+  await logAudit({ userId: user.id, action: 'auth.signup', meta: { hasNext: !!next } })
+
+  return { ok: true, redirectTo: next ?? '/account' }
 }

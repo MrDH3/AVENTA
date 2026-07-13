@@ -1,15 +1,10 @@
 'use server'
 
-import crypto from 'node:crypto'
 import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/db'
-import { requireOwner } from '@/lib/auth'
-import { emailSchema } from '@/lib/validation'
+import { requireOwner, hashPassword } from '@/lib/auth'
+import { emailSchema, passwordSchema } from '@/lib/validation'
 import { logAudit } from '@/lib/audit'
-import { sendEmail } from '@/lib/notify'
-import { env } from '@/lib/env'
-
-const hashToken = (t: string) => crypto.createHash('sha256').update(t).digest('hex')
 
 /**
  * Owner-only staff & recovery management. Every action re-checks requireOwner() on the server,
@@ -19,8 +14,7 @@ const hashToken = (t: string) => crypto.createHash('sha256').update(t).digest('h
 export interface ActionResult {
   ok: boolean
   error?: string
-  inviteLink?: string // set-password link returned by createAdmin (also emailed to the admin)
-  invitedEmail?: string
+  invitedEmail?: string // set on a successful admin create — shown in the success message
 }
 
 export interface StaffRow {
@@ -62,14 +56,16 @@ export async function listStaffAction(): Promise<StaffRow[]> {
 }
 
 /**
- * Create a new admin and EMAIL them a "set your password" link (valid 3 days). The account has no
- * password until they use the link, so they can't sign in before setting one. The link is also
- * returned to the owner as a fallback (to share manually if email isn't configured yet).
+ * Create a new admin with a starting password the OWNER sets here. The admin can sign in immediately
+ * and change it later in Settings → password. The account is marked email-verified (owner-created,
+ * trusted — no confirmation nag). No email is sent, so this works even with SMTP unconfigured.
  */
 export async function createAdminAction(_prev: ActionResult, formData: FormData): Promise<ActionResult> {
   await requireOwner()
   const email = emailSchema.safeParse(norm(formData.get('email')))
   if (!email.success) return { ok: false, error: 'Некорректный email' }
+  const pw = passwordSchema.safeParse(String(formData.get('password') ?? ''))
+  if (!pw.success) return { ok: false, error: pw.error.issues[0]?.message ?? 'Пароль: минимум 8 символов' }
   if (await prisma.user.findUnique({ where: { email: email.data } })) {
     return { ok: false, error: 'Пользователь с таким email уже существует' }
   }
@@ -79,24 +75,13 @@ export async function createAdminAction(_prev: ActionResult, formData: FormData)
       firstName: norm(formData.get('firstName')) || null,
       lastName: norm(formData.get('lastName')) || null,
       role: 'ADMIN',
-      passwordHash: null, // set by the admin via the emailed link
+      passwordHash: await hashPassword(pw.data),
+      emailVerified: true,
     },
-  })
-  // Set-password invite = a reset token with a longer (3-day) window than an ordinary reset.
-  const token = crypto.randomBytes(32).toString('base64url')
-  await prisma.passwordResetToken.create({
-    data: { userId: user.id, tokenHash: hashToken(token), expiresAt: new Date(Date.now() + 3 * 864e5) },
-  })
-  const link = `${env.appUrl}/auth?reset_token=${token}`
-  await sendEmail({
-    to: email.data,
-    subject: 'AVENTA — вы добавлены как администратор',
-    html: `<p>Вас добавили администратором в AVENTA. Задайте свой пароль по ссылке (действует 3 дня), после чего сможете войти:</p><p><a href="${link}">${link}</a></p><p>Если вы не ожидали этого письма — просто проигнорируйте его.</p>`,
-    event: 'admin.invite',
   })
   await logAudit({ action: 'staff.admin.create', entity: 'User', entityId: user.id, meta: { email: user.email } })
   revalidatePath('/admin/team')
-  return { ok: true, inviteLink: link, invitedEmail: email.data }
+  return { ok: true, invitedEmail: email.data }
 }
 
 /** Archive (disable) an admin — login is refused, the record and history are kept. Owner-only. */

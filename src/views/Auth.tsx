@@ -1295,14 +1295,14 @@ function RegisterView({
   bannerError: string | null
   next: string | null
 }) {
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
+  const [password, setPassword] = useState('')
   const [consent, setConsent] = useState(false)
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | undefined>(bannerError ?? undefined)
   const [fe, setFe] = useState<Record<string, string>>({})
-  const [sent, setSent] = useState(false)
-  const [devLink, setDevLink] = useState<string | null>(null)
 
   const dest = encodeURIComponent(next || '/account')
   const inputStyle = { ...fieldBase, borderRadius: 10, padding: '13px 15px', font: '600 13px var(--f-ui)' } as CSSProperties
@@ -1311,10 +1311,10 @@ function RegisterView({
     setError(undefined)
     setFe({})
     startTransition(async () => {
-      const res = await requestAccountAction({ email, name, consentPersonalData: consent, next: next ?? undefined })
+      const res = await requestAccountAction({ email, name, password, consentPersonalData: consent, next: next ?? undefined })
       if (res.ok) {
-        setSent(true)
-        setDevLink(res.devLink ?? null)
+        // Signed in immediately; the "confirm your email" banner shows on the destination.
+        router.push(res.redirectTo ?? '/account')
       } else {
         setError(res.error)
         setFe(res.fieldErrors ?? {})
@@ -1326,52 +1326,40 @@ function RegisterView({
     <AuthCard pad={30}>
       <CardHead title={t.registerTitle} sub={t.registerSub} icon={<LogoMark size={42} variant="onTeal" />} />
 
-      {sent ? (
-        <SuccessBanner>
-          <div style={{ font: '700 14px var(--f-ui)' }}>{t.signupSentTitle}</div>
-          <div style={{ marginTop: 5, font: '500 12.5px/1.6 var(--f-ui)' }}>{t.signupSentBody}</div>
-          {devLink && (
-            <div style={{ marginTop: 8, font: '500 11px var(--f-ui)' }}>
-              {t.signupDev} <a href={devLink} style={{ color: C.teal, wordBreak: 'break-all' }}>{devLink}</a>
-            </div>
-          )}
-        </SuccessBanner>
-      ) : (
-        <>
-          {/* social sign-in on top */}
-          <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {providers.includes('google') && <SocialButton href={`/api/auth/oauth/google?next=${dest}`} icon={<GoogleIcon />} label={t.withGoogle} />}
-            {providers.includes('yandex') && <SocialButton href={`/api/auth/oauth/yandex?next=${dest}`} icon={<YandexIcon />} label={t.withYandex} />}
-            {telegramBot && (
-              <button type="button" onClick={() => goCode('telegram')} className="av-cta" style={{ ...outlineBtn, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
-                <TelegramIcon />
-                {t.telegramBtn}
-              </button>
-            )}
-            <button type="button" onClick={() => goCode('sms')} style={outlineBtn}>{t.byCode}</button>
-          </div>
+      {/* social sign-in on top */}
+      <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
+        {providers.includes('google') && <SocialButton href={`/api/auth/oauth/google?next=${dest}`} icon={<GoogleIcon />} label={t.withGoogle} />}
+        {providers.includes('yandex') && <SocialButton href={`/api/auth/oauth/yandex?next=${dest}`} icon={<YandexIcon />} label={t.withYandex} />}
+        {telegramBot && (
+          <button type="button" onClick={() => goCode('telegram')} className="av-cta" style={{ ...outlineBtn, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+            <TelegramIcon />
+            {t.telegramBtn}
+          </button>
+        )}
+        <button type="button" onClick={() => goCode('sms')} style={outlineBtn}>{t.byCode}</button>
+      </div>
 
-          <Divider label={t.or} />
+      <Divider label={t.or} />
 
-          {/* minimal email form — placeholders only, no labels */}
-          <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 11 }}>
-            <ErrorBanner message={error} />
-            <input type="email" autoComplete="email" placeholder={t.emailPh} value={email} onChange={(e) => setEmail(e.target.value)} style={{ ...inputStyle, ...(fe.email ? { border: `1px solid ${C.danger}` } : {}) }} />
-            <FieldError error={fe.email} />
-            <input type="text" autoComplete="name" placeholder={t.namePh} value={name} onChange={(e) => setName(e.target.value)} style={{ ...inputStyle, ...(fe.name ? { border: `1px solid ${C.danger}` } : {}) }} />
-            <FieldError error={fe.name} />
+      {/* email + password sign-up — placeholders only, no labels */}
+      <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 11 }}>
+        <ErrorBanner message={error} />
+        <input type="email" autoComplete="email" placeholder={t.emailPh} value={email} onChange={(e) => setEmail(e.target.value)} style={{ ...inputStyle, ...(fe.email ? { border: `1px solid ${C.danger}` } : {}) }} />
+        <FieldError error={fe.email} />
+        <input type="text" autoComplete="name" placeholder={t.namePh} value={name} onChange={(e) => setName(e.target.value)} style={{ ...inputStyle, ...(fe.name ? { border: `1px solid ${C.danger}` } : {}) }} />
+        <FieldError error={fe.name} />
+        <input type="password" autoComplete="new-password" placeholder={t.passwordPh} value={password} onChange={(e) => setPassword(e.target.value)} style={{ ...inputStyle, ...(fe.password ? { border: `1px solid ${C.danger}` } : {}) }} />
+        <FieldError error={fe.password || (password.length > 0 && password.length < 8 ? t.passwordMin : undefined)} />
 
-            {/* required KVKK data-processing consent (kept) */}
-            <label style={{ display: 'flex', alignItems: 'flex-start', gap: 9, cursor: 'pointer', marginTop: 2 }}>
-              <CheckBox checked={consent} onClick={() => setConsent((v) => !v)} align="flex-start" />
-              <span style={{ font: '500 11px/1.5 var(--f-ui)', color: C.muted }}>{t.consentData}</span>
-            </label>
-            <FieldError error={fe.consentPersonalData} />
+        {/* required KVKK data-processing consent (kept) */}
+        <label style={{ display: 'flex', alignItems: 'flex-start', gap: 9, cursor: 'pointer', marginTop: 2 }}>
+          <CheckBox checked={consent} onClick={() => setConsent((v) => !v)} align="flex-start" />
+          <span style={{ font: '500 11px/1.5 var(--f-ui)', color: C.muted }}>{t.consentData}</span>
+        </label>
+        <FieldError error={fe.consentPersonalData} />
 
-            <ActionButton label={t.registerCta} onClick={submit} pending={pending} />
-          </div>
-        </>
-      )}
+        <ActionButton label={t.registerCta} onClick={submit} pending={pending} />
+      </div>
 
       <div style={{ marginTop: 14, textAlign: 'center', font: '500 13px var(--f-ui)', color: C.muted }}>
         {t.haveAccount} <SwitchLink onClick={() => go('login')}>{t.signInLink}</SwitchLink>

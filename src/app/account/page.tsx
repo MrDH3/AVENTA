@@ -147,6 +147,7 @@ export default async function AccountPage() {
   return (
     <Account
       user={serializedUser}
+      emailUnverified={user.role === 'CLIENT' && !user.emailVerified}
       bookings={serializedBookings}
       favouriteCar={favouriteCar}
       lastPickupCity={lastPickupCity}

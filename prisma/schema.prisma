@@ -216,6 +216,7 @@ model User {
   sessions        Session[]
   oauthAccounts   OAuthAccount[]
   resetTokens     PasswordResetToken[]
+  emailVerifyTokens EmailVerificationToken[]
   addresses       SavedAddress[]
   paymentMethods  SavedPaymentMethod[]
   waitlist        WaitlistEntry[]
@@ -307,6 +308,22 @@ model OAuthAccount {
 }
 
 model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+/// A single-use link token that confirms a new signup owns their email address. Mirrors
+/// PasswordResetToken: only the sha256 hash is stored, it expires, and it's marked used once
+/// redeemed. Flipping User.emailVerified true is the only thing it does.
+model EmailVerificationToken {
   id        String    @id @default(cuid())
   userId    String
   tokenHash String    @unique

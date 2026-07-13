@@ -4,6 +4,7 @@ import { type ReactNode, type CSSProperties } from 'react'
 import Link from 'next/link'
 import { useLang, type Lang } from '@/i18n/lang'
 import LangToggle from '@/components/LangToggle'
+import VerifyEmailBanner from '@/components/VerifyEmailBanner'
 import { logoutAction } from '@/server/auth-actions'
 
 /**
@@ -105,7 +106,9 @@ export default function AccountShell({
   children,
 }: {
   active: AccountNavKey
-  user: { fullName: string; initial: string; tierName: string }
+  // email/emailUnverified are optional: the cabinet sub-pages (via toShellUser) pass them to drive the
+  // verify-email banner; transactional pages (booking, success) pass a lean chip and simply skip it.
+  user: { fullName: string; initial: string; tierName: string; email?: string; emailUnverified?: boolean }
   title?: string
   kicker?: string
   children: ReactNode
@@ -200,7 +203,14 @@ export default function AccountShell({
           <span style={{ display: 'inline-flex' }}><LangToggle glass /></span>
         </header>
 
-        <main className="acs-main" style={{ flex: 1, minWidth: 0 }}>{children}</main>
+        <main className="acs-main" style={{ flex: 1, minWidth: 0 }}>
+          {user.emailUnverified && user.email && (
+            <div style={{ padding: '16px clamp(14px,3vw,26px) 0' }}>
+              <VerifyEmailBanner email={user.email} />
+            </div>
+          )}
+          {children}
+        </main>
       </div>
     </div>
   )

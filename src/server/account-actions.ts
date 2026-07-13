@@ -5,10 +5,30 @@ import { requireUser, verifyPassword, hashPassword, createSession } from '@/lib/
 import { passwordSchema } from '@/lib/validation'
 import { logAudit } from '@/lib/audit'
 import { rateLimit } from '@/lib/rate-limit'
+import { sendVerificationEmail } from '@/lib/email-verify'
 
 export interface ChangePwResult {
   ok: boolean
   error?: string
+}
+
+export interface ResendResult {
+  ok: boolean
+  error?: string
+}
+
+/**
+ * Re-send the email-confirmation link for the signed-in user (the "Resend" button on the verify banner).
+ * No-op-success if they're already verified. Rate-limited so the button can't be used to spam an inbox.
+ */
+export async function resendVerificationEmailAction(): Promise<ResendResult> {
+  const user = await requireUser()
+  if (user.emailVerified) return { ok: true } // nothing to do — banner will already be gone
+  const rl = rateLimit(`verifyresend:${user.id}`, 3, 600)
+  if (!rl.ok) return { ok: false, error: 'Слишком часто — попробуйте через несколько минут' }
+  await sendVerificationEmail({ id: user.id, email: user.email, firstName: user.firstName })
+  await logAudit({ userId: user.id, action: 'auth.verify_email.resend' })
+  return { ok: true }
 }
 
 /**
