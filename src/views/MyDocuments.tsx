@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import CountryRegionPicker from '../components/CountryRegionPicker'
 import { useDict, useLang } from '../i18n/lang'
+import { useIsMobile } from '@/components/useIsMobile'
 import { uploadDocumentAction, deleteDocumentAction, saveDocLocationAction } from '../server/document-actions'
 import type { DerivedVerification } from '@/lib/verification'
 
@@ -183,6 +184,7 @@ export default function MyDocuments({
   const t = useDict(DICT)
   const { lang } = useLang()
   const router = useRouter()
+  const isMobile = useIsMobile()
 
   const [docCountry, setDocCountry] = useState(initialCountry)
   const [docRegion, setDocRegion] = useState(initialRegion)
@@ -277,6 +279,7 @@ export default function MyDocuments({
   const card: React.CSSProperties = { background: '#fff', borderRadius: 18, padding: 20, boxShadow: '0 18px 40px -30px rgba(11,85,96,.4)', border: '1px solid rgba(20,153,174,.1)' }
 
   return (
+    <>
     <div style={{ maxWidth: 620, margin: '0 auto', padding: '22px var(--pad-x) 40px', display: 'flex', flexDirection: 'column', gap: 16 }}>
       <div>
         <Link href="/account" style={{ font: '700 12px var(--f-ui)', color: 'var(--av-teal)', textDecoration: 'none' }}>‹ {t.back}</Link>
@@ -411,7 +414,7 @@ export default function MyDocuments({
 
           {docError && <div style={{ marginTop: 10, font: '600 11px var(--f-ui)', color: '#D64545' }}>{docError}</div>}
 
-          {stagedCount > 0 && (
+          {stagedCount > 0 && !isMobile && (
             <button type="button" onClick={submitDocuments} disabled={submitting} className="av-cta av-tap" style={{ marginTop: 14, width: '100%', padding: '13px 18px', borderRadius: 12, border: 'none', background: 'var(--grad-coral)', color: '#fff', font: '800 13px var(--f-ui)', cursor: submitting ? 'wait' : 'pointer', opacity: submitting ? 0.7 : 1 }}>
               {submitting ? t.uploading : t.submit(stagedCount)}
             </button>
@@ -420,6 +423,17 @@ export default function MyDocuments({
           <div style={{ marginTop: 12, font: '500 11px/1.5 var(--f-ui)', color: 'var(--av-muted)' }}>{t.approvedLock}</div>
         </div>
       )}
+      {method !== 'SUMSUB' && isMobile && stagedCount > 0 && <div aria-hidden style={{ height: 84 }} />}
     </div>
+
+    {/* Landing-style sticky action bar (mobile): the primary CTA lives at the bottom, above the tab bar. */}
+    {method !== 'SUMSUB' && isMobile && stagedCount > 0 && (
+      <div style={{ position: 'fixed', left: 0, right: 0, bottom: 'calc(50px + env(safe-area-inset-bottom, 0px))', zIndex: 40, padding: '12px 16px', background: 'rgba(255,255,255,.93)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderTop: '1px solid rgba(20,153,174,.14)', boxShadow: '0 -10px 30px -20px rgba(6,33,38,.5)' }}>
+        <button type="button" onClick={submitDocuments} disabled={submitting} className="av-cta av-tap" style={{ width: '100%', padding: '15px 18px', borderRadius: 14, border: 'none', background: 'var(--grad-coral)', color: '#fff', font: '800 15px var(--f-display)', cursor: submitting ? 'wait' : 'pointer', opacity: submitting ? 0.7 : 1, boxShadow: '0 14px 30px -14px rgba(255,122,92,.85)' }}>
+          {submitting ? t.uploading : t.submit(stagedCount)}
+        </button>
+      </div>
+    )}
+    </>
   )
 }

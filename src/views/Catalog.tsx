@@ -261,7 +261,10 @@ export default function Catalog({
                 <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
               </Link>
               <span style={{ flex: 1 }} />
-              <Link href={authed ? '/account' : '/auth'} style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg,#fb6d4c,#ef5c3a)', display: 'grid', placeItems: 'center', color: '#fff', font: '700 15px var(--f-display)', flexShrink: 0, position: 'relative' }}>И<span style={{ position: 'absolute', right: 0, bottom: 0, width: 11, height: 11, borderRadius: '50%', background: '#0f9d6f', border: '2px solid #0a4247' }} /></Link>
+              <Link href={authed ? '/account' : '/auth'} aria-label={authed ? t.myAccount : t.signIn} style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg,#fb6d4c,#ef5c3a)', display: 'grid', placeItems: 'center', color: '#fff', font: '700 15px var(--f-display)', flexShrink: 0, position: 'relative' }}>
+                {shellUser ? shellUser.initial : <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 4-6.5 8-6.5s8 2.5 8 6.5" /></svg>}
+                {shellUser && <span style={{ position: 'absolute', right: 0, bottom: 0, width: 11, height: 11, borderRadius: '50%', background: '#0f9d6f', border: '2px solid #0a4247' }} />}
+              </Link>
               <span style={{ display: 'inline-flex' }}><LangToggle glass /></span>
             </div>
             <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', gap: 7, marginTop: 20, font: '600 10px var(--f-mono)', letterSpacing: '.18em', textTransform: 'uppercase', color: 'var(--teal-bright)' }}>
@@ -284,11 +287,11 @@ export default function Catalog({
 
             {/* date + availability filter */}
             <div style={{ background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: 20, padding: 16, boxShadow: '0 14px 36px -26px rgba(6,33,38,.5)' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18 }}>
                 {[{ lbl: t.fFrom, v: startDate, set: setStartDate }, { lbl: t.fTo, v: endDate, set: setEndDate }].map((d) => (
                   <label key={d.lbl} style={{ display: 'block' }}>
-                    <span style={{ display: 'block', font: '600 9.5px var(--f-mono)', letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--muted-2)', marginBottom: 6 }}>{d.lbl}</span>
-                    <input type="date" value={d.v} onChange={(e) => d.set(e.target.value)} style={{ width: '100%', padding: '11px 12px', border: '1px solid var(--line)', borderRadius: 12, background: 'var(--bg)', color: 'var(--ink)', font: '600 14px var(--f-ui)' }} />
+                    <span style={{ display: 'block', font: '600 9.5px var(--f-mono)', letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--muted-2)', marginBottom: 7 }}>{d.lbl}</span>
+                    <input type="date" value={d.v} onChange={(e) => d.set(e.target.value)} style={{ width: '100%', boxSizing: 'border-box', padding: '12px 12px', border: '1px solid var(--line)', borderRadius: 12, background: 'var(--bg)', color: 'var(--ink)', font: '600 14px var(--f-ui)' }} />
                   </label>
                 ))}
               </div>
