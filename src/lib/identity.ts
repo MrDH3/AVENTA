@@ -45,8 +45,13 @@ export async function linkOrCreateUser(id: ExternalIdentity): Promise<User> {
         role: 'CLIENT',
       },
     })
-  } else if (id.image && !user.image) {
-    user = await prisma.user.update({ where: { id: user.id }, data: { image: id.image } })
+  } else {
+    // Existing account matched. The provider has already verified this email, so clear any pending
+    // "confirm your email" state for a matching account (no confirmation email is ever sent on OAuth).
+    const data: { image?: string; emailVerified?: boolean } = {}
+    if (id.image && !user.image) data.image = id.image
+    if (email && user.email === email && !user.emailVerified) data.emailVerified = true
+    if (Object.keys(data).length) user = await prisma.user.update({ where: { id: user.id }, data })
   }
 
   await prisma.oAuthAccount

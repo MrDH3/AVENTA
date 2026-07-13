@@ -90,6 +90,7 @@ const dict: Record<'ru' | 'en' | 'tr' | 'es' | 'de', Record<string, string>> = {
     resetSub: 'Укажите email — пришлём ссылку для создания нового пароля',
     sendLink: 'Отправить ссылку',
     resetSent: 'Письмо отправлено — проверьте почту',
+    emailNotRegistered: 'Этот email не зарегистрирован — сначала создайте аккаунт',
     devLink: 'Ссылка (dev):',
     backToLogin: '← Вернуться ко входу',
     // new password
@@ -162,6 +163,7 @@ const dict: Record<'ru' | 'en' | 'tr' | 'es' | 'de', Record<string, string>> = {
     resetSub: 'Enter your email — we will send a link to create a new password',
     sendLink: 'Send link',
     resetSent: 'Email sent — check your inbox',
+    emailNotRegistered: 'This email is not registered — please sign up first',
     devLink: 'Link (dev):',
     backToLogin: '← Back to sign in',
     newPassTitle: 'New password',
@@ -232,6 +234,7 @@ const dict: Record<'ru' | 'en' | 'tr' | 'es' | 'de', Record<string, string>> = {
     resetSub: 'E-postanızı girin — yeni bir parola oluşturmanız için bağlantı göndereceğiz',
     sendLink: 'Bağlantı gönder',
     resetSent: 'E-posta gönderildi — gelen kutunuzu kontrol edin',
+    emailNotRegistered: 'Bu e-posta kayıtlı değil — önce kayıt olun',
     devLink: 'Bağlantı (dev):',
     backToLogin: '← Girişe dön',
     newPassTitle: 'Yeni parola',
@@ -302,6 +305,7 @@ const dict: Record<'ru' | 'en' | 'tr' | 'es' | 'de', Record<string, string>> = {
     resetSub: 'Introduce tu correo — te enviaremos un enlace para crear una nueva contraseña',
     sendLink: 'Enviar enlace',
     resetSent: 'Correo enviado — revisa tu bandeja de entrada',
+    emailNotRegistered: 'Este correo no está registrado — regístrate primero',
     devLink: 'Enlace (dev):',
     backToLogin: '← Volver al inicio de sesión',
     newPassTitle: 'Nueva contraseña',
@@ -372,6 +376,7 @@ const dict: Record<'ru' | 'en' | 'tr' | 'es' | 'de', Record<string, string>> = {
     resetSub: 'Geben Sie Ihre E-Mail ein — wir senden Ihnen einen Link, um ein neues Passwort zu erstellen',
     sendLink: 'Link senden',
     resetSent: 'E-Mail gesendet — überprüfen Sie Ihren Posteingang',
+    emailNotRegistered: 'Diese E-Mail ist nicht registriert — bitte zuerst registrieren',
     devLink: 'Link (dev):',
     backToLogin: '← Zurück zur Anmeldung',
     newPassTitle: 'Neues Passwort',
@@ -1403,7 +1408,7 @@ function ResetView({ t, go }: { t: T; go: (v: View) => void }) {
         setSent(true)
         setDevLink(res.devLink)
       } else {
-        setError(res.error)
+        setError(res.notRegistered ? t.emailNotRegistered : res.error)
       }
     })
   }

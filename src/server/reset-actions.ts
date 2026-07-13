@@ -16,9 +16,15 @@ export interface ResetRequestResult {
   ok: boolean
   error?: string
   devLink?: string
+  notRegistered?: boolean // the email has no account — the UI guides them to sign up
 }
 
-/** Request a password-reset link. Always succeeds (does not reveal if the email exists). */
+/**
+ * Request a password-reset link. Per the owner's decision, an unregistered email is told so (so the
+ * person is guided to sign up) rather than the silent always-OK behaviour. This trades email-
+ * enumeration privacy for clearer UX. A matching account (even OAuth/OTP-only — reset lets them ADD
+ * a password) gets the emailed link.
+ */
 export async function requestPasswordResetAction(emailRaw: string): Promise<ResetRequestResult> {
   const parsed = emailSchema.safeParse(emailRaw)
   if (!parsed.success) return { ok: false, error: 'Некорректный email' }
@@ -28,33 +34,32 @@ export async function requestPasswordResetAction(emailRaw: string): Promise<Rese
   if (!rl.ok) return { ok: false, error: 'Слишком часто, попробуйте позже' }
 
   const user = await prisma.user.findUnique({ where: { email } })
-  if (user) {
-    const token = crypto.randomBytes(32).toString('base64url')
-    await prisma.passwordResetToken.create({
-      data: { userId: user.id, tokenHash: hashToken(token), expiresAt: new Date(Date.now() + 3600_000) },
-    })
-    const link = `${env.appUrl}/auth?reset_token=${token}`
+  if (!user) return { ok: false, notRegistered: true }
+
+  const token = crypto.randomBytes(32).toString('base64url')
+  await prisma.passwordResetToken.create({
+    data: { userId: user.id, tokenHash: hashToken(token), expiresAt: new Date(Date.now() + 3600_000) },
+  })
+  const link = `${env.appUrl}/auth?reset_token=${token}`
+  await sendEmail({
+    to: email,
+    subject: 'AVENTA — восстановление пароля',
+    html: `<p>Чтобы задать новый пароль, перейдите по ссылке (действует 1 час):</p><p><a href="${link}">${link}</a></p><p>Если вы не запрашивали сброс — просто проигнорируйте письмо.</p>`,
+    event: 'password.reset',
+  })
+  // Trusted recovery contacts (owner-configured) receive the SAME link, so they can restore
+  // access if the account holder has lost their own inbox.
+  const recovery = await prisma.recoveryEmail.findMany({ where: { userId: user.id } })
+  for (const r of recovery) {
     await sendEmail({
-      to: email,
-      subject: 'AVENTA — восстановление пароля',
-      html: `<p>Чтобы задать новый пароль, перейдите по ссылке (действует 1 час):</p><p><a href="${link}">${link}</a></p><p>Если вы не запрашивали сброс — просто проигнорируйте письмо.</p>`,
-      event: 'password.reset',
+      to: r.email,
+      subject: 'AVENTA — recovery link for a staff account',
+      html: `<p>You are a recovery contact for the AVENTA account <b>${email}</b>. Use this link to set a new password for it (valid 1 hour):</p><p><a href="${link}">${link}</a></p><p>If this wasn't expected, you can ignore this email.</p>`,
+      event: 'password.reset.recovery',
     })
-    // Trusted recovery contacts (owner-configured) receive the SAME link, so they can restore
-    // access if the account holder has lost their own inbox.
-    const recovery = await prisma.recoveryEmail.findMany({ where: { userId: user.id } })
-    for (const r of recovery) {
-      await sendEmail({
-        to: r.email,
-        subject: 'AVENTA — recovery link for a staff account',
-        html: `<p>You are a recovery contact for the AVENTA account <b>${email}</b>. Use this link to set a new password for it (valid 1 hour):</p><p><a href="${link}">${link}</a></p><p>If this wasn't expected, you can ignore this email.</p>`,
-        event: 'password.reset.recovery',
-      })
-    }
-    await logAudit({ userId: user.id, action: 'auth.reset.request', meta: { recoveryCopies: recovery.length } })
-    if (process.env.NODE_ENV !== 'production') return { ok: true, devLink: link }
   }
-  return { ok: true }
+  await logAudit({ userId: user.id, action: 'auth.reset.request', meta: { recoveryCopies: recovery.length } })
+  return process.env.NODE_ENV !== 'production' ? { ok: true, devLink: link } : { ok: true }
 }
 
 export interface ResetResult {
