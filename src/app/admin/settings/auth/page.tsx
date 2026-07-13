@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { getCurrentUser } from '@/lib/auth'
 import AdminShell from '@/components/AdminShell'
 import { listProviderStatuses } from '@/lib/provider-credentials'
+import { env } from '@/lib/env'
 import AuthSettings from '@/views/AuthSettings'
 
 export const dynamic = 'force-dynamic'
@@ -16,7 +17,7 @@ export default async function AuthSettingsPage() {
 
   return (
     <AdminShell active="settings" title="Вход через соцсети" subtitle="Ключи OAuth · Google · Yandex · Telegram">
-      <AuthSettings statuses={statuses} />
+      <AuthSettings statuses={statuses} appUrl={env.appUrl} />
     </AdminShell>
   )
 }

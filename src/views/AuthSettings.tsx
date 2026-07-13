@@ -37,6 +37,9 @@ interface Strings {
   enableLogin: (name: string) => string
   // save result
   saved: string
+  // the callback URL / domain to register in the provider console
+  callbackLabel: string
+  domainLabel: string
 }
 
 const dict: Dict<Strings> = {
@@ -57,6 +60,8 @@ const dict: Dict<Strings> = {
     secretNotSetHint: 'Секрет ещё не задан',
     enableLogin: (name) => `Включить вход через ${name}`,
     saved: 'Сохранено ✓',
+    callbackLabel: 'Redirect URI — вставьте в консоль провайдера',
+    domainLabel: 'Домен — укажите в @BotFather → /setdomain',
   },
   en: {
     introBefore: 'Manage social logins right here — no file editing needed. The Client ID is stored as-is, ',
@@ -75,6 +80,8 @@ const dict: Dict<Strings> = {
     secretNotSetHint: 'Secret not set yet',
     enableLogin: (name) => `Enable login via ${name}`,
     saved: 'Saved ✓',
+    callbackLabel: 'Redirect URI — paste into the provider console',
+    domainLabel: 'Domain — set in @BotFather → /setdomain',
   },
   tr: {
     introBefore: 'Sosyal girişleri doğrudan buradan yönetin — dosya düzenlemeye gerek yok. Client ID olduğu gibi saklanır, ',
@@ -93,6 +100,8 @@ const dict: Dict<Strings> = {
     secretNotSetHint: 'Gizli anahtar henüz ayarlanmadı',
     enableLogin: (name) => `${name} ile girişi etkinleştir`,
     saved: 'Kaydedildi ✓',
+    callbackLabel: 'Redirect URI — sağlayıcı konsoluna yapıştırın',
+    domainLabel: 'Alan adı — @BotFather → /setdomain ile ayarlayın',
   },
   es: {
     introBefore: 'Gestione los inicios de sesión sociales aquí mismo — sin editar archivos. El Client ID se guarda tal cual, ',
@@ -111,6 +120,8 @@ const dict: Dict<Strings> = {
     secretNotSetHint: 'El secreto aún no está configurado',
     enableLogin: (name) => `Activar el inicio de sesión con ${name}`,
     saved: 'Guardado ✓',
+    callbackLabel: 'Redirect URI — pégalo en la consola del proveedor',
+    domainLabel: 'Dominio — configúralo en @BotFather → /setdomain',
   },
   de: {
     introBefore: 'Verwalten Sie Social Logins direkt hier — ohne Dateien zu bearbeiten. Die Client ID wird unverändert gespeichert, ',
@@ -129,6 +140,8 @@ const dict: Dict<Strings> = {
     secretNotSetHint: 'Secret noch nicht festgelegt',
     enableLogin: (name) => `Anmeldung über ${name} aktivieren`,
     saved: 'Gespeichert ✓',
+    callbackLabel: 'Redirect URI — in die Anbieter-Konsole einfügen',
+    domainLabel: 'Domain — in @BotFather → /setdomain festlegen',
   },
 }
 
@@ -172,9 +185,11 @@ function SaveButton() {
   )
 }
 
-function ProviderCard({ s }: { s: ProviderStatusView }) {
+function ProviderCard({ s, appUrl }: { s: ProviderStatusView; appUrl: string }) {
   const t = useDict(dict)
   const meta = META[s.provider]
+  const host = appUrl.replace(/^https?:\/\//, '').replace(/\/.*$/, '')
+  const callbackValue = s.provider === 'telegram' ? host : `${appUrl}/api/auth/oauth/${s.provider}/callback`
   const badge = statusBadge(s, t)
   const [state, action] = useFormState<ProviderSaveResult, FormData>(saveAuthProviderAction, { ok: false })
 
@@ -225,12 +240,18 @@ function ProviderCard({ s }: { s: ProviderStatusView }) {
         {state.error && <span style={{ font: '600 12px var(--f-ui)', color: 'var(--d-red)' }}>{state.error}</span>}
       </div>
 
+      {/* Exact value to register in the provider console — built from APP_URL, so a wrong APP_URL shows here. */}
+      <div style={{ marginTop: 14 }}>
+        <label style={label}>{(s.provider === 'telegram' ? t.domainLabel : t.callbackLabel).toUpperCase()}</label>
+        <div style={{ userSelect: 'all', wordBreak: 'break-all', padding: '9px 11px', borderRadius: 9, border: '1px solid rgba(255,255,255,.14)', background: 'var(--d-base)', color: 'var(--d-text)', font: '500 12px var(--f-mono,monospace)' }}>{callbackValue}</div>
+      </div>
+
       <div style={{ marginTop: 12, font: '400 10px var(--f-mono)', color: 'var(--d-muted-2)' }}>{meta.help}</div>
     </form>
   )
 }
 
-export default function AuthSettings({ statuses }: { statuses: ProviderStatusView[] }) {
+export default function AuthSettings({ statuses, appUrl }: { statuses: ProviderStatusView[]; appUrl: string }) {
   const t = useDict(dict)
   return (
     <div>
@@ -241,7 +262,7 @@ export default function AuthSettings({ statuses }: { statuses: ProviderStatusVie
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 16 }}>
         {statuses.map((s) => (
-          <ProviderCard key={s.provider} s={s} />
+          <ProviderCard key={s.provider} s={s} appUrl={appUrl} />
         ))}
       </div>
     </div>
