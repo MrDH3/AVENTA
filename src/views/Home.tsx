@@ -302,33 +302,50 @@ export default function Home({ cars, reviews = [], resumeSlugs = [] }: { cars: C
     return () => { document.removeEventListener('mousedown', onDocDown); document.removeEventListener('touchstart', onDocDown) }
   }, [menuOpen])
 
-  // Scroll-reveal + count-up stats via IntersectionObserver
+  // Scroll-reveal + count-up stats via IntersectionObserver. The reveal is a progressive enhancement:
+  // a safety net guarantees content still appears if the observer never fires (some mobile browsers,
+  // bfcache restores, or a load while the tab is backgrounded) — otherwise the fleet, which starts at
+  // opacity:0, could stay permanently invisible.
   useEffect(() => {
     const root = rootRef.current
     if (!root) return
+    const els = Array.from(root.querySelectorAll<HTMLElement>('.rv, [data-count]'))
+
+    const countUp = (el: HTMLElement) => {
+      const raw = el.dataset.count ?? ''
+      const num = parseFloat(raw.replace(/[^0-9.]/g, '')) || 0
+      const suffix = raw.replace(/[0-9.,]/g, ''), decimals = (raw.split('.')[1] || '').replace(/[^0-9]/g, '').length
+      const t0 = performance.now(), dur = 1500
+      const tick = (now: number) => {
+        const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3), v = num * e
+        el.textContent = (decimals ? v.toFixed(decimals) : Math.round(v).toLocaleString('en-US')) + suffix
+        if (k < 1) requestAnimationFrame(tick)
+      }
+      requestAnimationFrame(tick)
+    }
+    const show = (el: HTMLElement, animate: boolean) => {
+      if (el.classList.contains('rv')) el.classList.add('in')
+      if (el.dataset.count != null) { if (animate) countUp(el); else el.textContent = el.dataset.count ?? '' }
+    }
+
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reduce) { root.querySelectorAll('.rv').forEach((e) => e.classList.add('in')); root.querySelectorAll<HTMLElement>('[data-count]').forEach((e) => { e.textContent = e.dataset.count ?? '' }); return }
+    if (reduce || typeof IntersectionObserver === 'undefined') { els.forEach((e) => show(e, false)); return }
+
+    let observerFired = false
     const io = new IntersectionObserver((entries) => {
       for (const en of entries) {
         if (!en.isIntersecting) continue
-        const el = en.target as HTMLElement
-        io.unobserve(el)
-        if (el.classList.contains('rv')) el.classList.add('in')
-        if (el.dataset.count != null) {
-          const raw = el.dataset.count, num = parseFloat(raw.replace(/[^0-9.]/g, '')) || 0
-          const suffix = raw.replace(/[0-9.,]/g, ''), decimals = (raw.split('.')[1] || '').replace(/[^0-9]/g, '').length
-          const t0 = performance.now(), dur = 1500
-          const tick = (now: number) => {
-            const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3), v = num * e
-            el.textContent = (decimals ? v.toFixed(decimals) : Math.round(v).toLocaleString('en-US')) + suffix
-            if (k < 1) requestAnimationFrame(tick)
-          }
-          requestAnimationFrame(tick)
-        }
+        observerFired = true
+        io.unobserve(en.target)
+        show(en.target as HTMLElement, true)
       }
     }, { threshold: 0.16, rootMargin: '0px 0px -8% 0px' })
-    root.querySelectorAll('.rv, [data-count]').forEach((e) => io.observe(e))
-    return () => io.disconnect()
+    els.forEach((e) => io.observe(e))
+
+    // Safety net: if nothing has revealed shortly after mount, the observer isn't firing on this
+    // device — reveal everything so the cars (and the rest) are never stuck at opacity:0.
+    const fallback = window.setTimeout(() => { if (!observerFired) els.forEach((el) => show(el, false)) }, 1600)
+    return () => { io.disconnect(); window.clearTimeout(fallback) }
   }, [cars.length, reviews.length])
 
   const search = () => {
