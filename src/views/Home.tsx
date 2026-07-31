@@ -302,14 +302,18 @@ export default function Home({ cars, reviews = [], resumeSlugs = [] }: { cars: C
     return () => { document.removeEventListener('mousedown', onDocDown); document.removeEventListener('touchstart', onDocDown) }
   }, [menuOpen])
 
-  // Scroll-reveal + count-up stats via IntersectionObserver. The reveal is a progressive enhancement:
-  // a safety net guarantees content still appears if the observer never fires (some mobile browsers,
-  // bfcache restores, or a load while the tab is backgrounded) — otherwise the fleet, which starts at
-  // opacity:0, could stay permanently invisible.
+  // Scroll-reveal + count-up stats. Two independent triggers so content is NEVER stuck invisible:
+  // (1) an IntersectionObserver with threshold 0 — fires the instant an element ENTERS, so it works for
+  //     the fleet grid too, which on a phone is a single column taller than the screen and could never
+  //     reach a fractional threshold (that was the "cars blank on mobile" bug); and
+  // (2) a scroll + short-interval sweep that reveals anything already on screen, covering a throttled /
+  //     backgrounded / bfcache-restored observer that never fires at all. A shared `done` set keeps each
+  //     element revealed exactly once (no double count-up).
   useEffect(() => {
     const root = rootRef.current
     if (!root) return
     const els = Array.from(root.querySelectorAll<HTMLElement>('.rv, [data-count]'))
+    const done = new Set<HTMLElement>()
 
     const countUp = (el: HTMLElement) => {
       const raw = el.dataset.count ?? ''
@@ -323,29 +327,30 @@ export default function Home({ cars, reviews = [], resumeSlugs = [] }: { cars: C
       }
       requestAnimationFrame(tick)
     }
-    const show = (el: HTMLElement, animate: boolean) => {
+    const reveal = (el: HTMLElement, animate: boolean) => {
+      if (done.has(el)) return
+      done.add(el)
       if (el.classList.contains('rv')) el.classList.add('in')
       if (el.dataset.count != null) { if (animate) countUp(el); else el.textContent = el.dataset.count ?? '' }
     }
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reduce || typeof IntersectionObserver === 'undefined') { els.forEach((e) => show(e, false)); return }
+    if (reduce || typeof IntersectionObserver === 'undefined') { els.forEach((e) => reveal(e, false)); return }
 
-    let observerFired = false
     const io = new IntersectionObserver((entries) => {
-      for (const en of entries) {
-        if (!en.isIntersecting) continue
-        observerFired = true
-        io.unobserve(en.target)
-        show(en.target as HTMLElement, true)
-      }
-    }, { threshold: 0.16, rootMargin: '0px 0px -8% 0px' })
+      for (const en of entries) if (en.isIntersecting) { io.unobserve(en.target); reveal(en.target as HTMLElement, true) }
+    }, { threshold: 0, rootMargin: '0px 0px -10% 0px' })
     els.forEach((e) => io.observe(e))
 
-    // Safety net: if nothing has revealed shortly after mount, the observer isn't firing on this
-    // device — reveal everything so the cars (and the rest) are never stuck at opacity:0.
-    const fallback = window.setTimeout(() => { if (!observerFired) els.forEach((el) => show(el, false)) }, 1600)
-    return () => { io.disconnect(); window.clearTimeout(fallback) }
+    const sweep = () => {
+      const vh = window.innerHeight
+      for (const el of els) if (!done.has(el) && el.getBoundingClientRect().top < vh) reveal(el, true)
+      if (done.size >= els.length) { window.removeEventListener('scroll', sweep); window.clearInterval(iv) }
+    }
+    window.addEventListener('scroll', sweep, { passive: true })
+    const iv = window.setInterval(sweep, 500)
+    const t0 = window.setTimeout(sweep, 100)
+    return () => { io.disconnect(); window.removeEventListener('scroll', sweep); window.clearInterval(iv); window.clearTimeout(t0) }
   }, [cars.length, reviews.length])
 
   const search = () => {
